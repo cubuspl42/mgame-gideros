@@ -1,0 +1,21 @@
+<project>
+ <properties architecture="0" assetsOnly="0" autorotation="0" encrypt="0" fps="60" iosDevice="0" logicalHeight="480" logicalWidth="320" mouseToTouch="1" mouseTouchOrder="0" orientation="3" packageName="com.yourdomain.yourapp" retinaDisplay="3" scaleMode="0" touchToMouse="1">
+  <imageScales />
+ </properties>
+ <folder name="data" />
+ <folder name="spriter">
+  <folder name="monster-kopia">
+   <file source="spirter/monster-kopia/Example.SCML" />
+  </folder>
+ </folder>
+ <file excludeFromExecution="1" source="xmlSimple.lua" />
+ <file source="scmlfile.lua" />
+ <file source="scmlentity.lua" />
+ <file source="ninja.lua" />
+ <file source="injection.lua" />
+ <file source="physicsshape.lua" />
+ <file source="mainlayer.lua" />
+ <file source="gameplayscene.lua" />
+ <file source="scenemanager.lua" />
+ <file source="main.lua" />
+</project>
