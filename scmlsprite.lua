@@ -7,6 +7,7 @@ function SCMLSprite:init(sprite)
 end
 
 function SCMLSprite:setParam(k, v)
+    if not self.sprite and k == "scaleX" or k == "scaleY" then return end
     if k == "pivotX" or k == "pivotY" then
         local s = self.sprite
         if s then
