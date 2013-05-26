@@ -142,7 +142,7 @@ function newNode(name)
         end
         return false
     end
-    function node:addChild(child)
+    function node:addChild(child) -- TODO always create table?
         if self[child:name()] ~= nil then
             if type(self[child:name()].name) == "function" then
                 self:createTable(child:name())

@@ -12,6 +12,7 @@ function PhysicsSprite:init(sprite, shapeDef)
         fixedRotation = shapeDef.fixedRotation,
         active = true
     }
+	
     self.body = world:createBody(bodyDef)
     self.lock = (shapeDef.lock == nil and true) or shapeDef.lock
     
@@ -54,7 +55,7 @@ function PhysicsSprite:createCircle(subshapeDef)
     end
 
 function PhysicsSprite:onEnterFrame()
-	if not world then return end
+	if not world or not self:getParent() then return end
     if self.lock then -- force physics body to transorm
 		local x, y = self:localToGlobal(0, 0)
 		x, y = world.parent:globalToLocal(x, y)
@@ -63,7 +64,7 @@ function PhysicsSprite:onEnterFrame()
     else -- transorm sprite according to body
 		local x, y = self.body:getPosition()
 		x, y = world.parent:localToGlobal(x, y)
-		x, y = self:globalToLocal(x, y)
+		x, y = self:getParent():globalToLocal(x, y)
         self:setPosition(x, y)
         self:setWorldRotation(self.body:getAngle() * 180 / math.pi)
     end

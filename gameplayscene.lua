@@ -1,26 +1,39 @@
 GameplayScene = gideros.class(Sprite)
 
-function GameplayScene:init(t)
-    if t then
-        print("Scene1: ", t)
-    end
-    
+function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
     self:addEventListener("enterBegin", self.onTransitionInBegin, self)
     self:addEventListener("enterEnd", self.onTransitionInEnd, self)
     self:addEventListener("exitBegin", self.onTransitionOutBegin, self)
     self:addEventListener("exitEnd", self.onTransitionOutEnd, self)
     self:addEventListener("enterFrame", self.onEnterFrame, self)
     self:addEventListener("logic", self.onLogic, self)
-    
-    self._paused = false; --true
-    
-    self:addChild(MainLayer.new())
+    self.paused = false; -- true?
+	
+    self.mainlayer = MainLayer.new()
+	
+    self:addChild(self.mainlayer)
     --self:addChild(HUDLayer.new())
     
 end
 
+function GameplayScene:loadLevel(levelCode)
+	local prefix = "data/levels/" .. levelCode
+	local svg = xmlFromFile(prefix .. "/level.svg")
+	local config = xmlFromFile(prefix .. "/level.xml")
+	self:loadMap(svg)
+	self:loadConfig(config)
+end
+
+function GameplayScene:loadConfig(xmlConfig)
+
+end
+
+function GameplayScene:loadMap(svgLevel)
+	-- it needs poly2tri to load terrain
+end
+
 function GameplayScene:setPaused(flag)
-    
+    self.paused = flag
 end
 
 function GameplayScene:onLogic()
