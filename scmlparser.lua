@@ -8,8 +8,7 @@ local function toLuaIndex(index)
     if index then return tonumber(index) + 1 end
 end
 
-function SCMLParser:init(filename, loaderFunction)
-	self.loaderFunction = loaderFunction
+function SCMLParser:init(filename)
     self.entities = {}
     self.scml = xml.newParser():loadFile(filename)
     self.scml = self.scml.spriter_data
@@ -27,7 +26,7 @@ function SCMLParser:init(filename, loaderFunction)
     
 end
 
-function SCMLParser:createEntity(id)
+function SCMLParser:createEntity(id, loaderFunction)
     local scml = self.scml
     if not scml or not scml.entity then return end
     local entityTag = scml.entity[id + 1]
@@ -91,11 +90,11 @@ function SCMLParser:createEntity(id)
                     local spriteName = scml.folder[folderIndex].file[fileIndex]["@name"]
                     if not object.sprites[spriteName] then
                         print("loading sprite " .. spriteName)
-                        object.sprites[spriteName] = self.loaderFunction(spriteName) -- change name of loader?
+                        object.sprites[spriteName] = loaderFunction(spriteName) -- change name of loader?
                     end
                     key.sprite = object.sprites[spriteName] -- can be nil?
                 else
-                    key.sprite = self.loaderFunction()
+                    key.sprite = loaderFunction()
                 end
                 
             end

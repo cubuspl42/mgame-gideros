@@ -20,8 +20,8 @@ function GameplayScene:loadLevel(levelCode)
 	local prefix = "data/levels/" .. levelCode
 	local svg = xmlFromFile(prefix .. "/level.svg")
 	local config = xmlFromFile(prefix .. "/level.xml")
-	self:loadMap(svg)
 	self:loadConfig(config)
+	self:loadMap(svg)
 end
 
 function GameplayScene:loadConfig(xmlConfig)

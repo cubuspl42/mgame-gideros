@@ -48,7 +48,9 @@ function MainLayer:init()
     
     self:addChild(debugDraw)
     prefix = "data/monster-kopia/"
-    local scml = SCMLParser.new(prefix .. "Example2.SCML", function(filename) 
+    local scml = SCMLParser.new(prefix .. "Example2.SCML")
+	
+	local function loader(filename) 
             local b 
             if filename then b = Bitmap.new(Texture.new(prefix .. filename, true)) end
             local s = SCMLSprite.new(b)
@@ -62,12 +64,15 @@ function MainLayer:init()
                 s:addChild(a)
             end
             return s
-    end)
-    self.monster = scml:createEntity(0)
+    end
+	
+    self.monster = scml:createEntity(0, loader)
     self.monster:setAnimation("Jump") -- TEMP
     self:addChild(self.monster)
 	
-	local monster2 = scml:createEntity(0)
+
+	
+	local monster2 = scml:createEntity(0, loader)
 	monster2:setAnimation("Idle")
 	monster2:setX(200)
 	self:addChild(monster2)
