@@ -7,7 +7,7 @@ function MainLayer:init()
     local debugDraw = b2.DebugDraw.new()
     world:setDebugDraw(debugDraw)
     
-    --[[test body
+    --test body
 	self.phSh = PhysicsShape.new {
 		lock = true,
 		subshapes = {
@@ -52,7 +52,7 @@ function MainLayer:init()
     self.monster:setAnimation("Jump") -- TEMP
     
     self:addChild(self.monster)
-    local scale = 0.7
+    local scale = 1
     self:setPosition(150, 300); self:setScale(scale, scale)
     
     
