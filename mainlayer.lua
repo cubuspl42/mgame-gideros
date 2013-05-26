@@ -32,7 +32,7 @@ function MainLayer:init()
     local debugDraw = b2.DebugDraw.new()
     world:setDebugDraw(debugDraw)
     
-    self:test_addPhysicsSprite()
+    --self:test_addPhysicsSprite()
     
     for i = 1,2 do
         a = Shape.new()
@@ -48,7 +48,7 @@ function MainLayer:init()
     
     self:addChild(debugDraw)
     prefix = "data/monster-kopia/"
-    local scml = SCMLFile.new(prefix .. "Example2.SCML", function(filename) 
+    local scml = SCMLParser.new(prefix .. "Example2.SCML", function(filename) 
             local b 
             if filename then b = Bitmap.new(Texture.new(prefix .. filename, true)) end
             local s = SCMLSprite.new(b)
@@ -63,12 +63,17 @@ function MainLayer:init()
             end
             return s
     end)
-    self.monster = scml.entities[1]
+    self.monster = scml:createEntity(0)
     self.monster:setAnimation("Jump") -- TEMP
-    --self:addChild(self.monster)
+    self:addChild(self.monster)
+	
+	local monster2 = scml:createEntity(0)
+	monster2:setAnimation("Idle")
+	monster2:setX(200)
+	self:addChild(monster2)
 	
     local scale = 1.2
-    --self:setPosition(150, 300); self:setScale(scale, scale)
+    self:setPosition(150, 300); self:setScale(scale, scale)
     
     
 end

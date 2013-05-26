@@ -23,13 +23,13 @@ function tprint (tbl, indent)
 end
 
 local function xmlFromFile(filename)
-	return xml.newParser():loadFile(filename)
+    return xml.newParser():loadFile(filename)
 end
 
 -- events: "transitionBegin", "transitionEnd"
 local sceneManager = SceneManager.new {
-        gameplay = GameplayScene,
-        --["scene2"] = Scene2,
+    gameplay = GameplayScene,
+    --["scene2"] = Scene2,
 }
 stage:addChild(sceneManager)
 

@@ -72,45 +72,45 @@ function SCMLEntity:onEnterFrame()
         local key = object.keys[object.index]
         local nextKey, nextTime = self:nextKeyAndTime(object)
         if nextKey.time < time and not anim.looping then nextKey = key end
-            
-            -- Swap sprite
-            if object.sprite ~= key.sprite then
-                if object.sprite then object:removeChild(object.sprite) end
-                object.sprite = key.sprite
-                if object.sprite then object:addChild(object.sprite) end
+        
+        -- Swap sprite
+        if object.sprite ~= key.sprite then
+            if object.sprite then object:removeChild(object.sprite) end
+            object.sprite = key.sprite
+            if object.sprite then object:addChild(object.sprite) end
+        end
+        
+        -- Perform linear linerpolation
+        local params = {}
+        object.params = params
+        for k, param in pairs(key.params) do
+            local nextParam = nextKey.params[k]
+            local spin = key.spin
+            if k == "rotation" and (nextParam - param) * spin < 0 then
+                nextParam = nextParam + spin * 360
             end
-            
-            -- Perform linear linerpolation
-            local params = {}
-            object.params = params
-            for k, param in pairs(key.params) do
-                local nextParam = nextKey.params[k]
-                local spin = key.spin
-                if k == "rotation" and (nextParam - param) * spin < 0 then
-                    nextParam = nextParam + spin * 360
-                end
-                params[k] = linearInterpolation(param, nextParam, key.time, nextTime, time)
-            end
-            
-            -- Parentness
-            local p = params
-            if ref.parent then
-                local pp = ref.parent.params -- it should have been already created
-                p.scaleX = p.scaleX * pp.scaleX
-                p.scaleY = p.scaleY * pp.scaleY
-                p.rotation = p.rotation + pp.rotation
-                p.x = p.x * pp.scaleX
-                p.y = p.y * pp.scaleY
-                local s = math.sin(pp.rotation * math.pi / 180)
-                local c = math.cos(pp.rotation * math.pi / 180)
-                local px, py = p.x, p.y
-                p.x = (px * c) - (py * s)
-                p.y = (px * s) + (py * c)
-                p.x = p.x + pp.x
-                p.y = p.y + pp.y
-            end
-            for k, v in pairs(params) do
-                if object.sprite then object.sprite:setParam(k, v) end
-            end 
+            params[k] = linearInterpolation(param, nextParam, key.time, nextTime, time)
+        end
+        
+        -- Parentness
+        local p = params
+        if ref.parent then
+            local pp = ref.parent.params -- it should have been already created
+            p.scaleX = p.scaleX * pp.scaleX
+            p.scaleY = p.scaleY * pp.scaleY
+            p.rotation = p.rotation + pp.rotation
+            p.x = p.x * pp.scaleX
+            p.y = p.y * pp.scaleY
+            local s = math.sin(pp.rotation * math.pi / 180)
+            local c = math.cos(pp.rotation * math.pi / 180)
+            local px, py = p.x, p.y
+            p.x = (px * c) - (py * s)
+            p.y = (px * s) + (py * c)
+            p.x = p.x + pp.x
+            p.y = p.y + pp.y
+        end
+        for k, v in pairs(params) do
+            if object.sprite then object.sprite:setParam(k, v) end
+        end 
     end
 end
