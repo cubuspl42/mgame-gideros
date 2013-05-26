@@ -1,27 +1,43 @@
 MainLayer = gideros.class(Sprite)
 
+function MainLayer:test_addPhysicsSprite()
+	local v = {10, 10, 100, 10, 100, 50, 10, 50}
+	
+	local shapeDef = {
+		type = b2.DYNAMIC_BODY, lock = true,
+		subshapes = {
+			{ vertices = v }
+		}
+	}
+	
+	local shape = Shape.new()
+	shape:setLineStyle(2, 0)
+	shape:beginPath()
+    for i=1,#v,2 do
+        local x, y = v[i], v[i + 1]
+        shape:lineTo(x, y)
+    end
+    shape:closePath();
+    shape:endPath();
+	
+	local ps = PhysicsSprite.new(shape, shapeDef)
+	self:addChild(ps)
+	
+end
+
 function MainLayer:init()
     self:addEventListener("logic", MainLayer.onLogic, self)
     
     world = b2.World.new(0, 10)
+	world.parent = self
     local debugDraw = b2.DebugDraw.new()
     world:setDebugDraw(debugDraw)
     
-    --test body
-	self.phSh = PhysicsShape.new {
-		lock = true,
-		subshapes = {
-			{ vertices = { 0,0, 100,0, 100,100, 0, 50 }, fixture = {} },
-			{ vertices = { 30,30, 200,0, 200,100, 30, 50 }, fixture = nil },
-			{ radius = 30, cx = 100, cy = 100, fixture = {} }
-		}
-	}
-	self:addChild(self.phSh)
-	--]]
+    self:test_addPhysicsSprite()
     
     for i = 1,2 do
         a = Shape.new()
-        a:setLineStyle(5, 1)
+        a:setLineStyle(3, 1)
         a:beginPath()
         a:moveTo(0, 0)
         a:lineTo(i==2 and 0 or 200, i==1 and 0 or 200)
@@ -29,7 +45,7 @@ function MainLayer:init()
         self:addChild(a)
     end
     
-    self.ninja = Ninja.new(); self:addChild(self.ninja)
+    --self.ninja = Ninja.new(); self:addChild(self.ninja)
     
     self:addChild(debugDraw)
     prefix = "data/monster-kopia/"
@@ -50,9 +66,9 @@ function MainLayer:init()
     end)
     self.monster = scml.entities[1]
     self.monster:setAnimation("Jump") -- TEMP
-    
-    self:addChild(self.monster)
-    local scale = 1
+    --self:addChild(self.monster)
+	
+    local scale = 1.2
     self:setPosition(150, 300); self:setScale(scale, scale)
     
     
