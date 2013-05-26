@@ -10,7 +10,7 @@ end
 
 function getSCMLParser(filename)
 	if not chache[filename] then
-		cache[filename] = SCMLParser.new(filename, loaderFunction) -- create loaderFunction...
+		cache[filename] = SCMLParser.new(filename) -- create loaderFunction...
 	end
 	return cache[filename]
 end
