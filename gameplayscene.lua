@@ -8,28 +8,28 @@ function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
     self:addEventListener("enterFrame", self.onEnterFrame, self)
     self:addEventListener("logic", self.onLogic, self)
     self.paused = false; -- true?
-    
+	
     self.mainlayer = MainLayer.new()
-    
+	
     self:addChild(self.mainlayer)
     --self:addChild(HUDLayer.new())
     
 end
 
 function GameplayScene:loadLevel(levelCode)
-    local prefix = "data/levels/" .. levelCode
-    local svg = xmlFromFile(prefix .. "/level.svg")
-    local config = xmlFromFile(prefix .. "/level.xml")
-    self:loadMap(svg)
-    self:loadConfig(config)
+	local prefix = "data/levels/" .. levelCode
+	local svg = xmlFromFile(prefix .. "/level.svg")
+	local config = xmlFromFile(prefix .. "/level.xml")
+	self:loadMap(svg)
+	self:loadConfig(config)
 end
 
 function GameplayScene:loadConfig(xmlConfig)
-    
+
 end
 
 function GameplayScene:loadMap(svgLevel)
-    -- it needs poly2tri to load terrain
+	
 end
 
 function GameplayScene:setPaused(flag)
