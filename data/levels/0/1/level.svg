@@ -19,14 +19,14 @@
      id="defs4" />
   <sodipodi:namedview
      id="base"
-     pagecolor="#543e3e"
+     pagecolor="#00002c"
      bordercolor="#372121"
      borderopacity="1"
-     inkscape:pageopacity="0.26666667"
+     inkscape:pageopacity="0.20784314"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="897.06481"
-     inkscape:cy="456.17305"
+     inkscape:zoom="1.4"
+     inkscape:cx="1614.9047"
+     inkscape:cy="915.04657"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -45,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -55,7 +55,7 @@
      id="layer1"
      transform="translate(0,-52.36218)">
     <rect
-       style="fill:#808080"
+       style="fill:#80808c;color:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3051"
        width="1812.8572"
        height="77.142853"
@@ -63,30 +63,30 @@
        y="978.07648"
        transform="scale(-1,1)" />
     <rect
-       style="fill:#808080"
+       style="fill:#80808c;color:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3051-1"
        width="91.428604"
        height="1017.1429"
        x="-6.4285541"
        y="43.790783" />
     <rect
-       style="fill:#808080"
+       style="color:#000000;fill:#80808c;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3051-1-7"
        width="91.428604"
-       height="1017.1429"
+       height="1002.1429"
        x="1721.4286"
-       y="25.219315"
+       y="40.219315"
        inkscape:transform-center-x="312.85714"
-       inkscape:transform-center-y="142.85714" />
+       inkscape:transform-center-y="140.7504" />
     <rect
-       style="fill:#808080"
+       style="fill:#80808c;color:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="rect3051-1-4"
        width="1802.8572"
        height="91.428604"
        x="-5.7143097"
        y="39.505009" />
     <path
-       style="fill:#808080"
+       style="fill:#80808c;fill-opacity:1"
        d="m 577.93135,880.93359 447.64405,-0.0893 108.7104,111.51782 -722.85724,61.42859 z"
        id="rect3096"
        inkscape:connector-curvature="0"

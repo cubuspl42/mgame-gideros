@@ -187,11 +187,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="0.53169555"
-     inkscape:cy="69.337076"
+     inkscape:zoom="15.839192"
+     inkscape:cx="53.037241"
+     inkscape:cy="80.455761"
      inkscape:document-units="px"
-     inkscape:current-layer="layer14"
+     inkscape:current-layer="layer1"
      showgrid="false"
      borderlayer="false"
      inkscape:showpageshadow="false"
@@ -379,10 +379,10 @@
       </linearGradient>
       <path
          style="color:#000000;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.85464525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="m 299.3793,176.81636 -2.81113,19.35597 -8.64479,17.16045 -50.78528,-53.45889 z"
+         d="m 299.3793,176.81636 -0.98083,18.74714 -10.47509,17.76928 -36.04039,-37.93774 -14.74489,-15.52115 z"
          id="polygon77"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc" />
+         sodipodi:nodetypes="cccccc" />
       <path
          style="fill:#1a1a1a;stroke:#000000;stroke-width:3;stroke-miterlimit:10"
          inkscape:connector-curvature="0"
