@@ -187,17 +187,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.839192"
-     inkscape:cx="53.037241"
-     inkscape:cy="80.455761"
+     inkscape:zoom="14.016868"
+     inkscape:cx="24.490042"
+     inkscape:cy="58.341719"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer5"
      showgrid="false"
      borderlayer="false"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1858"
-     inkscape:window-height="1058"
-     inkscape:window-x="54"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
@@ -208,7 +208,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -301,7 +301,7 @@
      inkscape:label="rarm1">
     <path
        style="color:#000000;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.00509107;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 43.570395,40.00266 1.878465,1.02952 -3.054797,22.445087 -1.471999,0.88986 -3.50052,-0.832768 -1.371362,-0.902646 z"
+       d="m 43.570395,40.00266 1.878465,1.02952 -3.054797,22.445087 -1.471999,0.88986 -3.50052,-0.832768 -1.085992,-1.330702 z"
        id="rect3526"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccc" />
@@ -379,10 +379,10 @@
       </linearGradient>
       <path
          style="color:#000000;fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2.85464525;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-         d="m 299.3793,176.81636 -0.98083,18.74714 -10.47509,17.76928 -36.04039,-37.93774 -14.74489,-15.52115 z"
+         d="m 299.3793,176.81636 -2.81113,19.35597 -8.64479,17.16045 -50.78528,-53.45889 z"
          id="polygon77"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="cccccc" />
+         sodipodi:nodetypes="ccccc" />
       <path
          style="fill:#1a1a1a;stroke:#000000;stroke-width:3;stroke-miterlimit:10"
          inkscape:connector-curvature="0"
