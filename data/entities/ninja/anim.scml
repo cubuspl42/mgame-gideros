@@ -2,14 +2,14 @@
   <folder id="0" name="/dev_img/dev_lines">
     <file id="0" name="/dev_img/dev_lines/img.png"/>
   </folder>
-  <folder id="1" name="/dev_img/lleg1">
+  <folder id="1" name="/dev_img/rleg1">
+    <file id="0" name="/dev_img/rleg1/img.png"/>
+  </folder>
+  <folder id="2" name="/dev_img/lleg1">
     <file id="0" name="/dev_img/lleg1/img.png"/>
   </folder>
-  <folder id="2" name="/dev_img/lleg0">
+  <folder id="3" name="/dev_img/lleg0">
     <file id="0" name="/dev_img/lleg0/img.png"/>
-  </folder>
-  <folder id="3" name="/dev_img/rleg1">
-    <file id="0" name="/dev_img/rleg1/img.png"/>
   </folder>
   <folder id="4" name="/dev_img/rleg0">
     <file id="0" name="/dev_img/rleg0/img.png"/>
@@ -20,20 +20,20 @@
   <folder id="6" name="/dev_img/torso0">
     <file id="0" name="/dev_img/torso0/img.png"/>
   </folder>
-  <folder id="7" name="/dev_img/rarm1">
-    <file id="0" name="/dev_img/rarm1/img.png"/>
+  <folder id="7" name="/dev_img/neck">
+    <file id="0" name="/dev_img/neck/img.png"/>
   </folder>
-  <folder id="8" name="/dev_img/rarm0">
-    <file id="0" name="/dev_img/rarm0/img.png"/>
+  <folder id="8" name="/dev_img/rarm1">
+    <file id="0" name="/dev_img/rarm1/img.png"/>
   </folder>
   <folder id="9" name="/dev_img/larm0">
     <file id="0" name="/dev_img/larm0/img.png"/>
   </folder>
-  <folder id="10" name="/dev_img/larm1">
-    <file id="0" name="/dev_img/larm1/img.png"/>
+  <folder id="10" name="/dev_img/rarm0">
+    <file id="0" name="/dev_img/rarm0/img.png"/>
   </folder>
-  <folder id="11" name="/dev_img/neck">
-    <file id="0" name="/dev_img/neck/img.png"/>
+  <folder id="11" name="/dev_img/larm1">
+    <file id="0" name="/dev_img/larm1/img.png"/>
   </folder>
   <folder id="12" name="/dev_img/head">
     <file id="0" name="/dev_img/head/img.png"/>
@@ -62,64 +62,64 @@
           <object file="0" folder="0" x="0.0" y="-5.9604644e-08"/>
         </key>
       </timeline>
-      <timeline id="1" name="lleg1">
+      <timeline id="1" name="rleg1">
         <key id="0">
-          <object file="0" folder="1" x="212.231132" y="-283.175488"/>
+          <object file="0" folder="1" x="141.41194" y="-282.62468"/>
         </key>
       </timeline>
-      <timeline id="2" name="lleg0">
+      <timeline id="2" name="lleg1">
         <key id="0">
-          <object file="0" folder="2" x="197.13362" y="-198.157336"/>
+          <object file="0" folder="2" x="204.948088" y="-282.623744"/>
         </key>
       </timeline>
-      <timeline id="3" name="rleg1">
+      <timeline id="3" name="lleg0">
         <key id="0">
-          <object file="0" folder="3" x="148.022728" y="-284.272636"/>
+          <object file="0" folder="3" x="193.222252" y="-200.941152"/>
         </key>
       </timeline>
       <timeline id="4" name="rleg0">
         <key id="0">
-          <object file="0" folder="4" x="172.9046" y="-199.794236"/>
+          <object file="0" folder="4" x="166.338068" y="-199.919164"/>
         </key>
       </timeline>
       <timeline id="5" name="torso1">
         <key id="0">
-          <object file="0" folder="5" x="194.994288" y="-161.542872"/>
+          <object file="0" folder="5" x="190.724352" y="-162.444184"/>
         </key>
       </timeline>
       <timeline id="6" name="torso0">
         <key id="0">
-          <object file="0" folder="6" x="192.289832" y="-111.707976"/>
+          <object file="0" folder="6" x="187.579456" y="-115.280048"/>
         </key>
       </timeline>
-      <timeline id="7" name="rarm1">
+      <timeline id="7" name="neck">
         <key id="0">
-          <object file="0" folder="7" x="143.332024" y="-158.000456"/>
+          <object file="0" folder="7" x="191.060864" y="-67.549392"/>
         </key>
       </timeline>
-      <timeline id="8" name="rarm0">
+      <timeline id="8" name="rarm1">
         <key id="0">
-          <object file="0" folder="8" x="170.914496" y="-100.225876"/>
+          <object file="0" folder="8" x="137.03196" y="-160.185228"/>
         </key>
       </timeline>
       <timeline id="9" name="larm0">
         <key id="0">
-          <object file="0" folder="9" x="197.281928" y="-101.396576"/>
+          <object file="0" folder="9" x="190.096964" y="-100.460512"/>
         </key>
       </timeline>
-      <timeline id="10" name="larm1">
+      <timeline id="10" name="rarm0">
         <key id="0">
-          <object file="0" folder="10" x="228.771436" y="-157.78876"/>
+          <object file="0" folder="10" x="165.231848" y="-100.262416"/>
         </key>
       </timeline>
-      <timeline id="11" name="neck">
+      <timeline id="11" name="larm1">
         <key id="0">
-          <object file="0" folder="11" x="198.542272" y="-54.608152"/>
+          <object file="0" folder="11" x="221.624444" y="-160.236872"/>
         </key>
       </timeline>
       <timeline id="12" name="head">
         <key id="0">
-          <object file="0" folder="12" x="112.539936" y="-1.80000488"/>
+          <object file="0" folder="12" x="107.652784" y="-4.1346448"/>
         </key>
       </timeline>
     </animation>
