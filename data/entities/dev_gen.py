@@ -12,7 +12,7 @@ import argparse
 gTag = "{http://www.w3.org/2000/svg}g"
 layerNameAttribute = "{http://www.inkscape.org/namespaces/inkscape}label"
 directories = [ dir for dir in listdir(".") if isdir(dir) ]
-exportarg = { 'png': "-e", 'svg': "-l" }
+exportarg = { 'png': "--export-png", 'svg': "--export-plain-svg" }
 scales = { '': 1, '@15x': 1.5, '@2x': 2 }
 spriterscale = 4
 
@@ -92,7 +92,7 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 		print "-> Creating directory " + layersubfolder + "... "
 		trymakedirs(layersubfolder)
 		
-		params = ["inkscape", "-z", exportarg[format] + "=" + imgfilename, "-d=" + str(scale * 90), "-i=" + id, "-j", dev_base]
+		params = ["inkscape", "--without-gui", exportarg[format] + "=" + imgfilename, "--export-dpi=" + str(scale * 90), "--export-id=" + id, "--export-id-only", dev_base]
 		print "-> Calling inkscape with:\n", params
 		print "-> Inkscape output:"
 		call(params)
