@@ -6,6 +6,19 @@ from subprocess import call
 import hashlib
 import argparse
 
+##########################################################################################
+# globals
+
+gTag = "{http://www.w3.org/2000/svg}g"
+layerNameAttribute = "{http://www.inkscape.org/namespaces/inkscape}label"
+directories = [ dir for dir in listdir(".") if isdir(dir) ]
+exportarg = { 'png': "-e", 'svg': "-l" }
+scales = { '': 1, '@15x': 1.5, '@2x': 2 }
+spriterscale = 4
+
+##########################################################################################
+# helpers
+
 def filemd5(filepath):
     with open(filepath, 'rb') as f:
         m = hashlib.md5()
@@ -34,13 +47,7 @@ def absjoin(*args) :
 	return abspath(join(*args))
 	
 ##########################################################################################
-
-gTag = "{http://www.w3.org/2000/svg}g"
-layerNameAttribute = "{http://www.inkscape.org/namespaces/inkscape}label"
-directories = [ dir for dir in listdir(".") if isdir(dir) ]
-exportarg = { 'png': "-e", 'svg': "-l" }
-spriterscale = 4
-scales = { '': 1, '@15x': 1.5, '@2x': 2 }
+# functions
 
 def get_base_layers(dir) :
 	print "\n\n--> get_base_layers\n"
@@ -52,8 +59,7 @@ def get_base_layers(dir) :
 	
 	for g in root.findall(gTag) :
 		layerName = g.attrib[layerNameAttribute]
-		if not layerName.startswith("dev_") :
-			layers.append({'id': g.attrib["id"], 'name': layerName})
+		layers.append({'id': g.attrib["id"], 'name': layerName})
 
 	for layer in layers :
 		print "--> Getting info for layer " + layer['name']
@@ -76,6 +82,8 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 	for layer in layers :
 		id = layer['id']
 		name = layer['name']
+		if imgsubfolder == 'img' and name.startswith("dev_") :
+			continue
 		layersubfolder = join(imgpath, name)
 		imgfilename = absjoin(layersubfolder, "img" + postfix + "." + format)
 		print "\n--> Layer: '%s', format = '%s', posfix = '%s', scale = '%s'" % (name, format, postfix, scale)
@@ -131,9 +139,12 @@ def generate_scml(dir, layers) :
 	print s
 	tree.write(anim, pretty_print=True)
 
-################# MAIN ###################################################################
+##########################################################################################
+# main
 
-parser = argparse.ArgumentParser(description='dev_gen generates pngs and scml from dev_base.svg')
+desc = '''dev_gen generates png images and SCML file from dev_base.svg.
+It will never overwrite scml, but it will override pngs if dev_base.md5 doesn't match.'''
+parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('--force', action='store_true',
 					help="generate pngs even if svg_base.md5 hasn't changed")
 parser.add_argument('--dev-only', action='store_true',
