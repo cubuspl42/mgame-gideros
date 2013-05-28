@@ -47,8 +47,8 @@ function MainLayer:init()
     --self.ninja = Ninja.new(); self:addChild(self.ninja)
     
     self:addChild(debugDraw)
-    prefix = "data/monster-kopia/"
-    local scml = SCMLParser.new(prefix .. "Example2.SCML")
+    prefix = "data/entities/ninja/"
+    local scml = SCMLParser.new(prefix .. "anim.scml")
 	
 	local function loader(filename) 
             local b 
@@ -67,18 +67,19 @@ function MainLayer:init()
     end
 	
     self.monster = scml:createEntity(0, loader)
-    self.monster:setAnimation("Jump") -- TEMP
+    self.monster:setAnimation("Idle") -- TEMP
     self:addChild(self.monster)
 	
 
-	
+	--[[
 	local monster2 = scml:createEntity(0, loader)
-	monster2:setAnimation("Idle")
+	monster2:setAnimation("Jump")
 	monster2:setX(200)
-	self:addChild(monster2)
+	self:addChild(monster2) 
+	--]]
 	
     local scale = 1.2
-    self:setPosition(150, 300); self:setScale(scale, scale)
+    self:setPosition(10, 10); self:setScale(scale, scale)
     
     
 end
