@@ -64,13 +64,15 @@ def get_base_layers(dir) :
 	for layer in layers :
 		print "--> Getting info for layer " + layer['name']
 		for z in ['x', 'y'] :
-			params = ["inkscape", "-z", "-I=" + layer['id'], "--query-" + z, dev_base]
+			params = ["inkscape", "-z", "--query-id=" + layer['id'], "--query-" + z, dev_base]
 			print "-> Calling inkscape with:\n", params
 			print "-> Inkscape output:"
 			process = subprocess.Popen(params, stdout=subprocess.PIPE)
 			out, err = process.communicate()
 			print "-> Out:"
 			print out
+			print "-> Err:"
+			print err
 			layer[z] = float(out)
 	
 	return layers
