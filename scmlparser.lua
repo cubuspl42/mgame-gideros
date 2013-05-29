@@ -11,28 +11,23 @@ end
 function SCMLParser:init(filename)
     self.entities = {}
     self.scml = xml.newParser():loadFile(filename)
-    self.scml = self.scml.spriter_data
+    self.scml = self.scml.spriter_data[1]
     if not self.scml then
         print ("File ".. filename .." is not SCML file")
         return
     end
     
-    print("loading scml " .. filename)
-    self.scml:createTable("entity")
-    self.scml:createTable("folder")
-    for i, folderTag in ipairs(self.scml.folder) do
-        folderTag:createTable("file")
-    end
-    
+    print("loading " .. filename)
 end
 
 function SCMLParser:createEntity(id, loaderFunction)
     local scml = self.scml
+	tprint(scml, 1)
+	print(scml.entity)
     if not scml or not scml.entity then return end
     local entityTag = scml.entity[id + 1]
 	
     -- Load entity
-    entityTag:createTable("animation")
     print("loading entity " .. entityTag["@name"])
     
     local entity = SCMLEntity.new()
@@ -61,7 +56,6 @@ function SCMLParser:createEntity(id, loaderFunction)
             anim.objects[j] = object
             
             -- Load keys
-            timelineTag:createTable("key")
             for k, keyTag in ipairs(timelineTag.key) do
                 
                 print ("adding key " .. keyTag["@id"])
@@ -102,8 +96,7 @@ function SCMLParser:createEntity(id, loaderFunction)
         
         -- Load mainline
         anim.keys = {} -- mainline keys
-        animationTag.mainline:createTable("key")
-        for j, keyTag in ipairs(animationTag.mainline.key) do
+        for j, keyTag in ipairs(animationTag.mainline[1].key) do
             local key = { refs = {} }
             key.time = tonumber(keyTag["@time"] or 0)
             anim.keys[j] = key
