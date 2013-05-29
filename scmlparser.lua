@@ -22,11 +22,11 @@ end
 
 function SCMLParser:createEntity(id, loaderFunction)
     local scml = self.scml
-	tprint(scml, 1)
-	print(scml.entity)
+    tprint(scml, 1)
+    print(scml.entity)
     if not scml or not scml.entity then return end
     local entityTag = scml.entity[id + 1]
-	
+    
     -- Load entity
     print("loading entity " .. entityTag["@name"])
     

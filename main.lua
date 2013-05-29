@@ -10,7 +10,7 @@ xml = require "xmlSimple"
 application:setBackgroundColor(0xFFFFFF)
 
 function tprint (tbl, depth, indent)
-	if not depth then depth = -1 end
+    if not depth then depth = -1 end
     if not indent then indent = 0 end
     for k, v in pairs(tbl) do
         formatting = string.rep("  ", indent) .. k .. ": "

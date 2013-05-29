@@ -133,14 +133,14 @@ function newNode(name)
     function node:children() return self.___children end
     function node:numChildren() return #self.___children end
     function node:createTable(name) -- depracted
-		return
+        return
     end
-	
+    
     function node:addChild(child) -- always create table
         if self[child:name()] == nil then
-			self[child:name()] = {}
-		end
-		table.insert(self[child:name()], child)
+            self[child:name()] = {}
+        end
+        table.insert(self[child:name()], child)
         table.insert(self.___children, child)
     end
     
