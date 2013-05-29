@@ -3,12 +3,13 @@ module(..., package.seeall)
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 --
--- xml.lua - XML parser for use with the Corona SDK.
+-- xml.lua - XML parser for use with the Gideros SDK.
 --
--- version: 1.2
+-- version: 1.3
 --
 -- CHANGELOG:
 --
+-- 1.3 - (Jakub Trzebiatowski/cubuspl42)
 -- 1.2 - Created new structure for returned table
 -- 1.1 - Fixed base directory issue with the loadFile() function.
 --
