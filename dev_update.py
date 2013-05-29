@@ -2,6 +2,7 @@
 import os
 import sys
 import argparse
+import posixpath
 from lxml import etree as ET
 
 script_name = 'dev_update'
@@ -38,7 +39,7 @@ def walk(root, tag) :
 	for item in os.listdir(root) :
 		if item.startswith(".") or (item.startswith("dev_") and not args.dev_too) :
 			continue
-		path = os.path.join(root, item)
+		path = posixpath.join(root, item)
 		print(path)
  	   	if os.path.isdir(path) :
  	   		folder = ET.SubElement(tag, 'folder', {'name': item })

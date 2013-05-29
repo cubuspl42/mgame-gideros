@@ -9,13 +9,14 @@ xml = require "xmlSimple"
 
 application:setBackgroundColor(0xFFFFFF)
 
-function tprint (tbl, indent)
+function tprint (tbl, depth, indent)
+	if not depth then depth = -1 end
     if not indent then indent = 0 end
     for k, v in pairs(tbl) do
         formatting = string.rep("  ", indent) .. k .. ": "
-        if type(v) == "table" then
+        if depth ~= 0 and type(v) == "table" then
             print(formatting)
-            tprint(v, indent+1)
+            tprint(v, depth - 1, indent+1)
         else
             print(formatting .. tostring(v))
         end

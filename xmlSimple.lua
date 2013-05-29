@@ -3,12 +3,13 @@ module(..., package.seeall)
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 --
--- xml.lua - XML parser for use with the Corona SDK.
+-- xml.lua - XML parser for use with the Gideros SDK.
 --
--- version: 1.2
+-- version: 1.3
 --
 -- CHANGELOG:
 --
+-- 1.3 - (Jakub Trzebiatowski/cubuspl42)
 -- 1.2 - Created new structure for returned table
 -- 1.1 - Fixed base directory issue with the loadFile() function.
 --
@@ -131,26 +132,15 @@ function newNode(name)
     function node:setName(name) self.___name = name end
     function node:children() return self.___children end
     function node:numChildren() return #self.___children end
-    function node:createTable(name)
-        if self[name] ~= nil then
-            if type(self[name].name) == "function" then
-                local tempTable = {}
-                table.insert(tempTable, self[name])
-                self[name] = tempTable
-                return true
-            end
-        end
-        return false
+    function node:createTable(name) -- depracted
+		return
     end
-    function node:addChild(child) -- TODO always create table?
-        if self[child:name()] ~= nil then
-            if type(self[child:name()].name) == "function" then
-                self:createTable(child:name())
-            end
-            table.insert(self[child:name()], child)
-        else
-            self[child:name()] = child
-        end
+	
+    function node:addChild(child) -- always create table
+        if self[child:name()] == nil then
+			self[child:name()] = {}
+		end
+		table.insert(self[child:name()], child)
         table.insert(self.___children, child)
     end
     
