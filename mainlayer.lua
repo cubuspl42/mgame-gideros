@@ -47,8 +47,8 @@ function MainLayer:init()
     --self.ninja = Ninja.new(); self:addChild(self.ninja)
     
     self:addChild(debugDraw)
-    prefix = "data/entities/ninja/"
-    local scml = SCMLParser.new(prefix .. "anim.scml")
+    prefix = "data/entities/ninja"
+    local scml = SCMLParser.new(prefix .. "/anim.scml")
 	
 	local function loader(filename) 
             local b 

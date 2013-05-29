@@ -25,11 +25,15 @@
       <folder name="ninja">
         <file source="data/entities/ninja/.DS_Store"/>
         <file source="data/entities/ninja/anim.scml"/>
-        <file source="data/entities/ninja/anim.scml-kopia"/>
-        <file source="data/entities/ninja/anim1.scml"/>
         <file source="data/entities/ninja/dev_base.md5"/>
         <file source="data/entities/ninja/dev_base.svg"/>
         <folder name="dev_img">
+          <folder name="dev_circle">
+            <file source="data/entities/ninja/dev_img/dev_circle/img.png"/>
+          </folder>
+          <folder name="dev_lines">
+            <file source="data/entities/ninja/dev_img/dev_lines/img.png"/>
+          </folder>
           <folder name="head">
             <file source="data/entities/ninja/dev_img/head/img.png"/>
           </folder>
