@@ -1,8 +1,4 @@
 --[[
-This code is MIT licensed, see http://www.opensource.org/licenses/mit-license.php
-(C) 2010 - 2011 Gideros Mobile 
-]]
---[[
   [set remote debugging](macro:shell(ide.config.gideros = {remote = "192.168.1.100"}))
   [set local debugging](macro:shell(ide.config.gideros = nil))
 --]]
@@ -26,12 +22,16 @@ function tprint (tbl, indent)
     end
 end
 
--- events: "transitionBegin", "transitionEnd"
-local sceneManager = SceneManager.new({
-        gameplay = GameplayScene,
-        --["scene2"] = Scene2,
-})
+local function xmlFromFile(filename)
+    return xml.newParser():loadFile(filename)
+end
 
+-- events: "transitionBegin", "transitionEnd"
+local sceneManager = SceneManager.new {
+    gameplay = GameplayScene,
+    --["scene2"] = Scene2,
+}
 stage:addChild(sceneManager)
-sceneManager:changeScene("gameplay")
+
+sceneManager:changeScene("gameplay", "0/1") -- pass level?
 

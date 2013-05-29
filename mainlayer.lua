@@ -4,9 +4,9 @@ function MainLayer:test_addPhysicsSprite()
 	local v = {10, 10, 100, 10, 100, 50, 10, 50}
 	
 	local shapeDef = {
-		type = b2.DYNAMIC_BODY, lock = true,
+		type = b2.DYNAMIC_BODY, lock = false,
 		subshapes = {
-			{ vertices = v }
+			{ vertices = v, fixture = {} }
 		}
 	}
 	
@@ -21,19 +21,18 @@ function MainLayer:test_addPhysicsSprite()
     shape:endPath();
 	
 	local ps = PhysicsSprite.new(shape, shapeDef)
-	self:addChild(ps)
-	
+	self:addChild(ps)	
 end
 
 function MainLayer:init()
     self:addEventListener("logic", MainLayer.onLogic, self)
     
-    world = b2.World.new(0, 10)
+    world = b2.World.new(0, 1)
 	world.parent = self
     local debugDraw = b2.DebugDraw.new()
     world:setDebugDraw(debugDraw)
     
-    self:test_addPhysicsSprite()
+    --self:test_addPhysicsSprite()
     
     for i = 1,2 do
         a = Shape.new()
@@ -48,8 +47,10 @@ function MainLayer:init()
     --self.ninja = Ninja.new(); self:addChild(self.ninja)
     
     self:addChild(debugDraw)
-    prefix = "data/monster-kopia/"
-    local scml = SCMLFile.new(prefix .. "Example2.SCML", function(filename) 
+    prefix = "data/entities/ninja"
+    local scml = SCMLParser.new(prefix .. "/anim.scml")
+	
+	local function loader(filename) 
             local b 
             if filename then b = Bitmap.new(Texture.new(prefix .. filename, true)) end
             local s = SCMLSprite.new(b)
@@ -63,19 +64,28 @@ function MainLayer:init()
                 s:addChild(a)
             end
             return s
-    end)
-    self.monster = scml.entities[1]
-    self.monster:setAnimation("Jump") -- TEMP
-    --self:addChild(self.monster)
+    end
+	
+    self.monster = scml:createEntity(0, loader)
+    self.monster:setAnimation("Idle") -- TEMP
+    self:addChild(self.monster)
+	
+
+	--[[
+	local monster2 = scml:createEntity(0, loader)
+	monster2:setAnimation("Jump")
+	monster2:setX(200)
+	self:addChild(monster2) 
+	--]]
 	
     local scale = 1.2
-    self:setPosition(150, 300); self:setScale(scale, scale)
+    self:setPosition(10, 10); self:setScale(scale, scale)
     
     
 end
 
 function MainLayer:onLogic()
     --print("physics step")
-    world:step(1/application:getFps(), 4, 8)
+    world:step(1.0/application:getFps(), 4, 8)
     
 end

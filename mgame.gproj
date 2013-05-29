@@ -1,55 +1,185 @@
 <project>
- <properties autorotation="0" encrypt="0" fps="60" scaleMode="0" mouseToTouch="1" iosDevice="0" packageName="com.yourdomain.yourapp" logicalHeight="480" logicalWidth="320" mouseTouchOrder="0" retinaDisplay="3" touchToMouse="1" assetsOnly="0" orientation="3" architecture="0">
-  <imageScales/>
- </properties>
- <file source="physicssprite.lua"/>
- <file source="scmlsprite.lua"/>
- <file source="xmlSimple.lua" excludeFromExecution="1"/>
- <file source="scmlfile.lua"/>
- <file source="scmlentity.lua"/>
- <file source="ninja.lua"/>
- <file source="injection.lua"/>
- <file source="mainlayer.lua"/>
- <file source="gameplayscene.lua"/>
- <file source="scenemanager.lua"/>
- <file source="main.lua"/>
- <folder name="data">
-  <folder name="monster-kopia">
-   <file source="data/monster-kopia/Example.SCML"/>
-   <file source="data/monster-kopia/Example2.SCML"/>
-   <folder name="mon_arms">
-    <file source="data/monster-kopia/mon_arms/forearm_0.png"/>
-    <file source="data/monster-kopia/mon_arms/forearm_a.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_0_0.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_0_1.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_0_2.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_0_3.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_a_0.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_a_1.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_a_2.png"/>
-    <file source="data/monster-kopia/mon_arms/hand_a_3.png"/>
-    <file source="data/monster-kopia/mon_arms/shoulder_0.png"/>
-    <file source="data/monster-kopia/mon_arms/shoulder_a.png"/>
-   </folder>
-   <folder name="mon_head">
-    <file source="data/monster-kopia/mon_head/head_0.png"/>
-    <file source="data/monster-kopia/mon_head/head_1.png"/>
-    <file source="data/monster-kopia/mon_head/head_2.png"/>
-    <file source="data/monster-kopia/mon_head/head_3.png"/>
-   </folder>
-   <folder name="mon_legs">
-    <file source="data/monster-kopia/mon_legs/foot_0.png"/>
-    <file source="data/monster-kopia/mon_legs/foot_a.png"/>
-    <file source="data/monster-kopia/mon_legs/pelvis_0.png"/>
-    <file source="data/monster-kopia/mon_legs/thigh_0.png"/>
-    <file source="data/monster-kopia/mon_legs/thigh_a.png"/>
-   </folder>
-   <folder name="mon_shadows">
-    <file source="data/monster-kopia/mon_shadows/shadow_idle.png"/>
-   </folder>
-   <folder name="mon_torso">
-    <file source="data/monster-kopia/mon_torso/torso_0.png"/>
-   </folder>
+  <properties autorotation="0" encrypt="0" fps="60" scaleMode="0" mouseToTouch="1" iosDevice="0" packageName="com.yourdomain.yourapp" logicalHeight="480" logicalWidth="320" mouseTouchOrder="0" retinaDisplay="3" touchToMouse="1" assetsOnly="0" orientation="3" architecture="0">
+    <imageScales/>
+  </properties>
+  <file source="cache.lua"/>
+  <file source="svg.lua"/>
+  <file source="ground.lua"/>
+  <file source="scmlparser.lua"/>
+  <file source="entities.lua"/>
+  <file source="physicssprite.lua"/>
+  <file source="scmlsprite.lua"/>
+  <file source="xmlSimple.lua" excludeFromExecution="1"/>
+  <file source="scmlentity.lua"/>
+  <file source="ninja.lua"/>
+  <file source="injection.lua"/>
+  <file source="mainlayer.lua"/>
+  <file source="gameplayscene.lua"/>
+  <file source="scenemanager.lua"/>
+  <file source="main.lua"/>
+  <dependency from="main.lua" to="injection.lua"/>
+  <folder name="data">
+    <folder name="entities">
+      <file source="data/entities/dev_gen.bat"/>
+      <file source="data/entities/dev_gen.py"/>
+      <folder name="ninja">
+        <file source="data/entities/ninja/.DS_Store"/>
+        <file source="data/entities/ninja/anim.scml"/>
+        <file source="data/entities/ninja/dev_base.md5"/>
+        <file source="data/entities/ninja/dev_base.svg"/>
+        <folder name="dev_img">
+          <folder name="dev_circle">
+            <file source="data/entities/ninja/dev_img/dev_circle/img.png"/>
+          </folder>
+          <folder name="dev_lines">
+            <file source="data/entities/ninja/dev_img/dev_lines/img.png"/>
+          </folder>
+          <folder name="head">
+            <file source="data/entities/ninja/dev_img/head/img.png"/>
+          </folder>
+          <folder name="larm0">
+            <file source="data/entities/ninja/dev_img/larm0/img.png"/>
+          </folder>
+          <folder name="larm1">
+            <file source="data/entities/ninja/dev_img/larm1/img.png"/>
+          </folder>
+          <folder name="lleg0">
+            <file source="data/entities/ninja/dev_img/lleg0/img.png"/>
+          </folder>
+          <folder name="lleg1">
+            <file source="data/entities/ninja/dev_img/lleg1/img.png"/>
+          </folder>
+          <folder name="neck">
+            <file source="data/entities/ninja/dev_img/neck/img.png"/>
+          </folder>
+          <folder name="rarm0">
+            <file source="data/entities/ninja/dev_img/rarm0/img.png"/>
+          </folder>
+          <folder name="rarm1">
+            <file source="data/entities/ninja/dev_img/rarm1/img.png"/>
+          </folder>
+          <folder name="rleg0">
+            <file source="data/entities/ninja/dev_img/rleg0/img.png"/>
+          </folder>
+          <folder name="rleg1">
+            <file source="data/entities/ninja/dev_img/rleg1/img.png"/>
+          </folder>
+          <folder name="torso0">
+            <file source="data/entities/ninja/dev_img/torso0/img.png"/>
+          </folder>
+          <folder name="torso1">
+            <file source="data/entities/ninja/dev_img/torso1/img.png"/>
+          </folder>
+        </folder>
+        <folder name="img">
+          <folder name="head">
+            <file source="data/entities/ninja/img/head/img.png"/>
+            <file source="data/entities/ninja/img/head/img@15x.png"/>
+            <file source="data/entities/ninja/img/head/img@2x.png"/>
+          </folder>
+          <folder name="larm0">
+            <file source="data/entities/ninja/img/larm0/img.png"/>
+            <file source="data/entities/ninja/img/larm0/img@15x.png"/>
+            <file source="data/entities/ninja/img/larm0/img@2x.png"/>
+          </folder>
+          <folder name="larm1">
+            <file source="data/entities/ninja/img/larm1/img.png"/>
+            <file source="data/entities/ninja/img/larm1/img@15x.png"/>
+            <file source="data/entities/ninja/img/larm1/img@2x.png"/>
+          </folder>
+          <folder name="lleg0">
+            <file source="data/entities/ninja/img/lleg0/img.png"/>
+            <file source="data/entities/ninja/img/lleg0/img@15x.png"/>
+            <file source="data/entities/ninja/img/lleg0/img@2x.png"/>
+          </folder>
+          <folder name="lleg1">
+            <file source="data/entities/ninja/img/lleg1/img.png"/>
+            <file source="data/entities/ninja/img/lleg1/img@15x.png"/>
+            <file source="data/entities/ninja/img/lleg1/img@2x.png"/>
+          </folder>
+          <folder name="neck">
+            <file source="data/entities/ninja/img/neck/img.png"/>
+            <file source="data/entities/ninja/img/neck/img@15x.png"/>
+            <file source="data/entities/ninja/img/neck/img@2x.png"/>
+          </folder>
+          <folder name="rarm0">
+            <file source="data/entities/ninja/img/rarm0/img.png"/>
+            <file source="data/entities/ninja/img/rarm0/img@15x.png"/>
+            <file source="data/entities/ninja/img/rarm0/img@2x.png"/>
+          </folder>
+          <folder name="rarm1">
+            <file source="data/entities/ninja/img/rarm1/img.png"/>
+            <file source="data/entities/ninja/img/rarm1/img@15x.png"/>
+            <file source="data/entities/ninja/img/rarm1/img@2x.png"/>
+          </folder>
+          <folder name="rleg0">
+            <file source="data/entities/ninja/img/rleg0/img.png"/>
+            <file source="data/entities/ninja/img/rleg0/img@15x.png"/>
+            <file source="data/entities/ninja/img/rleg0/img@2x.png"/>
+          </folder>
+          <folder name="rleg1">
+            <file source="data/entities/ninja/img/rleg1/img.png"/>
+            <file source="data/entities/ninja/img/rleg1/img@15x.png"/>
+            <file source="data/entities/ninja/img/rleg1/img@2x.png"/>
+          </folder>
+          <folder name="torso0">
+            <file source="data/entities/ninja/img/torso0/img.png"/>
+            <file source="data/entities/ninja/img/torso0/img@15x.png"/>
+            <file source="data/entities/ninja/img/torso0/img@2x.png"/>
+          </folder>
+          <folder name="torso1">
+            <file source="data/entities/ninja/img/torso1/img.png"/>
+            <file source="data/entities/ninja/img/torso1/img@15x.png"/>
+            <file source="data/entities/ninja/img/torso1/img@2x.png"/>
+          </folder>
+        </folder>
+        <file source="data/entities/ninja/logic.lua"/>
+      </folder>
+    </folder>
+    <folder name="levels">
+      <folder name="0">
+        <folder name="1">
+          <file source="data/levels/0/1/.DS_Store"/>
+          <file source="data/levels/0/1/level.xml"/>
+        </folder>
+      </folder>
+    </folder>
+    <folder name="monster-kopia">
+      <file source="data/monster-kopia/Example.SCML"/>
+      <file source="data/monster-kopia/Example2.SCML"/>
+      <folder name="mon_arms">
+        <file source="data/monster-kopia/mon_arms/forearm_0.png"/>
+        <file source="data/monster-kopia/mon_arms/forearm_a.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_0_0.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_0_1.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_0_2.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_0_3.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_a_0.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_a_1.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_a_2.png"/>
+        <file source="data/monster-kopia/mon_arms/hand_a_3.png"/>
+        <file source="data/monster-kopia/mon_arms/shoulder_0.png"/>
+        <file source="data/monster-kopia/mon_arms/shoulder_a.png"/>
+      </folder>
+      <folder name="mon_head">
+        <file source="data/monster-kopia/mon_head/head_0.png"/>
+        <file source="data/monster-kopia/mon_head/head_1.png"/>
+        <file source="data/monster-kopia/mon_head/head_2.png"/>
+        <file source="data/monster-kopia/mon_head/head_3.png"/>
+      </folder>
+      <folder name="mon_legs">
+        <file source="data/monster-kopia/mon_legs/foot_0.png"/>
+        <file source="data/monster-kopia/mon_legs/foot_a.png"/>
+        <file source="data/monster-kopia/mon_legs/pelvis_0.png"/>
+        <file source="data/monster-kopia/mon_legs/thigh_0.png"/>
+        <file source="data/monster-kopia/mon_legs/thigh_a.png"/>
+      </folder>
+      <folder name="mon_shadows">
+        <file source="data/monster-kopia/mon_shadows/shadow_idle.png"/>
+      </folder>
+      <folder name="mon_torso">
+        <file source="data/monster-kopia/mon_torso/torso_0.png"/>
+      </folder>
+    </folder>
   </folder>
- </folder>
 </project>
