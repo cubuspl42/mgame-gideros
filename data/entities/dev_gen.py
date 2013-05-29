@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from os import listdir, error, makedirs
 from os.path import isdir, join, abspath, exists
 from lxml import etree
@@ -5,6 +6,7 @@ import subprocess
 from subprocess import call
 import hashlib
 import argparse
+import sys
 
 ##########################################################################################
 # globals
@@ -151,7 +153,11 @@ parser.add_argument('--force', action='store_true',
 					help="generate pngs even if svg_base.md5 hasn't changed")
 parser.add_argument('--dev-only', action='store_true',
 					help="generate images only in 'dev_img', not in 'img'")
-args = parser.parse_args()
+argv = sys.argv
+if len(argv) < 2 :
+	print "Reading arguments from dev_gen_args.txt..."
+	argv = readfile('dev_gen_args.txt').split()
+args = parser.parse_args(argv)
 
 if args.dev_only :
 	print "*** Generating ONLY dev_img ***"
