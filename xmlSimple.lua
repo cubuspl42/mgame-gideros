@@ -132,9 +132,6 @@ function newNode(name)
     function node:setName(name) self.___name = name end
     function node:children() return self.___children end
     function node:numChildren() return #self.___children end
-    function node:createTable(name) -- depracted
-        return
-    end
     
     function node:addChild(child) -- always create table
         if self[child:name()] == nil then

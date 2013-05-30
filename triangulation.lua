@@ -25,7 +25,7 @@ Algorithm Suitable for Terrain Modelling.
 http://local.wasp.uwa.edu.au/~pbourke/papers/triangulate/index.html
  
 --]]
- 
+
 function delaunay(points_list)
     local triangle_list = {}
     local numpoints = #points_list
@@ -46,16 +46,16 @@ function delaunay(points_list)
             w = x
         end    
     end
- 
- 
+    
+    
     --Create Supertriangle
     table.insert(points_list, {x = -5000, y = -5000})
     table.insert(points_list, {x = 5000, y = 0})
     table.insert(points_list, {x = 0, y = 5000})
     table.insert(triangle_list, {numpoints+1,numpoints+2,numpoints+3})
- 
+    
     local function inCircle(point, triangle_counter)
-                --[[
+        --[[
                 '''Series of calculations to check if a certain point lies inside lies inside the circumcircle
                 made up by points in triangle (x1,y1) (x2,y2) (x3,y3)'''
                 #adapted from Dimitrie Stefanescu's Rhinoscript version
@@ -66,91 +66,91 @@ function delaunay(points_list)
         if triangle_list[triangle_counter].done then
             return false
         end    
- 
-                local xp = point.x
-                local yp = point.y
- 
-                if  triangle_list[triangle_counter].r then
- 
+        
+        local xp = point.x
+        local yp = point.y
+        
+        if  triangle_list[triangle_counter].r then
             
-                    local r = triangle_list[triangle_counter].r
-                    local xc = triangle_list[triangle_counter].xc
-                    local yc = triangle_list[triangle_counter].yc
-                 
-                    local dx = xp - xc
-                local dy = yp - yc
-                local rsqr = r*r
-                local drsqr = dx * dx + dy * dy
+            
+            local r = triangle_list[triangle_counter].r
+            local xc = triangle_list[triangle_counter].xc
+            local yc = triangle_list[triangle_counter].yc
+            
+            local dx = xp - xc
+            local dy = yp - yc
+            local rsqr = r*r
+            local drsqr = dx * dx + dy * dy
             
             if xp > xc + r then
                 triangle_list[triangle_counter].done = true
             end    
             
-                if drsqr <= rsqr then
-                        return true
-                else
-                        return false
-                end
+            if drsqr <= rsqr then
+                return true
+            else
+                return false
+            end
         end     
- 
-                local x1 = points_list[triangle_list[triangle_counter][1]].x
-                local y1 = points_list[triangle_list[triangle_counter][1]].y
-                local x2 = points_list[triangle_list[triangle_counter][2]].x
-                local y2 = points_list[triangle_list[triangle_counter][2]].y
-                local x3 = points_list[triangle_list[triangle_counter][3]].x
-                local y3 = points_list[triangle_list[triangle_counter][3]].y
-                local eps = 0.0001
-                
-                if math.abs(y1-y2) < eps and math.abs(y2-y3) < eps then 
-                    return false    
-                end
-                
-                if math.abs(y2-y1) < eps then
-                        m2 = -(x3 - x2) / (y3 - y2)
-                         mx2 = (x2 + x3) / 2
-                         my2 = (y2 + y3) / 2
-                         xc = (x2 + x1) / 2
-                         yc = m2 * (xc - mx2) + my2
-                elseif math.abs(y3-y2) < eps then
-                        
-                         m1 = -(x2 - x1) / (y2 - y1)
-                        
-                         mx1 = (x1 + x2) / 2
-                         my1 = (y1 + y2) / 2
-                         xc = (x3 + x2) / 2
-                         yc = m1 * (xc - mx1) + my1
-                else
-                         m1 = -(x2 - x1) / (y2 - y1)
-                         m2 = -(x3 - x2) / (y3 - y2)
-                         mx1 = (x1 + x2) / 2
-                         mx2 = (x2 + x3) / 2
-                         my1 = (y1 + y2) / 2
-                         my2 = (y2 + y3) / 2
-                         xc = (m1 * mx1 - m2 * mx2 + my2 - my1) / (m1 - m2)
-                         yc = m1 * (xc - mx1) + my1
-                end
-                
-                 
-                 dx = x2 - xc
-                 dy = y2 - yc
-                 rsqr = dx * dx + dy * dy
-                 r = math.sqrt(rsqr)
-                 
-                 triangle_list[triangle_counter].r = r
-                 triangle_list[triangle_counter].xc = xc
-                 triangle_list[triangle_counter].yc = yc
-                 
-                 dx = xp - xc
-                 dy = yp - yc
-                 drsqr = (dx * dx) + (dy * dy)
- 
-                if drsqr <= rsqr then
-                        return true
-                else
-                        return false
-                end     
+        
+        local x1 = points_list[triangle_list[triangle_counter][1]].x
+        local y1 = points_list[triangle_list[triangle_counter][1]].y
+        local x2 = points_list[triangle_list[triangle_counter][2]].x
+        local y2 = points_list[triangle_list[triangle_counter][2]].y
+        local x3 = points_list[triangle_list[triangle_counter][3]].x
+        local y3 = points_list[triangle_list[triangle_counter][3]].y
+        local eps = 0.0001
+        
+        if math.abs(y1-y2) < eps and math.abs(y2-y3) < eps then 
+            return false    
+        end
+        
+        if math.abs(y2-y1) < eps then
+            m2 = -(x3 - x2) / (y3 - y2)
+            mx2 = (x2 + x3) / 2
+            my2 = (y2 + y3) / 2
+            xc = (x2 + x1) / 2
+            yc = m2 * (xc - mx2) + my2
+        elseif math.abs(y3-y2) < eps then
+            
+            m1 = -(x2 - x1) / (y2 - y1)
+            
+            mx1 = (x1 + x2) / 2
+            my1 = (y1 + y2) / 2
+            xc = (x3 + x2) / 2
+            yc = m1 * (xc - mx1) + my1
+        else
+            m1 = -(x2 - x1) / (y2 - y1)
+            m2 = -(x3 - x2) / (y3 - y2)
+            mx1 = (x1 + x2) / 2
+            mx2 = (x2 + x3) / 2
+            my1 = (y1 + y2) / 2
+            my2 = (y2 + y3) / 2
+            xc = (m1 * mx1 - m2 * mx2 + my2 - my1) / (m1 - m2)
+            yc = m1 * (xc - mx1) + my1
+        end
+        
+        
+        dx = x2 - xc
+        dy = y2 - yc
+        rsqr = dx * dx + dy * dy
+        r = math.sqrt(rsqr)
+        
+        triangle_list[triangle_counter].r = r
+        triangle_list[triangle_counter].xc = xc
+        triangle_list[triangle_counter].yc = yc
+        
+        dx = xp - xc
+        dy = yp - yc
+        drsqr = (dx * dx) + (dy * dy)
+        
+        if drsqr <= rsqr then
+            return true
+        else
+            return false
         end     
-                        
+    end     
+    
     for i = 1, numpoints do
         local edges = {}
         local point = points_list[i]
@@ -159,7 +159,7 @@ function delaunay(points_list)
         local j = 1
         
         while triangles_remain do
-        
+            
             if inCircle(point, j) then
                 table.insert(edges, {triangle_list[j][1],triangle_list[j][2]})
                 table.insert(edges, {triangle_list[j][2],triangle_list[j][3]})
@@ -173,8 +173,8 @@ function delaunay(points_list)
                 triangles_remain = false
             end    
         end
- 
- 
+        
+        
         --Remove duplicates
         local k = 1
         while k < #edges do
@@ -190,7 +190,7 @@ function delaunay(points_list)
             end
             k = k + 1
         end            
- 
+        
         -- Make triangles from edges
         for k = 1, #edges do
             if edges[k][1] then 
@@ -198,20 +198,20 @@ function delaunay(points_list)
             end
         end
     end
- 
+    
     --remove Super Triangle and its verticies
     local i = 1
     while i < #triangle_list + 1 do    
-            if triangle_list[i][1] > numpoints   then
-                table.remove(triangle_list,i)
-                i = i-1    
-            elseif triangle_list[i][2] > numpoints then
-                table.remove(triangle_list,i)
-                i = i-1 
-            elseif triangle_list[i][3] > numpoints then
-                table.remove(triangle_list,i)
-                i = i-1 
-            end
+        if triangle_list[i][1] > numpoints   then
+            table.remove(triangle_list,i)
+            i = i-1    
+        elseif triangle_list[i][2] > numpoints then
+            table.remove(triangle_list,i)
+            i = i-1 
+        elseif triangle_list[i][3] > numpoints then
+            table.remove(triangle_list,i)
+            i = i-1 
+        end
         i = i+1
     end
     points_list[numpoints+1] = nil
