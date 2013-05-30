@@ -67,7 +67,7 @@ function MainLayer:init()
     end
 	
     self.monster = scml:createEntity(0, loader)
-    self.monster:setAnimation("Idle") -- TEMP
+    self.monster:setAnimation("Run") -- TEMP
     self:addChild(self.monster)
 	
 
