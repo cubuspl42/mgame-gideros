@@ -6,7 +6,7 @@ import posixpath
 from lxml import etree as ET
 
 script_name = 'dev_update'
-data_folder = 'data'
+folders = ['data', 'lib']
 filename = 'mgame.gproj'
 
 def readfile(filepath) :
@@ -15,7 +15,7 @@ def readfile(filepath) :
 			return f.read()
 	except IOError: return ""
 
-desc = script_name + """ updates mgame.gproj with files from 'data', recursively."""
+desc = script_name + """ updates mgame.gproj with files from 'data' and 'lib', recursively."""
 parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('--dev-too', action='store_true',
 					help="don't skip items starting with 'dev_'")
@@ -29,23 +29,24 @@ parser = ET.XMLParser(remove_blank_text=True)
 tree = ET.parse(filename, parser)
 root = tree.getroot()
 
-for folder in root.findall('folder') :
-	if folder.attrib['name'] == data_folder :
-		root.remove(folder)
-		
-data = ET.SubElement(root, 'folder', {'name': data_folder})
-			
-def walk(root, tag) :
-	for item in os.listdir(root) :
+for folderTag in root.findall('folder') :
+	if folderTag.attrib['name'] in folders :
+		root.remove(folderTag)
+
+def walk(rootpath, tag) :
+	for item in os.listdir(rootpath) :
 		if item.startswith(".") or (item.startswith("dev_") and not args.dev_too) :
 			continue
-		path = posixpath.join(root, item)
+		path = posixpath.join(rootpath, item)
 		print(path)
  	   	if os.path.isdir(path) :
  	   		folder = ET.SubElement(tag, 'folder', {'name': item })
  	   		walk(path, folder)
 		else :
 			file = ET.SubElement(tag, 'file', {'source': path, 'excludeFromExecution': '1'})
-			
-walk(data_folder, data)
+
+for folder in folders :
+	tag = ET.SubElement(root, 'folder', {'name': folder})
+	walk(folder, tag)
+	
 tree.write(filename, pretty_print=True)
