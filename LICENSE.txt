@@ -1,3 +1,2 @@
-This is proprietary software.
+This is proprietary software, unless specified otherwise (see local LICENSE.txt files and licence notes in headers).
 It doesn't deprive you of rights granted by GitHub Terms of Service, though.
-
