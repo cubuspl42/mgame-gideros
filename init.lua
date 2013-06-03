@@ -1,5 +1,13 @@
 package.path = package.path .. ";./lib/?.lua"
 
+function run(untrusted_code, env)
+  if untrusted_code:byte(1) == 27 then return nil, "binary bytecode prohibited" end
+  local untrusted_function, message = loadstring(untrusted_code)
+  if not untrusted_function then return nil, message end
+  setfenv(untrusted_function, env)
+  return pcall(untrusted_function)
+end
+
 function get(array, i)
     if i < 0 then return array[table.getn(array) + i + 1]
     elseif i > 0 then return array[i] end
