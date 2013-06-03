@@ -15,13 +15,42 @@ function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
     
 end
 
+local function test_newShapeFromVertices(x, y, ...)
+	local s = Shape.new()
+	s:setFillStyle(Shape.SOLID, 0xC0C0C0)
+	s:beginPath()
+	s:moveTo(x, y)
+	local points = {...}
+	for i=1,#points,2 do
+		local px, py = points[i], points[i+1]
+		s:lineTo(px, py)
+		--print("test_newShapeFromVertices i, px, py ", i, px, py)
+
+	end
+	s:closePath()
+	s:endPath()
+	return s
+end
+
 function GameplayScene:loadLevel(levelCode)
 	print("loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
 	
+	local s = 0.6
+	self:setScale(s, s)
 	local svg = require('msvg').newTree()
 	svg:loadFile(prefix .. "/level.svg")
 	svg:simplify()
+	
+	local function walk(e)
+		if e.vertices then
+				self:addChild(test_newShapeFromVertices(unpack(e.vertices)))
+		end
+		for _, c in ipairs(e.children) do walk(c) end
+	end
+	walk(svg.root)
+	
+	
 	--tprint(svg)
 	
     --local svg = xmlFromFile(prefix .. "/level.svg")

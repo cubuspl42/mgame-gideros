@@ -4,6 +4,8 @@ local path = {
 	arc = require 'path_svgarc',
 	line = require 'path_line',
 	bezier2 = require 'path_bezier2',
+	bezier3 = require 'path_bezier3',
+	point = require 'path_point'
 }
 local affine = require 'affine'
 
@@ -26,20 +28,21 @@ local function parsePathDef(dString)
 end
 
 local function parseTransform(transformString)
-	local transform = {}
-	--= affine.matrix()
-	--print(transformString)
+	local transform = affine.matrix()
+	print("ttransformString", transformString)
 	if transformString then
 		local s = transformString
-		for f, args in s:gmatch"(%a+)%((%A*)%)" do
-			--print("f=", f, args)
-			local fn = {name = f}
-			for val in args:gmatch"([%-]?[%d%.]+)" do
-				--print("val=", val)
-				table.insert(fn, tonumber(val))
-			end
-			table.insert(transform, fn)
-		end	
+		local env = {}
+		function env.matrix(...)
+			print("env.matrix", ...)
+			transform = affine.matrix(...) * transform
+		end
+		function env.translate(...)
+			print("env.matrix", ...)
+			transform = affine.trans(...) * transform
+		end
+		local ok = run(transformString, env)
+		-- do we care if ok?
 	end
 	return transform
 end
@@ -60,11 +63,13 @@ end
 
 local pathCommands = {}
 
+-- converts relative coords to absolute, if necessary
 local function absolute(rel, cx, cy, x, y, ...)
+		if not x then return end
 		if rel then
 			x, y = cx + x, cy + y
 		end
-		return x, y, (... and absolute(rel, cx, cy, ...))
+		return x, y, absolute(rel, cx, cy, ...)
 end
 
 function pathCommands.moveto(rel, v, cx, cy, x, y, ...)
@@ -76,34 +81,74 @@ function pathCommands.moveto(rel, v, cx, cy, x, y, ...)
 end
 
 function pathCommands.lineto(rel, v, cx, cy, x, y, ...)
-	local px, py = get(v, -2), get(v, -1)
+	local px, py = get(v, -2), get(v, -1) 
 	if px ~= cx or py ~= cy then
+		--print("lineto preinsert cx, cy: ", cx, cy)
 		table.insertall(v, cx, cy)
 	end
-	cx, cy = absolute(rel, cx, cy, x, y)
-	table.insertall(v, cx, cy)
+	-- this logic above is in every pathCommand, make it common?
+	x, y = absolute(rel, cx, cy, x, y)
+	--print("lineto insert cx, cy: ", cx, cy)
+	table.insertall(v, x, y)
 	if ... then
-		return pathCommands.lineto(rel, v, cx, cy, ...)
+		return pathCommands.lineto(rel, v, x, y, ...)
 	end
-	return cx, cy
+	return x, y
 end
 
 function pathCommands.curveto(rel, v, cx, cy, x1, y1, x2, y2, x, y, ...)
+	--print("curveto")
 	local px, py = get(v, -2), get(v, -1)
 	if px ~= cx or py ~= cy then
+		--print("curveto preinsert cx, cy: ", cx, cy)
 		table.insertall(v, cx, cy)
 	end
-	x1, y1, x2, y2, cx, cy = absolute(rel, cx, cy, x1, y1, x2, y2, x, y)
+	x1, y1, x2, y2, x, y = absolute(rel, cx, cy, x1, y1, x2, y2, x, y)
 	-- push vertices from curve
-	if ... then
-		return pathCommands.curveto(rel, v, cx, cy, ...)
+	local l = path.bezier3.length(1, cx, cy, x1, y1, x2, y2, x, y)
+	local steps = l/15 -- experimental, unit: svg px
+	for i=1,steps do
+		local tx, ty = path.bezier3.point(i/steps, cx, cy, x1, y1, x2, y2, x, y)
+		table.insertall(v, tx, ty)
+		--print("i, ty, ty, #v", i, tx, ty, #v)
 	end
-	return cx, cy
+	if ... then
+		return pathCommands.curveto(rel, v, x, y, ...)
+	end
+	return x, y
+end
+
+function pathCommands.arc(rel, v, cx, cy, rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y, ...)
+	--print("arc")
+	local px, py = get(v, -2), get(v, -1)
+	if px ~= cx or py ~= cy then
+		--print("arc preinsert cx, cy: ", cx, cy)
+		table.insertall(v, cx, cy)
+	end
+	x, y = absolute(rel, cx, cy, x, y)
+	local l = path.point.distance(cx, cy, x, y) -- there is no path.arc.length, so we use this
+	local steps = l/15 -- experimental, unit: svg px
+	for i=1,steps do
+		local tx, ty = path.arc.point(i/steps, cx, cy, rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y)
+		table.insertall(v, tx, ty)
+		--print("i, ty, ty, #v", i, tx, ty, #v)
+	end
+	if ... then
+		return pathCommands.arc(rel, v, x, y, ...)
+	end
+	return x, y
+end
+
+function pathCommands.close(rel, v)
+	v.close = true
 end
 
 table.merge(pathCommands, {
 	M = pathCommands.moveto,
 	L = pathCommands.lineto,
+	C = pathCommands.curveto,
+	Z = pathCommands.close,
+	A = pathCommands.arc,
 })
 
 -- base functions --
@@ -116,7 +161,7 @@ local function newSvgElement(tag) --> svgElement
 		-- a lot of these will be nil. who cares
 		name = tag:name(),
 		id = tonumber(tag['@id']),
-		label = tag['@inkscape:label'],
+		label = tag['@label'],
 		title = tag.title and tag.title[1]:value(),
 		desc = tag.desc and tag.desc[1]:value(),
 		style = parseStyle(tag['@style']),
@@ -139,19 +184,20 @@ local function newSvgElement(tag) --> svgElement
 end
 
 local function simplifyElement(svgElement) --> nil
-	print("simplifyElement")
 	local e = svgElement
+	--print("simplifyElement", e.name, e.label or "<label>")
 	if e.name == "path" then
 		local v = { close = false }
 		e.vertices = v
 		local cx, cy = 0, 0
 		for i, comm in ipairs(e.d) do
 			local n = comm.name
+			--print("command ", n)
 			local N = string.upper(n)
 			local commandFn = pathCommands[N]
 			if commandFn then
 				cx, cy = commandFn(n ~= N, v, cx, cy, unpack(comm))
-				-- cx? cy? 'z'?
+				if not cx then break end -- 'z'
 			else 
 				print("unimplemented path command: ", N)
 			end
@@ -162,7 +208,7 @@ local function simplifyElement(svgElement) --> nil
 						e.x + w, e.y + h, e.x, e.y + h,
 						close = true }
 	else 
-		print("not simplifying ", e.name)
+		--print("not simplifying ", e.name)
 	end
 	for _, child in ipairs(svgElement.children) do
 		--[[ multiply matrices... here?

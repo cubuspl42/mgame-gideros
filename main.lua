@@ -3,6 +3,7 @@
   [set local debugging](macro:shell(ide.config.gideros = nil))
 --]]
 
+print("----------------------------------------------------------->")
 
 require "box2d"
 xml = require "xmlSimple"

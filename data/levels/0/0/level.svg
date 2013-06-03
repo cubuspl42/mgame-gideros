@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.24705882"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35355339"
-     inkscape:cx="444.02615"
-     inkscape:cy="602.58285"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="330.30303"
+     inkscape:cy="355.1147"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -58,28 +58,24 @@
        id="rect2997"
        width="1661.6442"
        height="125.30431"
-       x="-43.58411"
-       y="912.83179"
-       transform="translate(0,52.362183)" />
-    <path
-       sodipodi:type="arc"
-       style="fill:#000000;fill-opacity:0.06600659;stroke:#000000;stroke-width:4.12038994;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path3001"
-       sodipodi:cx="389.53299"
-       sodipodi:cy="441.57858"
-       sodipodi:rx="62.652157"
-       sodipodi:ry="70.824181"
-       d="m 452.18515,441.57858 c 0,39.11512 -28.05033,70.82418 -62.65216,70.82418 -34.60183,0 -62.65216,-31.70906 -62.65216,-70.82418 0,-39.11511 28.05033,-70.82418 62.65216,-70.82418 34.60183,0 62.65216,31.70907 62.65216,70.82418 z"
-       transform="matrix(0.77411541,0,0,0.68479437,-132.29115,603.20159)">
-      <title
-         id="title3771">ninja</title>
-    </path>
+       x="20.0555"
+       y="914.28229" />
     <path
        style="fill:#999999;stroke:none"
-       d="m 431.63454,970.64705 c 110.96004,-73.14946 226.45159,-98.18207 355.93955,25.40313 l -170.00901,47.94712 z"
+       d="m 415.63454,826.64705 c 110.96004,-73.14946 226.45159,-98.18207 355.93955,25.40313 L 601.56508,899.9973 z"
        id="ramp"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc"
        inkscape:label="#path3794" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:0.22112211;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path3074"
+       sodipodi:cx="181.01933"
+       sodipodi:cy="564.42224"
+       sodipodi:rx="70.710678"
+       sodipodi:ry="70.710678"
+       d="m 251.73001,564.42224 a 70.710678,70.710678 0 1 1 -141.42136,0 70.710678,70.710678 0 1 1 141.42136,0 z"
+       transform="translate(0,52.362183)" />
   </g>
 </svg>
