@@ -18,8 +18,18 @@ end
 function GameplayScene:loadLevel(levelCode)
 	print("loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
-    local svg = xmlFromFile(prefix .. "/level.svg")
+	
+	local svg = require('msvg').newTree()
+	svg:loadFile(prefix .. "/level.svg")
+	svg:simplify()
+	--tprint(svg)
+	
+    --local svg = xmlFromFile(prefix .. "/level.svg")
     local config = xmlFromFile(prefix .. "/level.xml")
+	
+	
+	
+	
     self:loadConfig(config)
     self:loadMap(svg)
 end
@@ -29,7 +39,8 @@ function GameplayScene:loadConfig(xmlConfig)
 end
 
 function GameplayScene:loadMap(svgLevel)
-    self.map = MapLoader.loadMap(svgLevel.svg[1])
+    -- self.map = MapLoader.loadMap(svgLevel.svg[1])
+	
 end
 
 function GameplayScene:setPaused(flag)

@@ -1,12 +1,3 @@
-function get(self, i)
-    if(i < 0) then return self[table.getn(self) + i + 1]
-    elseif(i > 0) then return self[i] end
-end
-
-function toboolean(v)
-    return (type(v) == "string" and v == "true") or (type(v) == "number" and v ~= 0) or (type(v) == "boolean" and v)
-end
-
 function string.firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
@@ -25,6 +16,16 @@ function table.copy(t)
         t2[k] = v
     end
     return t2
+end
+
+function table.merge(t1, t2)
+	for k,v in pairs(t2) do t1[k] = v end
+end
+
+function table.insertall(t, ...)
+	for _, v in ipairs(arg) do
+		table.insert(t, v)
+	end
 end
 
 function Application:getSpf()
