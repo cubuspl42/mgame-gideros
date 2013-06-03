@@ -17,6 +17,7 @@ end
 
 local function test_newShapeFromVertices(x, y, ...)
 	local s = Shape.new()
+	s:setLineStyle(2)
 	s:setFillStyle(Shape.SOLID, 0xC0C0C0)
 	s:beginPath()
 	s:moveTo(x, y)
@@ -36,7 +37,7 @@ function GameplayScene:loadLevel(levelCode)
 	print("loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
 	
-	local s = 0.6
+	local s = 1
 	self:setScale(s, s)
 	local svg = require('msvg').newTree()
 	svg:loadFile(prefix .. "/level.svg")

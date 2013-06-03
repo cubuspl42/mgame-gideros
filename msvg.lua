@@ -29,8 +29,8 @@ end
 
 local function parseTransform(transformString)
 	local transform = affine.matrix()
-	print("ttransformString", transformString)
 	if transformString then
+		print("transformString", transformString)
 		local s = transformString
 		local env = {}
 		function env.matrix(...)
@@ -192,7 +192,7 @@ local function simplifyElement(svgElement) --> nil
 		local cx, cy = 0, 0
 		for i, comm in ipairs(e.d) do
 			local n = comm.name
-			--print("command ", n)
+			--print("path command ", n)
 			local N = string.upper(n)
 			local commandFn = pathCommands[N]
 			if commandFn then
@@ -210,13 +210,18 @@ local function simplifyElement(svgElement) --> nil
 	else 
 		--print("not simplifying ", e.name)
 	end
-	for _, child in ipairs(svgElement.children) do
-		--[[ multiply matrices... here?
-		local t, ct = svgElement.transform, child.transform
-		if t and ct then
-			ct = ct * t
+	local v = e.vertices
+	if v then
+		for i=1,#v,2 do
+			print("#v", #v, i)
+			-- apply transform
+			v[i], v[i+1] = e.transform(v[i], v[i+1])
 		end
-		--]]
+	end
+	for _, child in ipairs(e.children) do
+		-- apply child transform
+		local t, ct = e.transform, child.transform
+		ct = ct * t
 		simplifyElement(child)
 	end
 end
