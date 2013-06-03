@@ -6,6 +6,8 @@
 
 require "box2d"
 xml = require "xmlSimple"
+lpeg = require "lpeg.re"
+--svg_parser = require "svg_parser"
 --require("mobdebug").start()
 
 application:setBackgroundColor(0xFFFFFF)
