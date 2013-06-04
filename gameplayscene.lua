@@ -37,7 +37,7 @@ function GameplayScene:loadLevel(levelCode)
 	print("loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
 	
-	local s = 1
+	local s = 0.6
 	self:setScale(s, s)
 	local svg = require('msvg').newTree()
 	svg:loadFile(prefix .. "/level.svg")
@@ -47,7 +47,7 @@ function GameplayScene:loadLevel(levelCode)
 		if e.vertices then
 				self:addChild(test_newShapeFromVertices(unpack(e.vertices)))
 		end
-		for _, c in ipairs(e.children) do walk(c) end
+		for c in all(e.children) do walk(c) end
 	end
 	walk(svg.root)
 	
@@ -91,17 +91,17 @@ function GameplayScene:onEnterFrame()
 end
 
 function GameplayScene:onTransitionInBegin()
-    print("scene1 - enter begin")
+    print("GameplayScene - enter begin")
 end
 
 function GameplayScene:onTransitionInEnd()
-    print("scene1 - enter end")
+    print("GameplayScene - enter end")
 end
 
 function GameplayScene:onTransitionOutBegin()
-    print("scene1 - exit begin")
+    print("GameplayScene - exit begin")
 end
 
 function GameplayScene:onTransitionOutEnd()
-    print("scene1 - exit end")
+    print("GameplayScene - exit end")
 end

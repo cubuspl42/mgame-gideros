@@ -26,7 +26,7 @@ http://local.wasp.uwa.edu.au/~pbourke/papers/triangulate/index.html
  
 --]]
 
-function delaunay(points_list)
+local function delaunay(points_list)
     local triangle_list = {}
     local numpoints = #points_list
     
@@ -219,4 +219,18 @@ function delaunay(points_list)
     points_list[numpoints+3] = nil  
     
     return triangle_list
+end
+
+local va = require 'vertexarray'
+
+function triangulate(vertices)
+	local xy = {}
+	for x, y, i in va.iter(vertices) do
+		xy[i] = { x=x, y=y }
+	end
+	local tri = delaunay(xy)
+	for i, v in ipairs(xy) do
+		va.set(vertices, i, v.x, v.y)
+	end
+	return tri
 end

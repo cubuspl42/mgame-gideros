@@ -191,6 +191,7 @@
   </folder>
  </folder>
  <folder name="lib">
+  <file source="vector.lua" excludeFromExecution="1"/>
   <file source="lib/affine.lua" excludeFromExecution="1"/>
   <file source="lib/glue.lua" excludeFromExecution="1"/>
   <file source="lib/LICENSE.txt" excludeFromExecution="1"/>
@@ -235,5 +236,6 @@
   <file source="lib/pp.lua" excludeFromExecution="1"/>
   <file source="lib/svg_colors.lua" excludeFromExecution="1"/>
   <file source="lib/svg_parser.lua" excludeFromExecution="1"/>
+  <file source="vertexarray.lua" excludeFromExecution="1"/>
  </folder>
 </project>

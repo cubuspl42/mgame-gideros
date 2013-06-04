@@ -1,13 +1,14 @@
-local msvg = {} -- API
-local supportedTags = { svg = true, g = true, path = true, rect = true }
+local affine = require 'affine'
 local path = {
 	arc = require 'path_svgarc',
 	line = require 'path_line',
 	bezier2 = require 'path_bezier2',
 	bezier3 = require 'path_bezier3',
-	point = require 'path_point'
+	point = require 'path_point',
 }
-local affine = require 'affine'
+
+local msvg = {} -- API
+local supportedTags = { svg = true, g = true, path = true, rect = true }
 
 ---- local functions ----
 
@@ -30,15 +31,12 @@ end
 local function parseTransform(transformString)
 	local transform = affine.matrix()
 	if transformString then
-		print("transformString", transformString)
 		local s = transformString
 		local env = {}
 		function env.matrix(...)
-			print("env.matrix", ...)
 			transform = affine.matrix(...) * transform
 		end
 		function env.translate(...)
-			print("env.matrix", ...)
 			transform = affine.trans(...) * transform
 		end
 		local ok = run(transformString, env)
@@ -59,18 +57,18 @@ local function parseStyle(styleString) --> style table
 	return style
 end
 
--- path commands --
-
-local pathCommands = {}
+-- path commands implementations --
 
 -- converts relative coords to absolute, if necessary
 local function absolute(rel, cx, cy, x, y, ...)
-		if not x then return end
+		if not x then return end -- because of recursion
 		if rel then
 			x, y = cx + x, cy + y
 		end
 		return x, y, absolute(rel, cx, cy, ...)
 end
+
+local pathCommands = {}
 
 function pathCommands.moveto(rel, v, cx, cy, x, y, ...)
 	cx, cy = absolute(rel, cx, cy, x, y)
@@ -100,17 +98,15 @@ function pathCommands.curveto(rel, v, cx, cy, x1, y1, x2, y2, x, y, ...)
 	--print("curveto")
 	local px, py = get(v, -2), get(v, -1)
 	if px ~= cx or py ~= cy then
-		--print("curveto preinsert cx, cy: ", cx, cy)
 		table.insertall(v, cx, cy)
 	end
 	x1, y1, x2, y2, x, y = absolute(rel, cx, cy, x1, y1, x2, y2, x, y)
 	-- push vertices from curve
 	local l = path.bezier3.length(1, cx, cy, x1, y1, x2, y2, x, y)
-	local steps = l/15 -- experimental, unit: svg px
+	local steps = l/15 -- experimental value; unit: svg px
 	for i=1,steps do
 		local tx, ty = path.bezier3.point(i/steps, cx, cy, x1, y1, x2, y2, x, y)
 		table.insertall(v, tx, ty)
-		--print("i, ty, ty, #v", i, tx, ty, #v)
 	end
 	if ... then
 		return pathCommands.curveto(rel, v, x, y, ...)
@@ -122,16 +118,14 @@ function pathCommands.arc(rel, v, cx, cy, rx, ry, x_axis_rotation, large_arc_fla
 	--print("arc")
 	local px, py = get(v, -2), get(v, -1)
 	if px ~= cx or py ~= cy then
-		--print("arc preinsert cx, cy: ", cx, cy)
 		table.insertall(v, cx, cy)
 	end
 	x, y = absolute(rel, cx, cy, x, y)
-	local l = path.point.distance(cx, cy, x, y) -- there is no path.arc.length, so we use this
-	local steps = l/15 -- experimental, unit: svg px
+	local l = path.point.distance(cx, cy, x, y) -- there is no path.arc.length, so we use distance instead
+	local steps = l/15 -- experimental value; unit: svg px
 	for i=1,steps do
 		local tx, ty = path.arc.point(i/steps, cx, cy, rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y)
 		table.insertall(v, tx, ty)
-		--print("i, ty, ty, #v", i, tx, ty, #v)
 	end
 	if ... then
 		return pathCommands.arc(rel, v, x, y, ...)
@@ -154,19 +148,20 @@ table.merge(pathCommands, {
 -- base functions --
 
 -- create new svgElement from xml tag
--- should take parent matrix?
 local function newSvgElement(tag) --> svgElement
 	if not supportedTags[tag:name()] then return end
 	local svgElement = {
-		-- a lot of these will be nil. who cares
+		-- a lot of these will be nil - who cares
+		children = {},
 		name = tag:name(),
-		id = tonumber(tag['@id']),
+		id = tag['@id'],
 		label = tag['@label'],
+		
 		title = tag.title and tag.title[1]:value(),
 		desc = tag.desc and tag.desc[1]:value(),
+		
 		style = parseStyle(tag['@style']),
 		transform = parseTransform(tag['@transform']),
-		children = {},
 		
 		width = tonumber(tag['@width']), -- svg, rect
 		height = tonumber(tag['@height']),  -- svg, rect
@@ -174,7 +169,7 @@ local function newSvgElement(tag) --> svgElement
 		y = tonumber(tag['@y']), -- rect
 		d = parsePathDef(tag['@d']) -- path
 	}
-	for _, childTag in ipairs(tag:children()) do
+	for childTag in all(tag:children()) do
 		local svgChildElement = newSvgElement(childTag)
 		if svgChildElement then
 			table.insert(svgElement.children, svgChildElement)
@@ -185,19 +180,18 @@ end
 
 local function simplifyElement(svgElement) --> nil
 	local e = svgElement
-	--print("simplifyElement", e.name, e.label or "<label>")
+	-- Inkscape doesn't seem to export tags other then 'path' and 'rect'
 	if e.name == "path" then
 		local v = { close = false }
 		e.vertices = v
-		local cx, cy = 0, 0
-		for i, comm in ipairs(e.d) do
+		local cx, cy = 0, 0 -- current x, y
+		for comm in all(e.d) do
 			local n = comm.name
-			--print("path command ", n)
 			local N = string.upper(n)
 			local commandFn = pathCommands[N]
 			if commandFn then
 				cx, cy = commandFn(n ~= N, v, cx, cy, unpack(comm))
-				if not cx then break end -- 'z'
+				if not cx then break end -- 'path is closed (z)'
 			else 
 				print("unimplemented path command: ", N)
 			end
@@ -213,12 +207,11 @@ local function simplifyElement(svgElement) --> nil
 	local v = e.vertices
 	if v then
 		for i=1,#v,2 do
-			print("#v", #v, i)
 			-- apply transform
 			v[i], v[i+1] = e.transform(v[i], v[i+1])
 		end
 	end
-	for _, child in ipairs(e.children) do
+	for child in all(e.children) do
 		-- apply child transform
 		local t, ct = e.transform, child.transform
 		ct = ct * t
@@ -226,6 +219,15 @@ local function simplifyElement(svgElement) --> nil
 	end
 end
 
+local function meta_load(method)
+	return function (svgTree, filename)
+		local p = xml.newParser()
+		local xmlDoc = p[method](p, filename)
+		svgTree.root = newSvgElement(xmlDoc:children()[1])
+	end
+end
+
+-- next two are replaced with meta function above
 local function loadFile(svgTree, filename) 
 	local xmlDoc = xml.newParser():loadFile(filename)
 	svgTree.root = newSvgElement(xmlDoc:children()[1])
@@ -242,8 +244,8 @@ end
 
 function msvg.newTree()
 	return {
-		loadFile = loadFile,
-		loadString = loadString,
+		loadFile = meta_load('loadFile'),
+		loadString = meta_load('loadString'),
 		simplify = simplifyTree,
 	}
 end

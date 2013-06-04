@@ -18,6 +18,17 @@ function table.copy(t)
     return t2
 end
 
+function table.reverse ( tab )
+    local size = #tab
+    local newTable = {}
+ 
+    for i,v in ipairs ( tab ) do
+        newTable[size-i+1] = v
+    end
+ 
+    return newTable
+end
+
 function table.merge(t1, t2)
 	for k,v in pairs(t2) do t1[k] = v end
 end

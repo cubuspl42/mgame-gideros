@@ -1,5 +1,14 @@
 package.path = package.path .. ";./lib/?.lua"
 
+function all(t)
+      local i = 0
+      local n = table.getn(t)
+      return function ()
+               i = i + 1
+               if i <= n then return t[i] end
+             end
+end
+
 function run(untrusted_code, env)
   if untrusted_code:byte(1) == 27 then return nil, "binary bytecode prohibited" end
   local untrusted_function, message = loadstring(untrusted_code)
