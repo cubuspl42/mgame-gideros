@@ -52,7 +52,6 @@ function GameplayScene:loadLevel(levelCode)
 		if e.vertices then
 				if e.vertices.close then
 					local alpha = tonumber(e.style.fill_opacity)
-					print("alpha: ", alpha)
 					local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha)
 					self:addChild(m)
 					--self:addChild(test_newShapeFromVertices(unpack(e.vertices)))

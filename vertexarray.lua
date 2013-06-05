@@ -1,5 +1,5 @@
 -- functions for accessing vertex arrays
--- int form {<x1>, <y1>, <x1>, <y1>, <...>, <xn>, <yn>}
+-- in form {<x1>, <y1>, <x1>, <y1>, <...>, <xn>, <yn>}
 
 local function get(array, i) -- 0 is last, -1 is one before last, etc.
 	if i <= 0 then

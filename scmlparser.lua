@@ -9,21 +9,21 @@ local function toLuaIndex(index)
 end
 
 function SCMLParser:init(filename)
-    self.entities = {}
+    self.entities = {} -- remove?
     self.scml = xml.newParser():loadFile(filename)
-    self.scml = self.scml.spriter_data[1]
-    if not self.scml then
+	if not self.scml.spriter_data then
+		self.scml = nil
         print ("File ".. filename .." is not SCML file")
         return
     end
-    
+    self.scml = self.scml.spriter_data[1]
     print("loading " .. filename)
 end
 
 function SCMLParser:createEntity(id, loaderFunction)
     local scml = self.scml
-    tprint(scml, 1)
-    print(scml.entity)
+    --tprint(scml, 1)
+    --print(scml.entity)
     if not scml or not scml.entity then return end
     local entityTag = scml.entity[id + 1]
     

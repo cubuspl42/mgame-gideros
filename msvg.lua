@@ -10,6 +10,7 @@ local path = {
 local msvg = {} -- API
 local supportedTags = { svg = true, g = true, path = true, rect = true }
 local arcStepConst = 10
+local curveStepConst = 15
 
 ---- local functions ----
 
@@ -56,6 +57,7 @@ local function parseStyle(styleString) --> style table
 			style[a] = v
 		end
 	end
+	-- tonumber some popular styles like 'fill'?
 	return style
 end
 
@@ -105,7 +107,7 @@ function pathCommands.curveto(rel, v, cx, cy, x1, y1, x2, y2, x, y, ...)
 	x1, y1, x2, y2, x, y = absolute(rel, cx, cy, x1, y1, x2, y2, x, y)
 	-- push vertices from curve
 	local l = path.bezier3.length(1, cx, cy, x1, y1, x2, y2, x, y)
-	local steps = l/15 -- experimental value; unit: svg px
+	local steps = l/curveStepConst -- experimental value; unit: svg px
 	for i=1,steps do
 		local tx, ty = path.bezier3.point(i/steps, cx, cy, x1, y1, x2, y2, x, y)
 		table.insertall(v, tx, ty)
@@ -171,8 +173,8 @@ local function newSvgElement(tag) --> svgElement
 		y = tonumber(tag['@y']), -- rect
 		d = parsePathDef(tag['@d']) -- path
 	}
-	print("element: ", svgElement.name)
-	tprint(svgElement.transform)
+	--print("element: ", svgElement.name)
+	--tprint(svgElement.transform)
 	for childTag in all(tag:children()) do
 		local svgChildElement = newSvgElement(childTag)
 		if svgChildElement then

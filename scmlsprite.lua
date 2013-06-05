@@ -18,7 +18,7 @@ function SCMLSprite:setParam(k, v)
         return
     end
     if not self["set" .. string.firstToUpper(k)] then
-        print("cannot set param " .. k)
+        print("critical: cannot set param " .. k)
         return
     end
     if k == "y" or k == "rotation" then v = -v end
