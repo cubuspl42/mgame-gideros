@@ -60,7 +60,7 @@ function Vector.__le(a, b)
 end
 
 function Vector.__tostring(a)
-  return "(" + a.x + ", " + a.y + ")"
+  return "(" .. a.x .. ", " .. a.y .. ")"
 end
 
 function Vector.new(x, y)

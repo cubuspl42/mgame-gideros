@@ -1,9 +1,12 @@
 -- functions for accessing vertex arrays
 -- int form {<x1>, <y1>, <x1>, <y1>, <...>, <xn>, <yn>}
 
-local function get(array, i)
-	if i < 0 then
-		i = #array/2 + i + 1
+local function get(array, i) -- 0 is last, -1 is one before last, etc.
+	if i <= 0 then
+		i = #array/2 + i
+	end
+	while i > #array/2 do
+		i = i - #array/2
 	end
 	return array[2*i-1], array[2*i]
 end

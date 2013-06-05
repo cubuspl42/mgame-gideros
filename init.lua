@@ -1,4 +1,6 @@
-package.path = package.path .. ";./lib/?.lua"
+package.path = package.path .. ";./lib/?.lua" -- add lib folder
+require 'box2d' -- b2 API
+require 'vector' -- global 'Vector'
 
 function all(t)
       local i = 0
@@ -44,6 +46,7 @@ function xmlFromFile(filename)
     return xml.newParser():loadFile(filename)
 end
 
+-- one should use env?
 function preserve(...)
 	local global = {}
 	for _, v in pairs(arg) do

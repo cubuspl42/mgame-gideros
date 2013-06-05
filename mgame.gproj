@@ -191,13 +191,13 @@
   </folder>
  </folder>
  <folder name="lib">
+  <folder name="lpeg">
+   <file source="lib/lpeg/re.lua" excludeFromExecution="1"/>
+  </folder>
   <file source="vector.lua" excludeFromExecution="1"/>
   <file source="lib/affine.lua" excludeFromExecution="1"/>
   <file source="lib/glue.lua" excludeFromExecution="1"/>
   <file source="lib/LICENSE.txt" excludeFromExecution="1"/>
-  <folder name="lpeg">
-   <file source="lib/lpeg/re.lua" excludeFromExecution="1"/>
-  </folder>
   <file source="lib/math_eq2.lua" excludeFromExecution="1"/>
   <file source="lib/math_eq2_test.lua" excludeFromExecution="1"/>
   <file source="lib/math_eq3.lua" excludeFromExecution="1"/>
