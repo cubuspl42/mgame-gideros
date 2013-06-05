@@ -11,8 +11,8 @@ end
 function SCMLParser:init(filename)
     self.entities = {} -- remove?
     self.scml = xml.newParser():loadFile(filename)
-	if not self.scml.spriter_data then
-		self.scml = nil
+    if not self.scml.spriter_data then
+        self.scml = nil
         print ("File ".. filename .." is not SCML file")
         return
     end

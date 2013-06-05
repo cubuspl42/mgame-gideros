@@ -14,19 +14,19 @@ local weights = {0.1279381953467521593204025975865079089999,0.127938195346752159
 --return a function that computes the length of a quad or cubic curve at parameter t, given the formulas
 --for extracting coefficients and for computing the first derivative based on the coefficients.
 local function length_function(coefficients, derivative1_for)
-	return function(t, x1, y1, x2, y2, x3, y3, x4, y4)
-		local ax, bx, cx = coefficients(x1, x2, x3, x4)
-		local ay, by, cy = coefficients(y1, y2, y3, y4)
-		local z2 = t / 2
-		local sum = 0
-		for i=1,#abscissae do
-			local corrected_t = z2 * abscissae[i] + z2
-			local dx = derivative1_for(corrected_t, ax, bx, cx)
-			local dy = derivative1_for(corrected_t, ay, by, cy)
-			sum = sum + weights[i] * hypot(dx, dy)
-		end
-		return z2 * sum
-	end
+    return function(t, x1, y1, x2, y2, x3, y3, x4, y4)
+        local ax, bx, cx = coefficients(x1, x2, x3, x4)
+        local ay, by, cy = coefficients(y1, y2, y3, y4)
+        local z2 = t / 2
+        local sum = 0
+        for i=1,#abscissae do
+            local corrected_t = z2 * abscissae[i] + z2
+            local dx = derivative1_for(corrected_t, ax, bx, cx)
+            local dy = derivative1_for(corrected_t, ay, by, cy)
+            sum = sum + weights[i] * hypot(dx, dy)
+        end
+        return z2 * sum
+    end
 end
 
 if not ... then require'path_hit_demo' end

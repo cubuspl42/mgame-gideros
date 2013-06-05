@@ -21,22 +21,22 @@ end
 function table.reverse ( tab )
     local size = #tab
     local newTable = {}
- 
+    
     for i,v in ipairs ( tab ) do
         newTable[size-i+1] = v
     end
- 
+    
     return newTable
 end
 
 function table.merge(t1, t2)
-	for k,v in pairs(t2) do t1[k] = v end
+    for k,v in pairs(t2) do t1[k] = v end
 end
 
 function table.insertall(t, ...)
-	for _, v in ipairs(arg) do
-		table.insert(t, v)
-	end
+    for _, v in ipairs(arg) do
+        table.insert(t, v)
+    end
 end
 
 function Application:getSpf()

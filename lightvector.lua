@@ -32,118 +32,118 @@ local vector = {}
 vector.__index = vector
 
 local function new(x,y)
-        local v = {x = x or 0, y = y or 0}
-        setmetatable(v, vector)
-        return v
+    local v = {x = x or 0, y = y or 0}
+    setmetatable(v, vector)
+    return v
 end
 
 function vector:clone()
-        return new(self.x, self.y)
+    return new(self.x, self.y)
 end
 
 function vector:unpack()
-        return self.x, self.y
+    return self.x, self.y
 end
 
 function vector:__tostring()
-        return "("..tonumber(self.x)..","..tonumber(self.y)..")"
+    return "("..tonumber(self.x)..","..tonumber(self.y)..")"
 end
 
 function vector.__unm(a)
-        return new(-a.x, -a.y)
+    return new(-a.x, -a.y)
 end
 
 function vector.__add(a,b)
-        return new(a.x+b.x, a.y+b.y)
+    return new(a.x+b.x, a.y+b.y)
 end
 
 function vector.__sub(a,b)
-        return new(a.x-b.x, a.y-b.y)
+    return new(a.x-b.x, a.y-b.y)
 end
 
 function vector.__mul(a,b)
-        if type(a) == "number" then
-                return new(a*b.x, a*b.y)
-        elseif type(b) == "number" then
-                return new(b*a.x, b*a.y)
-        else
-                return a.x*b.x + a.y*b.y
-        end
+    if type(a) == "number" then
+        return new(a*b.x, a*b.y)
+    elseif type(b) == "number" then
+        return new(b*a.x, b*a.y)
+    else
+        return a.x*b.x + a.y*b.y
+    end
 end
 
 function vector.__div(a,b)
-        return new(a.x / b, a.y / b)
+    return new(a.x / b, a.y / b)
 end
 
 function vector.__eq(a,b)
-        return a.x == b.x and a.y == b.y
+    return a.x == b.x and a.y == b.y
 end
 
 function vector.__lt(a,b)
-        return a.x < b.x or (a.x == b.x and a.y < b.y)
+    return a.x < b.x or (a.x == b.x and a.y < b.y)
 end
 
 function vector.__le(a,b)
-        return a.x <= b.x and a.y <= b.y
+    return a.x <= b.x and a.y <= b.y
 end
 
 function vector.permul(a,b)
-        return new(a.x*b.x, a.y*b.y)
+    return new(a.x*b.x, a.y*b.y)
 end
 
 function vector:len2()
-        return self.x * self.x + self.y * self.y
+    return self.x * self.x + self.y * self.y
 end
 
 function vector:len()
-        return sqrt(self.x * self.x + self.y * self.y)
+    return sqrt(self.x * self.x + self.y * self.y)
 end
 
 function vector.dist(a, b)
-        local dx = a.x - b.x
-        local dy = a.y - b.y
-        return sqrt( dx*dx + dy*dy )
+    local dx = a.x - b.x
+    local dy = a.y - b.y
+    return sqrt( dx*dx + dy*dy )
 end
 
 function vector:normalize_inplace()
-        local l = sqrt(self.x * self.x + self.y * self.y)
-        self.x, self.y = self.x / l, self.y / l
-        return self
+    local l = sqrt(self.x * self.x + self.y * self.y)
+    self.x, self.y = self.x / l, self.y / l
+    return self
 end
 
 function vector:normalized()
-        return self / sqrt(self.x * self.x + self.y * self.y)
+    return self / sqrt(self.x * self.x + self.y * self.y)
 end
 
 function vector:rotate_inplace(phi)
-        local c, s = cos(phi), sin(phi)
-        self.x, self.y = c * self.x - s * self.y, s * self.x + c * self.y
-        return self
+    local c, s = cos(phi), sin(phi)
+    self.x, self.y = c * self.x - s * self.y, s * self.x + c * self.y
+    return self
 end
 
 function vector:rotated(phi)
-        local c, s = cos(phi), sin(phi)
-        return new(c * self.x - s * self.y, s * self.x + c * self.y)
+    local c, s = cos(phi), sin(phi)
+    return new(c * self.x - s * self.y, s * self.x + c * self.y)
 end
 
 function vector:perpendicular()
-        return new(-self.y, self.x)
+    return new(-self.y, self.x)
 end
 
 function vector:projectOn(v)
-        -- (self * v) * v / v:len2()
-        local s = (self.x * v.x + self.y * v.y) / (v.x * v.x + v.y * v.y)
-        return new(s * v.x, s * v.y)
+    -- (self * v) * v / v:len2()
+    local s = (self.x * v.x + self.y * v.y) / (v.x * v.x + v.y * v.y)
+    return new(s * v.x, s * v.y)
 end
 
 function vector:mirrorOn(v)
-        -- 2 * self:projectOn(other) - self
-        local s = 2 * (self.x * v.x + self.y * v.y) / (v.x * v.x + v.y * v.y)
-        return new(s * v.x - self.x, s * v.y - self.y)
+    -- 2 * self:projectOn(other) - self
+    local s = 2 * (self.x * v.x + self.y * v.y) / (v.x * v.x + v.y * v.y)
+    return new(s * v.x - self.x, s * v.y - self.y)
 end
 
 function vector:cross(other)
-        return self.x * other.y - self.y * other.x
+    return self.x * other.y - self.y * other.x
 end
 
 

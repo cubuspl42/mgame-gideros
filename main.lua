@@ -22,11 +22,11 @@ stage:addChild(sceneManager)
 sceneManager:changeScene("gameplay", nil, nil, nil, {userData = "0/1"}) -- pass level?
 
 local v = {
-0, 0, 400, 0, 700,200, 800, 200, 600, 300, 0, 400
+    0, 0, 400, 0, 700,200, 800, 200, 600, 300, 0, 400
 }
 
 if false then
-local m = SimpleMesh.new(v)
-m:setPosition(20, 20)
-stage:addChild(m)
+    local m = SimpleMesh.new(v)
+    m:setPosition(20, 20)
+    stage:addChild(m)
 end
