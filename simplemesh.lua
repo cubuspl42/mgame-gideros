@@ -5,6 +5,11 @@ SimpleMesh = Core.class(Sprite)
 local dbg = false
 
 -- SimpleMesh doesn't support (or check for) repeat points
+-- Input:
+-- vertices = {<x1>, <y1>, <x2>, <y2>, <...>}
+-- color = 0xABCDEF
+-- alpha = 0.123
+-- d = 1.123 [antialiased border]
 
 function SimpleMesh:init(vertices, color, alpha, d)
     local m = Mesh.new()
@@ -25,7 +30,7 @@ function SimpleMesh:init(vertices, color, alpha, d)
     local t = Polygon.triangulate(polygon)
     
     for i=1,n do
-        table.insertall(colorArray, dbg and math.random(0xffffff) or color, (dbg and 0.5) or alpha)
+        table.insertall(colorArray, dbg and math.random(0xffffff) or color, (dbg and 0.9) or alpha)
     end
     
     for tri in all(t) do

@@ -33,13 +33,15 @@ local function test_newShapeFromVertices(x, y, ...)
     return s
 end
 
+local msvg = require 'msvg'
+
 function GameplayScene:loadLevel(levelCode)
     print("loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
     
     local s = 0.6
     self:setScale(s, s)
-    local svg = require('msvg').newTree()
+    local svg = msvg.newTree()
     svg:loadFile(prefix .. "/level.svg")
     svg:simplify()
     
@@ -61,6 +63,40 @@ function GameplayScene:loadLevel(levelCode)
     end
     walk(svg.root)
     
+    -- SCML
+    
+    prefix = "data/entities/ninja"
+    local scml = SCMLParser.new(prefix .. "/anim.scml")
+    local dbg = false
+    local function loader(filename)
+        local ok, b 
+        if filename then
+            filename = filename:gsub("dev_", "")
+            ok, b = pcall(function()
+                    return Bitmap.new(Texture.new(prefix .. filename, true))
+            end)
+            if not ok then b = nil end
+        end
+        local s = SCMLSprite.new(b, 4)
+        if dbg then 
+            for i = 1,2 do
+                a = Shape.new()
+                a:setLineStyle(3, i==1 and 0xFF0000 or 0x00FF00)
+                a:beginPath()
+                a:moveTo(0, 0)
+                a:lineTo(i==2 and 0 or 30, i==1 and 0 or 30)
+                a:endPath()
+                s:addChild(a)
+            end
+        end
+        return s
+    end
+    
+    local ninja = scml:createEntity(0, loader)
+    ninja:setAnimation("Idle") -- TEMP
+    self:addChild(ninja)
+    
+    -- CONFIG ...
     
     --tprint(svg)
     

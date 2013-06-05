@@ -1,4 +1,5 @@
 package.path = package.path .. ";./lib/?.lua" -- add lib folder
+require 'injection' -- injection to global scope
 require 'box2d' -- b2 API
 require 'vector' -- global 'Vector'
 
