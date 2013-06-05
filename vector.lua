@@ -181,6 +181,10 @@ function Vector:projectOn(other)
   return (self * other) * other / other:lenSq()
 end
 
+function Vector:scalarProjectOn(other)
+  return (self:dotproduct(other)) / other:len()
+end
+
 function Vector:cross(other)
   return self.x * other.y - self.y * other.x
 end

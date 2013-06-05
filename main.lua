@@ -3,7 +3,7 @@
   [set local debugging](macro:shell(ide.config.gideros = nil))
 --]]
 
-print("------------------------------------------------------| ", os.date(), " |--------->")
+print("-----------------------------------------------------------------------------| ", os.date(), " |--------->")
 -- TODO: cleanup
 
 xml = require "xmlSimple"
@@ -22,23 +22,11 @@ stage:addChild(sceneManager)
 sceneManager:changeScene("gameplay", nil, nil, nil, {userData = "0/1"}) -- pass level?
 
 local v = {
-0, 0, 400, 0, 700,200, 400, 400, 0, 400
+0, 0, 400, 0, 700,200, 800, 200, 600, 300, 0, 400
 }
 
---local tri = triangulate(v)
-local va = require 'vertexarray'
-
---[[
-for i, t in ipairs(tri) do
-	print(t[1], t[2], t[3])
-	print(va.get(v, t[1]))
-	print(va.get(v, t[2]))
-	print(va.get(v, t[3]))
-end
---]]
-
+if false then
 local m = SimpleMesh.new(v)
 m:setPosition(20, 20)
 stage:addChild(m)
-
---tprint(triangulate(v))
+end

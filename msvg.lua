@@ -9,6 +9,7 @@ local path = {
 
 local msvg = {} -- API
 local supportedTags = { svg = true, g = true, path = true, rect = true }
+local arcStepConst = 10
 
 ---- local functions ----
 
@@ -51,6 +52,7 @@ local function parseStyle(styleString) --> style table
 		--print("parseStyle", styleString)
 		local s, d = styleString, {}
 		for a, v in s:gmatch(";?([^;^:]+):([^;^:]+)") do
+			a = a:gsub("-", "_")
 			style[a] = v
 		end
 	end
@@ -122,7 +124,7 @@ function pathCommands.arc(rel, v, cx, cy, rx, ry, x_axis_rotation, large_arc_fla
 	end
 	x, y = absolute(rel, cx, cy, x, y)
 	local l = path.point.distance(cx, cy, x, y) -- there is no path.arc.length, so we use distance instead
-	local steps = l/15 -- experimental value; unit: svg px
+	local steps = l/arcStepConst -- experimental value; unit: svg px
 	for i=1,steps do
 		local tx, ty = path.arc.point(i/steps, cx, cy, rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y)
 		table.insertall(v, tx, ty)
@@ -169,6 +171,8 @@ local function newSvgElement(tag) --> svgElement
 		y = tonumber(tag['@y']), -- rect
 		d = parsePathDef(tag['@d']) -- path
 	}
+	print("element: ", svgElement.name)
+	tprint(svgElement.transform)
 	for childTag in all(tag:children()) do
 		local svgChildElement = newSvgElement(childTag)
 		if svgChildElement then
@@ -213,8 +217,7 @@ local function simplifyElement(svgElement) --> nil
 	end
 	for child in all(e.children) do
 		-- apply child transform
-		local t, ct = e.transform, child.transform
-		ct = ct * t
+		child.transform = e.transform * child.transform
 		simplifyElement(child)
 	end
 end

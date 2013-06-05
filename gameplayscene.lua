@@ -43,9 +43,20 @@ function GameplayScene:loadLevel(levelCode)
 	svg:loadFile(prefix .. "/level.svg")
 	svg:simplify()
 	
+	local function hex_color(s)
+		if not s:find'^#' then return end
+		return tonumber(s:sub(2), 16)
+	end
+	
 	local function walk(e)
 		if e.vertices then
-				self:addChild(test_newShapeFromVertices(unpack(e.vertices)))
+				if e.vertices.close then
+					local alpha = tonumber(e.style.fill_opacity)
+					print("alpha: ", alpha)
+					local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha)
+					self:addChild(m)
+					--self:addChild(test_newShapeFromVertices(unpack(e.vertices)))
+				end
 		end
 		for c in all(e.children) do walk(c) end
 	end
@@ -56,10 +67,7 @@ function GameplayScene:loadLevel(levelCode)
 	
     --local svg = xmlFromFile(prefix .. "/level.svg")
     local config = xmlFromFile(prefix .. "/level.xml")
-	
-	
-	
-	
+		
     self:loadConfig(config)
     self:loadMap(svg)
 end

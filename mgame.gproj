@@ -19,8 +19,6 @@
  <file source="scmlentity.lua"/>
  <file source="scmlparser.lua"/>
  <file source="scmlsprite.lua"/>
- <file source="svg.lua"/>
- <file source="triangulation.lua"/>
  <file source="xmlSimple.lua" excludeFromExecution="1"/>
  <folder name="data">
   <folder name="entities">
@@ -191,6 +189,8 @@
   </folder>
  </folder>
  <folder name="lib">
+  <file source="lightvector.lua" excludeFromExecution="1"/>
+  <file source="polygon.lua" excludeFromExecution="1"/>
   <folder name="lpeg">
    <file source="lib/lpeg/re.lua" excludeFromExecution="1"/>
   </folder>
