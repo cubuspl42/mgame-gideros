@@ -7,10 +7,11 @@ print("-------------------------------------------------------------------------
 -- TODO: cleanup
 
 xml = require "xmlSimple"
-lpeg = require "lpeg.re"
+--lpeg = require "lpeg.re"
 --require("mobdebug").start()
 
 application:setBackgroundColor(0xFFFFFF)
+application:setKeepAwake(true)
 
 -- events: "transitionBegin", "transitionEnd"
 local sceneManager = SceneManager.new {

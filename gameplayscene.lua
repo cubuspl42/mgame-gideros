@@ -7,6 +7,10 @@ function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
     self:addEventListener("exitEnd", self.onTransitionOutEnd, self)
     self:addEventListener("enterFrame", self.onEnterFrame, self)
     self:addEventListener("logic", self.onLogic, self)
+	self:addEventListener("touchesMove", self.onTouch, self)
+	self:addEventListener("touchesEnd", self.onTouchEnd, self)
+
+	
     self.paused = false; -- true?
     
     self:loadLevel(levelCode)
@@ -39,7 +43,11 @@ function GameplayScene:loadLevel(levelCode)
     print("loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
     
-    local s = 0.6
+    local s = 0.45
+	--s = 0.2
+	--s = 1
+    
+	self:setPosition(0, -100)
     self:setScale(s, s)
     local svg = msvg.newTree()
     svg:loadFile(prefix .. "/level.svg")
@@ -54,7 +62,7 @@ function GameplayScene:loadLevel(levelCode)
         if e.vertices then
             if e.vertices.close then
                 local alpha = tonumber(e.style.fill_opacity)
-                local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha)
+                local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.7)
                 self:addChild(m)
                 --self:addChild(test_newShapeFromVertices(unpack(e.vertices)))
             end
@@ -64,16 +72,15 @@ function GameplayScene:loadLevel(levelCode)
     walk(svg.root)
     
     -- SCML
-    
-    prefix = "data/entities/ninja"
-    local scml = SCMLParser.new(prefix .. "/anim.scml")
+    local scmlprefix = "data/entities/ninja"
+    local scml = SCMLParser.new(scmlprefix .. "/anim.scml")
     local dbg = false
     local function loader(filename)
         local ok, b 
         if filename then
             filename = filename:gsub("dev_", "")
             ok, b = pcall(function()
-                    return Bitmap.new(Texture.new(prefix .. filename, true))
+                    return Bitmap.new(Texture.new(scmlprefix .. filename, true))
             end)
             if not ok then b = nil end
         end
@@ -92,7 +99,9 @@ function GameplayScene:loadLevel(levelCode)
         return s
     end
     
+    
     local ninja = scml:createEntity(0, loader)
+    ninja:setPosition(120, 804)
     ninja:setAnimation("Idle") -- TEMP
     self:addChild(ninja)
     
@@ -124,9 +133,26 @@ function GameplayScene:onLogic()
     
 end
 
+function GameplayScene:onTouch(e)
+	if e.touch.id ~= 1 then return end
+	local x, y = e.touch.rx, e.touch.ry
+	--print("onTouch x, y", x, y)
+	if self.prevTouchX then
+		local px, py = self:getPosition()
+		local dx, dy = x - self.prevTouchX, y - self.prevTouchY
+		--print("dx, dy", dx, dy)
+		self:setPosition(px + dx, py + dy)
+	end
+	self.prevTouchX, self.prevTouchY = x, y
+end
+
+function GameplayScene:onTouchEnd(e)
+	if e.touch.id ~= 1 then return end
+	self.prevTouchX, self.prevTouchY = nil, nil
+end
+
 function GameplayScene:onEnterFrame()
     if not self.paused then
-        --print("onEnterFrame")
         local logic = Event.new("logic")
         logic.broadcast = true
         dispatchEvent(self, logic)

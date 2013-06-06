@@ -21,7 +21,7 @@ local function parsePathDef(dString)
         local s, d = dString, {}
         for n, args in s:gmatch"(%a+)(%A*)" do
             local comm = {name = n}
-            for val in args:gmatch"([%-]?[%d%.]+)" do		
+            for val in args:gmatch"([%-]?[%d%.e]+)" do		
                 table.insert(comm, tonumber(val))
             end
             table.insert(d, comm)
@@ -187,6 +187,7 @@ end
 local function simplifyElement(svgElement) --> nil
     local e = svgElement
     -- Inkscape doesn't seem to export tags other then 'path' and 'rect'
+	print("simplify", e.id)
     if e.name == "path" then
         local v = { close = false }
         e.vertices = v
@@ -194,6 +195,7 @@ local function simplifyElement(svgElement) --> nil
         for comm in all(e.d) do
             local n = comm.name
             local N = string.upper(n)
+			print("command name", n)
             local commandFn = pathCommands[N]
             if commandFn then
                 cx, cy = commandFn(n ~= N, v, cx, cy, unpack(comm))

@@ -6,10 +6,12 @@ local dbg = false
 
 -- SimpleMesh doesn't support (or check for) repeat points
 -- Input:
--- vertices = {<x1>, <y1>, <x2>, <y2>, <...>}
--- color = 0xABCDEF
--- alpha = 0.123
--- d = 1.123 [antialiased border]
+-- vertices = table (e.g. {<x1>, <y1>, <x2>, <y2>, <...>})
+-- color = numer (e.g. 0xABCDEF)
+-- alpha = number (e.g. 0.123)
+-- d = number (e.g. 1.123) [antialiased border]
+
+-- TODO: is it clockwise only or not?
 
 function SimpleMesh:init(vertices, color, alpha, d)
     local m = Mesh.new()
@@ -19,7 +21,7 @@ function SimpleMesh:init(vertices, color, alpha, d)
     color = color or 0x4169E1
     alpha = alpha or 1
     d = d or 1.5
-    d = d * (dbg and 5 or 1)
+    d = d * (dbg and 2 or 1)
     local n = #vertices/2 -- initial vertices' size
     
     local vertexArray = table.copy(vertices)
@@ -38,8 +40,7 @@ function SimpleMesh:init(vertices, color, alpha, d)
             local p = tri.vertices[i]
             local found = false
             for x, y, j in va.iter(vertices) do
-                local v = Vector(x, y)
-                if v.x == p.x and v.y == p.y then
+                if x == p.x and y == p.y then
                     table.insert(indexArray, j)
                     found = true
                     break
