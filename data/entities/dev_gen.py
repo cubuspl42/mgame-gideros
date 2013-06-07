@@ -7,6 +7,7 @@ from subprocess import call
 import hashlib
 import argparse
 import sys
+import time
 
 ##########################################################################################
 # globals
@@ -15,7 +16,6 @@ gTag = "{http://www.w3.org/2000/svg}g"
 layerNameAttribute = "{http://www.inkscape.org/namespaces/inkscape}label"
 directories = [ dir for dir in listdir(".") if isdir(dir) ]
 exportarg = { 'png': "--export-png", 'svg': "--export-plain-svg" }
-scales = { '': 1, '@15x': 1.5, '@2x': 2 }
 spriterscale = 4
 
 ##########################################################################################
@@ -159,11 +159,17 @@ if len(argv) < 1 :
 	argv = readfile('dev_gen_args.txt').split()
 args = parser.parse_args(argv)
 
+scalessrc = readfile(join('.','dev_gen_scales.txt'))
+print "*** Scales: ", scalessrc, " ***"
+scales = eval(scalessrc)
+
 if args.dev_only :
 	print "*** Generating ONLY dev_img ***"
 	
 if args.force :
 	print "*** Will ignore md5 check result ***"
+	
+time.sleep(2)
 	
 for dir in directories :
 	print "\n---> Entity directory: " + dir
