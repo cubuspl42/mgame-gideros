@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="2850"
-   height="2210"
+   width="1500"
+   height="1000"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.2 r9819"
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.24705882"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.125"
-     inkscape:cx="1026.2864"
-     inkscape:cy="1455.8209"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="573.73803"
+     inkscape:cy="495.82093"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -54,44 +54,46 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,1157.6378)">
+     transform="translate(0,-52.362183)">
     <rect
        style="fill:#999999;stroke:none"
        id="rect2991"
        width="120.79205"
-       height="2326.4385"
+       height="1022.4383"
        x="-32.234478"
-       y="-1264.3992" />
+       y="39.60083" />
     <rect
        style="fill:#999999;fill-opacity:1;stroke:none"
        id="rect2993"
-       width="3084.2681"
+       width="1596.2681"
        height="100.78825"
        x="-43.58411"
-       y="-1169.3124" />
+       y="-29.674591"
+       transform="translate(0,52.362183)" />
     <rect
        style="fill:#999999;fill-opacity:1;stroke:none"
        id="rect2995"
        width="138.92435"
-       height="2414.5347"
-       x="2743.2075"
-       y="-1313.6565" />
+       height="1070.5347"
+       x="1399.2075"
+       y="6.3435483" />
     <rect
        style="fill:#999999;fill-opacity:1;stroke:none"
        id="rect2997"
-       width="3061.6443"
+       width="1661.6442"
        height="125.30431"
        x="-43.58411"
-       y="965.19397" />
+       y="912.83179"
+       transform="translate(0,52.362183)" />
     <path
        sodipodi:type="arc"
-       style="fill:#654646;fill-opacity:0.4389439;stroke:#000000;stroke-width:4.12038994;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:#654646;fill-opacity:0.43894389;stroke:#000000;stroke-width:4.12038993999999992;stroke-miterlimit:4;stroke-dasharray:none"
        id="path3001"
        sodipodi:cx="389.53299"
        sodipodi:cy="441.57858"
        sodipodi:rx="62.652157"
        sodipodi:ry="70.824181"
-       d="m 452.18515,441.57858 c 0,39.11512 -28.05033,70.82418 -62.65216,70.82418 -34.60183,0 -62.65216,-31.70906 -62.65216,-70.82418 0,-39.11511 28.05033,-70.82418 62.65216,-70.82418 34.60183,0 62.65216,31.70907 62.65216,70.82418 z"
+       d="m 452.18515,441.57858 a 62.652157,70.824181 0 1 1 -125.30432,0 62.652157,70.824181 0 1 1 125.30432,0 z"
        transform="matrix(0.77411541,0,0,0.68479437,-132.29115,603.20159)">
       <title
          id="title3771">ninja</title>

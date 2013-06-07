@@ -65,7 +65,7 @@ def get_base_layers(dir) :
 
 	for layer in layers :
 		print "--> Getting info for layer " + layer['name']
-		for z in ['x', 'y', 'width', 'height'] :
+		for z in ['x', 'y'] :
 			params = ["inkscape", "-z", "--query-id=" + layer['id'], "--query-" + z, dev_base]
 			print "-> Calling inkscape with:\n", params
 			print "-> Inkscape output:"
@@ -83,28 +83,9 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 	print "\n\n--> export_base\n"
 	dev_base = absjoin(dir, "dev_base.svg")
 	imgpath = join(dir, imgsubfolder)
-	
-	print "--> Getting height of image"
-	z = 'height'
-	params = ["inkscape", "-z", "--query-" + z, dev_base]
-	print "-> Calling inkscape with:\n", params
-	print "-> Inkscape output:"
-	process = subprocess.Popen(params, stdout=subprocess.PIPE)
-	out, err = process.communicate()
-	print "-> Out:"
-	print out
-	print "-> Err:"
-	print err
-	imgheight = float(out)
-	
 	for layer in layers :
 		id = layer['id']
 		name = layer['name']
-		x0 = layer['x'] - 2
-		y0 = imgheight - (layer['y'] - 2)
-		x1 = x0 + layer['width'] + 3
-		y1 = imgheight - ( y0 + layer['height'] + 3)
-		
 		if imgsubfolder == 'img' and name.startswith("dev_") :
 			continue
 		layersubfolder = join(imgpath, name)
@@ -113,8 +94,7 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 		print "-> Creating directory " + layersubfolder + "... "
 		trymakedirs(layersubfolder)
 		
-		params = ["inkscape", "--without-gui", exportarg[format] + "=" + imgfilename, "--export-dpi=" + str(scale * 90), 
-		"--export-id=" + id, "--export-id-only", "--export-area=%d:%d:%d:%d" % (int(x0), int(y0), int(x1), int(y1)), dev_base]
+		params = ["inkscape", "--without-gui", exportarg[format] + "=" + imgfilename, "--export-dpi=" + str(scale * 90), "--export-id=" + id, "--export-id-only", dev_base]
 		print "-> Calling inkscape with:\n", params
 		print "-> Inkscape output:"
 		call(params)
