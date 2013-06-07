@@ -19,9 +19,9 @@ local curveStepConst = 15
 local function parsePathDef(dString)
     if dString then
         local s, d = dString, {}
-        for n, args in s:gmatch"(%a+)(%A*)" do
+        for n, args in s:gmatch"([a-df-zA-DF-Z])([^a-df-zA-DF-Z]*)" do
             local comm = {name = n}
-            for val in args:gmatch"([%-]?[%d%.e]+)" do		
+            for val in args:gmatch"([%-]?[%deE.]+)" do		
                 table.insert(comm, tonumber(val))
             end
             table.insert(d, comm)
@@ -164,6 +164,7 @@ local function newSvgElement(tag) --> svgElement
         title = tag.title and tag.title[1]:value(),
         desc = tag.desc and tag.desc[1]:value(),
         
+		-- should it take parent element to apply parent style first?
         style = parseStyle(tag['@style']),
         transform = parseTransform(tag['@transform']),
         
@@ -187,7 +188,7 @@ end
 local function simplifyElement(svgElement) --> nil
     local e = svgElement
     -- Inkscape doesn't seem to export tags other then 'path' and 'rect'
-	print("simplify", e.id)
+	--print("simplify", e.id)
     if e.name == "path" then
         local v = { close = false }
         e.vertices = v
@@ -195,7 +196,7 @@ local function simplifyElement(svgElement) --> nil
         for comm in all(e.d) do
             local n = comm.name
             local N = string.upper(n)
-			print("command name", n)
+			--print("command name", n)
             local commandFn = pathCommands[N]
             if commandFn then
                 cx, cy = commandFn(n ~= N, v, cx, cy, unpack(comm))

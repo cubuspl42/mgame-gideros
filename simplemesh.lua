@@ -2,7 +2,7 @@ local va = require 'vertexarray'
 local Polygon = require 'polygon'
 
 SimpleMesh = Core.class(Sprite)
-local dbg = false
+local dbg --= true
 
 -- SimpleMesh doesn't support (or check for) repeat points
 -- Input:

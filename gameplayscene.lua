@@ -5,6 +5,7 @@ function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
     self:addEventListener("enterEnd", self.onTransitionInEnd, self)
     self:addEventListener("exitBegin", self.onTransitionOutBegin, self)
     self:addEventListener("exitEnd", self.onTransitionOutEnd, self)
+	
     self:addEventListener("enterFrame", self.onEnterFrame, self)
     self:addEventListener("logic", self.onLogic, self)
 	self:addEventListener("touchesMove", self.onTouch, self)
@@ -19,14 +20,13 @@ function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
     
 end
 
-local function test_newShapeFromVertices(x, y, ...)
+local function test_newShapeFromVertices(points, color, alpha)
     local s = Shape.new()
-    s:setLineStyle(2)
-    s:setFillStyle(Shape.SOLID, 0xC0C0C0)
+    --s:setLineStyle(2)
+    s:setFillStyle(Shape.SOLID, color, alpha)
     s:beginPath()
-    s:moveTo(x, y)
-    local points = {...}
-    for i=1,#points,2 do
+    s:moveTo(points[1], points[2])
+    for i=3,#points,2 do
         local px, py = points[i], points[i+1]
         s:lineTo(px, py)
         --print("test_newShapeFromVertices i, px, py ", i, px, py)
@@ -45,7 +45,7 @@ function GameplayScene:loadLevel(levelCode)
     
     local s = 0.45
 	--s = 0.2
-	--s = 1
+	s = 1
     
 	self:setPosition(0, -100)
     self:setScale(s, s)
@@ -62,9 +62,16 @@ function GameplayScene:loadLevel(levelCode)
         if e.vertices then
             if e.vertices.close then
                 local alpha = tonumber(e.style.fill_opacity)
-                local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.7)
+                local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.8)
                 self:addChild(m)
-                --self:addChild(test_newShapeFromVertices(unpack(e.vertices)))
+				
+				local mesh_vs_shape = true
+				if mesh_vs_shape then
+					local sh = test_newShapeFromVertices(e.vertices, hex_color(e.style.fill), alpha)
+					sh:setPosition(20, 20)
+					self:addChild(sh)
+				
+				end
             end
         end
         for c in all(e.children) do walk(c) end

@@ -28,7 +28,7 @@ function SCMLParser:createEntity(id, loaderFunction)
     local entityTag = scml.entity[id + 1]
     
     -- Load entity
-    print("loading entity " .. entityTag["@name"])
+    --print("loading entity " .. entityTag["@name"])
     
     local entity = SCMLEntity.new()
     entity.name = attribValue(entityTag, "name", "<unanmed>")
@@ -43,12 +43,12 @@ function SCMLParser:createEntity(id, loaderFunction)
         anim.looping = toboolean(animationTag["@looping"] or 1)
         anim.length = tonumber(animationTag["@length"] or 1000)
         entity.animations[animationName] = anim
-        print("loading animation " .. animationName)
+        --print("loading animation " .. animationName)
         
         -- Load timeline
         for j, timelineTag in ipairs(animationTag.timeline) do
             timelineName = timelineTag["@name"] or "object-" .. timelineTag["@id"]
-            print ("adding timeline (object) " .. timelineName)
+            --print ("adding timeline (object) " .. timelineName)
             
             local object = Sprite.new()
             object.name = timelineName
@@ -58,7 +58,7 @@ function SCMLParser:createEntity(id, loaderFunction)
             -- Load keys
             for k, keyTag in ipairs(timelineTag.key) do
                 
-                print ("adding key " .. keyTag["@id"])
+                --print ("adding key " .. keyTag["@id"])
                 local objectTag = keyTag:children()[1]
                 
                 -- Load key params
@@ -83,7 +83,7 @@ function SCMLParser:createEntity(id, loaderFunction)
                     local fileIndex = objectTag["@file"] + 1
                     local spriteName = scml.folder[folderIndex].file[fileIndex]["@name"]
                     if not object.sprites[spriteName] then
-                        print("loading sprite " .. spriteName)
+                        --print("loading sprite " .. spriteName)
                         object.sprites[spriteName] = loaderFunction(spriteName) -- change name of loader?
                     end
                     key.sprite = object.sprites[spriteName] -- can be nil?
