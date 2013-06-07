@@ -45,9 +45,10 @@ function GameplayScene:loadLevel(levelCode)
     
     local s = 0.45
 	--s = 0.2
-	s = 1
-    
-	self:setPosition(0, -100)
+	s = 5
+	--s = 1
+
+	--self:setPosition(0, -100)
     self:setScale(s, s)
     local svg = msvg.newTree()
     svg:loadFile(prefix .. "/level.svg")
@@ -65,7 +66,7 @@ function GameplayScene:loadLevel(levelCode)
                 local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.8)
                 self:addChild(m)
 				
-				local mesh_vs_shape = true
+				local mesh_vs_shape --= true
 				if mesh_vs_shape then
 					local sh = test_newShapeFromVertices(e.vertices, hex_color(e.style.fill), alpha)
 					sh:setPosition(20, 20)

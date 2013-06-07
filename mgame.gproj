@@ -84,10 +84,8 @@
     </folder>
     <folder name="img">
      <folder name="head">
-      <file source="data/entities/ninja/img/head/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/head/img.png"/>
       <file source="data/entities/ninja/img/head/img@066x.png" excludeFromExecution="1"/>
-      <file source="data/entities/ninja/img/head/img@15x.png" excludeFromExecution="1"/>
-      <file source="data/entities/ninja/img/head/img@2x.png" excludeFromExecution="1"/>
      </folder>
      <folder name="larm0">
       <file source="data/entities/ninja/img/larm0/img.png" excludeFromExecution="1"/>

@@ -20,6 +20,7 @@ local ratio = mmpp/bmmpp
 print("bmmpp, mmpp, w, h, ratio", bmmpp, mmpp, w, h, ratio)
 application:setLogicalDimensions(ratio * w, ratio * h)
 print("logical w, h", application:getLogicalWidth(), application:getLogicalHeight())
+print("scaling is...", application:getDeviceHeight()/application:getLogicalHeight())
 
 -- Scene managment
 local sceneManager = SceneManager.new {
