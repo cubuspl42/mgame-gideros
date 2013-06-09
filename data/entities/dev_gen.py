@@ -97,7 +97,8 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 		trymakedirs(layersubfolder)
 		
 		params = ["inkscape", "--without-gui", exportarg[format] + "=" + imgfilename, "--export-dpi=" + str(scale * 90), 
-		"--export-area-snap", "--export-id=" + id, "--export-id-only", dev_base]
+		#"--export-area-snap", 
+		"--export-id=" + id, "--export-id-only", dev_base]
 		print "-> Calling inkscape with:\n", params
 		print "-> Inkscape output:"
 		call(params)
