@@ -101,9 +101,9 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 		print "-> Calling inkscape with:\n", params
 		print "-> Inkscape output:"
 		call(params)
-		
+		print "-> Adding 1px offset to image:\n"
 		image = Image.open(imgfilename)
-		image = ImageOps.extend(image, 1, (0, 0, 0, 0))
+		image = ImageOps.expand(image, 1, (0, 0, 0, 0))
 		image.save(imgfilename)
 	pass
 	
