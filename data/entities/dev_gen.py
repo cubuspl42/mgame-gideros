@@ -8,6 +8,8 @@ import hashlib
 import argparse
 import sys
 import time
+import Image
+import ImageOps
 
 ##########################################################################################
 # globals
@@ -99,6 +101,10 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 		print "-> Calling inkscape with:\n", params
 		print "-> Inkscape output:"
 		call(params)
+		
+		image = Image.open(imgfilename)
+		image = ImageOps.extend(image, 1, (0, 0, 0, 0))
+		image.save(imgfilename)
 	pass
 	
 def generate_scml(dir, layers) :
