@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="b2">
     <folder id="0" name="/dev_img/dev_lines">
-        <file id="0" name="/dev_img/dev_lines/img.png" width="400" height="400"/>
+        <file id="0" name="/dev_img/dev_lines/img.png" width="402" height="402"/>
     </folder>
     <folder id="1" name="/dev_img/rleg1">
-        <file id="0" name="/dev_img/rleg1/img.png" width="51" height="116"/>
+        <file id="0" name="/dev_img/rleg1/img.png" width="49" height="114"/>
     </folder>
     <folder id="2" name="/dev_img/lleg1">
-        <file id="0" name="/dev_img/lleg1/img.png" width="51" height="116"/>
+        <file id="0" name="/dev_img/lleg1/img.png" width="49" height="114"/>
     </folder>
     <folder id="3" name="/dev_img/lleg0">
-        <file id="0" name="/dev_img/lleg0/img.png" width="38" height="91"/>
+        <file id="0" name="/dev_img/lleg0/img.png" width="37" height="90"/>
     </folder>
     <folder id="4" name="/dev_img/rleg0">
-        <file id="0" name="/dev_img/rleg0/img.png" width="38" height="91"/>
+        <file id="0" name="/dev_img/rleg0/img.png" width="37" height="90"/>
     </folder>
     <folder id="5" name="/dev_img/torso1">
         <file id="0" name="/dev_img/torso1/img.png" width="16" height="55"/>
@@ -22,28 +22,28 @@
         <file id="0" name="/dev_img/torso0/img.png" width="23" height="53"/>
     </folder>
     <folder id="7" name="/dev_img/neck">
-        <file id="0" name="/dev_img/neck/img.png" width="18" height="55"/>
+        <file id="0" name="/dev_img/neck/img.png" width="18" height="54"/>
     </folder>
     <folder id="8" name="/dev_img/rarm1">
-        <file id="0" name="/dev_img/rarm1/img.png" width="40" height="101"/>
+        <file id="0" name="/dev_img/rarm1/img.png" width="42" height="105"/>
     </folder>
     <folder id="9" name="/dev_img/larm0">
-        <file id="0" name="/dev_img/larm0/img.png" width="44" height="68"/>
+        <file id="0" name="/dev_img/larm0/img.png" width="42" height="69"/>
     </folder>
     <folder id="10" name="/dev_img/rarm0">
-        <file id="0" name="/dev_img/rarm0/img.png" width="44" height="68"/>
+        <file id="0" name="/dev_img/rarm0/img.png" width="42" height="69"/>
     </folder>
     <folder id="11" name="/dev_img/larm1">
         <file id="0" name="/dev_img/larm1/img.png" width="40" height="101"/>
     </folder>
     <folder id="12" name="/dev_img/head">
-        <file id="0" name="/dev_img/head/img.png" width="129" height="90"/>
+        <file id="0" name="/dev_img/head/img.png" width="127" height="88"/>
     </folder>
     <folder id="13" name="dev_img/dev_lines">
-        <file id="0" name="dev_img/dev_lines/img.png" width="400" height="400"/>
+        <file id="0" name="dev_img/dev_lines/img.png" width="402" height="402"/>
     </folder>
     <entity id="0" name="ninja">
-        <animation id="0" name="Run" length="1500" looping="false">
+        <animation id="0" name="Run" length="1500">
             <mainline>
                 <key id="0"/>
                 <key id="1" time="72">

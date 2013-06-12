@@ -31,7 +31,7 @@ end
 function SCMLEntity:onEnterFrame()
     local anim = self.anim
     if not anim then return end -- TODO: or anim paused?
-    
+
     -- Looping
     local time = os.timems() - self.starttime
     if time >= anim.length then

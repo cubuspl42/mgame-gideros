@@ -90,7 +90,7 @@ function GameplayScene:test_addNinja()
     
     local ninja = scml:createEntity(0, loader)
     ninja:setPosition(120, 804)
-    ninja:setAnimation("Idle") -- TEMP
+    ninja:setAnimation("Run") -- TEMP
     self:addChild(ninja)
 end
 

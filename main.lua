@@ -14,7 +14,7 @@ application:setKeepAwake(true)
 local ppi = application:getScreenDensity() -- pixels per inch
 ppi = ppi or 150
 --ppi = 400
-local bmmpp = 0.05 -- base mm per pixel (7 mm / 100 px)
+local bmmpp = 0.04 -- base mm per pixel (7 mm / 100 px)
 local mmpp = (1/ppi)*25.4 -- mm per pixel (25.4 mm / 1 inch)
 local w, h = application:getDeviceWidth(), application:getDeviceHeight()
 local ratio = mmpp/bmmpp
