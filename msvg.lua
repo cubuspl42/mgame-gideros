@@ -1,3 +1,5 @@
+-- msvg - micro svg library for loading and simplifying Inkscape SVG files
+
 local affine = require 'affine'
 local path = {
     arc = require 'path_svgarc',
@@ -9,7 +11,7 @@ local path = {
 
 local msvg = {} -- API
 local supportedTags = { svg = true, g = true, path = true, rect = true }
-local arcStepConst = 10
+local arcStepConst = 7 -- experimental values; unit: svg px
 local curveStepConst = 15
 
 ---- local functions ----
@@ -30,7 +32,7 @@ local function parsePathDef(dString)
     end
 end
 
-local function parseTransform(transformString)
+local function parseTransform(transformString) --> affine matrix
     local transform = affine.matrix()
     if transformString then
         local s = transformString
@@ -47,8 +49,8 @@ local function parseTransform(transformString)
     return transform
 end
 
-local function parseStyle(styleString) --> style table
-    local style = {}
+local function parseStyle(styleString, parentStyle) --> style table
+    local style = table.copy(parentStyle)
     if styleString then
         --print("parseStyle", styleString)
         local s, d = styleString, {}
@@ -107,7 +109,7 @@ function pathCommands.curveto(rel, v, cx, cy, x1, y1, x2, y2, x, y, ...)
     x1, y1, x2, y2, x, y = absolute(rel, cx, cy, x1, y1, x2, y2, x, y)
     -- push vertices from curve
     local l = path.bezier3.length(1, cx, cy, x1, y1, x2, y2, x, y)
-    local steps = l/curveStepConst -- experimental value; unit: svg px
+    local steps = l/curveStepConst
     for i=1,steps do
         local tx, ty = path.bezier3.point(i/steps, cx, cy, x1, y1, x2, y2, x, y)
         table.insertall(v, tx, ty)
@@ -126,7 +128,7 @@ function pathCommands.arc(rel, v, cx, cy, rx, ry, x_axis_rotation, large_arc_fla
     end
     x, y = absolute(rel, cx, cy, x, y)
     local l = path.point.distance(cx, cy, x, y) -- there is no path.arc.length, so we use distance instead
-    local steps = l/arcStepConst -- experimental value; unit: svg px
+    local steps = l/arcStepConst
     for i=1,steps do
         local tx, ty = path.arc.point(i/steps, cx, cy, rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y)
         table.insertall(v, tx, ty)
@@ -152,7 +154,7 @@ table.merge(pathCommands, {
 -- base functions --
 
 -- create new svgElement from xml tag
-local function newSvgElement(tag) --> svgElement
+local function newSvgElement(tag, parentElement) --> svgElement
     if not supportedTags[tag:name()] then return end
     local svgElement = {
         -- a lot of these will be nil - who cares
@@ -165,7 +167,7 @@ local function newSvgElement(tag) --> svgElement
         desc = tag.desc and tag.desc[1]:value(),
         
 		-- should it take parent element to apply parent style first?
-        style = parseStyle(tag['@style']),
+        style = parseStyle(tag['@style'], parentElement and parentElement.style or {}),
         transform = parseTransform(tag['@transform']),
         
         width = tonumber(tag['@width']), -- svg, rect
@@ -177,7 +179,7 @@ local function newSvgElement(tag) --> svgElement
     --print("element: ", svgElement.name)
     --tprint(svgElement.transform)
     for childTag in all(tag:children()) do
-        local svgChildElement = newSvgElement(childTag)
+        local svgChildElement = newSvgElement(childTag, svgElement)
         if svgChildElement then
             table.insert(svgElement.children, svgChildElement)
         end

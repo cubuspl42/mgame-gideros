@@ -1,16 +1,14 @@
-cache = {}
+local cache = {} -- API
+local cacheTable = {}
 
--- should support Texture, SCMLParser
-function getTexture(filename)
-    if not cache[filename] then
-        cache[filename] = Texture.new(filename, true)
-    end
-    return cache[filename]
+function cache.get(class, args)
+	local filename = args[args.index or 1]
+	cacheTable[class] = cacheTable[class] or {}
+	if cacheTable[class][filename] ~= nil then
+		return cacheTable[filename]
+	else
+		cacheTable[class][filename] = class.new(unpack(args))
+	end
 end
 
-function getSCMLParser(filename)
-    if not cache[filename] then
-        cache[filename] = SCMLParser.new(filename) -- create loaderFunction...
-    end
-    return cache[filename]
-end
+return cache

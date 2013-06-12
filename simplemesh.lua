@@ -4,7 +4,6 @@ local Polygon = require 'polygon'
 SimpleMesh = Core.class(Sprite)
 local dbg --= true
 
--- SimpleMesh doesn't support (or check for) repeat points
 -- Input:
 -- vertices = table (e.g. {<x1>, <y1>, <x2>, <y2>, <...>})
 -- color = numer (e.g. 0xABCDEF)
@@ -14,6 +13,12 @@ local dbg --= true
 -- TODO: is it clockwise only or not?
 
 function SimpleMesh:init(vertices, color, alpha, d)
+	for i, _ in ipairs(vertices) do
+		-- (probably) remove repeated points
+		vertices[i] = vertices[i] + 0.00000000001 * math.random(1000000) -- HACK
+		-- God, I'm so sorry for this dirty hack
+	end
+
     local m = Mesh.new()
     self:addChild(m)
     self.mesh = m

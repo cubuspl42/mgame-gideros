@@ -11,13 +11,33 @@ function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
 	self:addEventListener("touchesMove", self.onTouch, self)
 	self:addEventListener("touchesEnd", self.onTouchEnd, self)
 
+    self.paused = false
+	self.contactListeners = {}
+	local debugDraw = b2.DebugDraw.new()
 	
-    self.paused = false; -- true?
+	self.world = b2.World.new(0, 10)
+	self.world:setDebugDraw(debugDraw)
+	self.world.parent = self
+	
+	self.world:addEventListener("preSolve", self.onPreSolve, self)
+	self.world:addEventListener("beginContact", self.onBeginContact, self)
     
+	
     self:loadLevel(levelCode)
+	self:test_physicsSprite()
+	
+	self:addChild(debugDraw)
     --self.mainlayer = MainLayer.new(); self:addChild(self.mainlayer)
     --self:addChild(HUDLayer.new())
     
+end
+
+function GameplayScene:test_physicsSprite()
+	local ps = PhysicsSprite.new(nil, {
+        lock = false, fixedRotation = true,
+        subshapes = { { cx = 50, cy = 50, radius = 50, fixture = {} } }
+    }, self.world)
+	self:addChild(ps)
 end
 
 local function test_newShapeFromVertices(points, color, alpha)
@@ -30,7 +50,6 @@ local function test_newShapeFromVertices(points, color, alpha)
         local px, py = points[i], points[i+1]
         s:lineTo(px, py)
         --print("test_newShapeFromVertices i, px, py ", i, px, py)
-        
     end
     s:closePath()
     s:endPath()
@@ -39,46 +58,8 @@ end
 
 local msvg = require 'msvg'
 
-function GameplayScene:loadLevel(levelCode)
-    print("loading level " .. levelCode)
-    local prefix = "data/levels/" .. levelCode
-    
-    local s = 0.45
-	--s = 0.2
-	s = 1
-    
-	self:setPosition(0, -100)
-    self:setScale(s, s)
-    local svg = msvg.newTree()
-    svg:loadFile(prefix .. "/level.svg")
-    svg:simplify()
-    
-    local function hex_color(s)
-        if not s:find'^#' then return end
-        return tonumber(s:sub(2), 16)
-    end
-    
-    local function walk(e)
-        if e.vertices then
-            if e.vertices.close then
-                local alpha = tonumber(e.style.fill_opacity)
-                local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.8)
-                self:addChild(m)
-				
-				local mesh_vs_shape = true
-				if mesh_vs_shape then
-					local sh = test_newShapeFromVertices(e.vertices, hex_color(e.style.fill), alpha)
-					sh:setPosition(20, 20)
-					self:addChild(sh)
-				
-				end
-            end
-        end
-        for c in all(e.children) do walk(c) end
-    end
-    walk(svg.root)
-    
-    -- SCML
+function GameplayScene:test_addNinja()
+	-- SCML
     local scmlprefix = "data/entities/ninja"
     local scml = SCMLParser.new(scmlprefix .. "/anim.scml")
     local dbg = false
@@ -87,7 +68,7 @@ function GameplayScene:loadLevel(levelCode)
         if filename then
             filename = filename:gsub("dev_", "")
             ok, b = pcall(function()
-                    return Bitmap.new(Texture.new(scmlprefix .. filename, true))
+                    return OffsetBitmap.new(Texture.new(scmlprefix .. filename, true))
             end)
             if not ok then b = nil end
         end
@@ -111,12 +92,42 @@ function GameplayScene:loadLevel(levelCode)
     ninja:setPosition(120, 804)
     ninja:setAnimation("Idle") -- TEMP
     self:addChild(ninja)
+end
+
+function GameplayScene:loadLevel(levelCode)
+    print("loading level " .. levelCode)
+    local prefix = "data/levels/" .. levelCode
     
-    -- CONFIG ...
+    local s = 1
+	--s = 4
+    self:setScale(s, s)
+	
+    local svg = msvg.newTree()
+    svg:loadFile(prefix .. "/level.svg")
+    svg:simplify()
     
-    --tprint(svg)
+    local function hex_color(s)
+        if s:find'^#' then
+			return tonumber(s:sub(2), 16)
+		end
+    end
     
-    --local svg = xmlFromFile(prefix .. "/level.svg")
+	-- Walk through SVG tree
+    local function walk(e)
+        if e.vertices then
+            if e.vertices.close then
+                local alpha = tonumber(e.style.fill_opacity)
+                local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.9)
+                self:addChild(m)
+            end
+        end
+        for c in all(e.children) do walk(c) end
+    end
+    walk(svg.root)
+    
+    self:test_addNinja()
+    
+
     local config = xmlFromFile(prefix .. "/level.xml")
     
     self:loadConfig(config)
@@ -164,6 +175,21 @@ function GameplayScene:onEnterFrame()
         logic.broadcast = true
         dispatchEvent(self, logic)
     end
+end
+
+function GameplayScene:onBeginContact()
+
+end
+
+function GameplayScene:onEndContact()
+
+end
+function GameplayScene:onPreSolve()
+
+end
+
+function GameplayScene:onPostSolve()
+
 end
 
 function GameplayScene:onTransitionInBegin()

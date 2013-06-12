@@ -1,7 +1,7 @@
 PhysicsSprite = Core.class(Sprite)
 
 -- PhysicsSprite [PS] can be inserted into Sprite tree
--- I think it assumes that world.parent is not rotated
+-- It assumes that world.parent is not rotated
 
 -- If PS is unlocked, its child sprite is slave and body is master
 -- If PS is locked, its body is master and child sprite is slave
@@ -18,6 +18,8 @@ PhysicsSprite = Core.class(Sprite)
 			vertices = {0, 0, 10, 0, 10, 10} -- for polygon; clockwise!
 			-- OR
 			radius = 5 -- for circle
+			cx = 2 (0)
+			cy = 2 (0)
 			
 			fixture = {
 				density = 20, -- (1)
@@ -29,9 +31,8 @@ PhysicsSprite = Core.class(Sprite)
 }
 --]]
 
-function PhysicsSprite:init(childSprite, shapeDef)
+function PhysicsSprite:init(childSprite, shapeDef, world)
     self:addEventListener("enterFrame", self.onEnterFrame, self)
-	
     if childSprite then self:addChild(childSprite) end
     
     local bodyDef = {
@@ -41,7 +42,9 @@ function PhysicsSprite:init(childSprite, shapeDef)
         active = true
     }
     
+	self.world = world
     self.body = world:createBody(bodyDef)
+	
     self.lock = (shapeDef.lock == nil and true) or shapeDef.lock
     
     for subshapeDef in all(shapeDef.subshapes) do
@@ -83,6 +86,7 @@ function PhysicsSprite:createCircle(subshapeDef)
 end
 
 function PhysicsSprite:onEnterFrame()
+	local world = self.world
     if not world or not self:getParent() then return end
     if self.lock then -- force physics body to transorm
         local x, y = self:localToGlobal(0, 0)
