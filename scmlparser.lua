@@ -8,12 +8,16 @@ local function toLuaIndex(index)
     if index then return tonumber(index) + 1 end
 end
 
+function SCMLParser.loadFile(filename)
+
+end
+
 function SCMLParser:init(filename)
     self.entities = {} -- remove?
-    self.scml = xml.newParser():loadFile(filename)
+    self.scml = xml.newParser():loadFile(filename) or {}
     if not self.scml.spriter_data then
         self.scml = nil
-        print ("File ".. filename .." is not SCML file")
+        print ("File ".. filename .." is not a SCML file or does not exist")
         return
     end
     self.scml = self.scml.spriter_data[1]
@@ -41,7 +45,7 @@ function SCMLParser:createEntity(id, loaderFunction)
         local anim = Sprite.new()
         anim.objects = {} -- timeline objects
         anim.looping = toboolean(animationTag["@looping"] or 1)
-        anim.length = tonumber(animationTag["@length"] or 1000)
+        anim.length = tonumber(animationTag["@length"]) or 1000
         entity.animations[animationName] = anim
         --print("loading animation " .. animationName)
         
@@ -59,6 +63,7 @@ function SCMLParser:createEntity(id, loaderFunction)
             for k, keyTag in ipairs(timelineTag.key) do
                 
                 --print ("adding key " .. keyTag["@id"])
+				-- it's actually either 'object' or 'bone', they don't differ much
                 local objectTag = keyTag:children()[1]
                 
                 -- Load key params
@@ -98,7 +103,7 @@ function SCMLParser:createEntity(id, loaderFunction)
         anim.keys = {} -- mainline keys
         for j, keyTag in ipairs(animationTag.mainline[1].key) do
             local key = { refs = {} }
-            key.time = tonumber(keyTag["@time"] or 0)
+            key.time = tonumber(keyTag["@time"]) or 0
             anim.keys[j] = key
             
             for k, refTag in ipairs(keyTag:children()) do

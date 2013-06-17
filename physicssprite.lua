@@ -45,6 +45,7 @@ function PhysicsSprite:init(childSprite, shapeDef, world)
 	self.world = world
     self.body = world:createBody(bodyDef)
 	
+	-- change naming to shapeDef.physicsMode = "master"|"slave"?
     self.lock = (shapeDef.lock == nil and true) or shapeDef.lock
     
     for subshapeDef in all(shapeDef.subshapes) do

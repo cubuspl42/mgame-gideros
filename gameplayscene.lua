@@ -1,6 +1,6 @@
 GameplayScene = Core.class(Sprite)
 
-function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
+function GameplayScene:init(levelCode) -- levelCode: e.g. "0/1"
     self:addEventListener("enterBegin", self.onTransitionInBegin, self)
     self:addEventListener("enterEnd", self.onTransitionInEnd, self)
     self:addEventListener("exitBegin", self.onTransitionOutBegin, self)
@@ -30,6 +30,15 @@ function GameplayScene:init(levelCode) -- levelCode: i.e. "0/1"
     --self.mainlayer = MainLayer.new(); self:addChild(self.mainlayer)
     --self:addChild(HUDLayer.new())
     
+end
+
+function GameplayScene:test_screenshot()
+	local b = Bitmap.new(Texture.new("data/gfx/0.png", true))
+	local s = 3.5
+	s = 2.5
+	--s = 4.76
+	b:setScale(s)
+	self:addChild(b)
 end
 
 function GameplayScene:test_physicsSprite()
@@ -89,8 +98,9 @@ function GameplayScene:test_addNinja()
     
     
     local ninja = scml:createEntity(0, loader)
-    ninja:setPosition(120, 804)
+    ninja:setPosition(2000, 3180)
     ninja:setAnimation("Run") -- TEMP
+	ninja.anim.paused = true
     self:addChild(ninja)
 end
 
@@ -99,6 +109,7 @@ function GameplayScene:loadLevel(levelCode)
     local prefix = "data/levels/" .. levelCode
     
     local s = 1
+	--s = 1.5
 	--s = 4
     self:setScale(s, s)
 	
@@ -125,6 +136,7 @@ function GameplayScene:loadLevel(levelCode)
     end
     walk(svg.root)
     
+	self:test_screenshot()
     self:test_addNinja()
     
 
@@ -184,6 +196,7 @@ end
 function GameplayScene:onEndContact()
 
 end
+
 function GameplayScene:onPreSolve()
 
 end

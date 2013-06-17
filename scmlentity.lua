@@ -24,8 +24,7 @@ function SCMLEntity:nextKeyAndTime(object)
 end
 
 local function linearInterpolation(v1, v2, t1, t2, t)
-    local r = v1 + (v2 - v1) * (t - t1) / (t2 - t1)
-    return r
+    return v1 + (v2 - v1) * (t - t1) / (t2 - t1)
 end
 
 function SCMLEntity:onEnterFrame()
