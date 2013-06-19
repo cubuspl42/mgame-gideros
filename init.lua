@@ -29,7 +29,7 @@ end
 
 function toboolean(v)
     return (type(v) == "string" and v == "true") 
-	or (type(v) == "number" and v ~= 0) or (type(v) == "boolean" and v)
+    or (type(v) == "number" and v ~= 0) or (type(v) == "boolean" and v)
 end
 
 function tprint (tbl, depth, indent) -- print table

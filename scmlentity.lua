@@ -5,7 +5,7 @@ function SCMLEntity:init()
 end
 
 function SCMLEntity:setAnimation(animName)
-	print("Setting animation: ", animName)
+    print("Setting animation: ", animName)
     if self.anim then self:removeChild(self.anim) end
     self.anim = self.animations[animName]
     self.anim.index = 0
@@ -30,7 +30,7 @@ end
 function SCMLEntity:onEnterFrame()
     local anim = self.anim
     if not anim then return end -- TODO: or anim paused?
-
+    
     -- Looping
     local time = os.timems() - self.starttime
     if time >= anim.length then
@@ -64,7 +64,7 @@ function SCMLEntity:onEnterFrame()
             anim:addChild(ref.object)
         end
     end
-
+    
     -- Update objects
     for _, ref in ipairs(mainKey.refs) do
         local object = ref.object
@@ -111,8 +111,8 @@ function SCMLEntity:onEnterFrame()
         end
         for k, v in pairs(params) do
             if object.sprite then 
-				object.sprite:setParam(k, v)
-			end
+                object.sprite:setParam(k, v)
+            end
         end 
     end
 end

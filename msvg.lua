@@ -166,7 +166,7 @@ local function newSvgElement(tag, parentElement) --> svgElement
         title = tag.title and tag.title[1]:value(),
         desc = tag.desc and tag.desc[1]:value(),
         
-		-- should it take parent element to apply parent style first?
+        -- should it take parent element to apply parent style first?
         style = parseStyle(tag['@style'], parentElement and parentElement.style or {}),
         transform = parseTransform(tag['@transform']),
         
@@ -189,11 +189,11 @@ end
 
 local function simplifyElement(svgElement, parentTransform) --> nil
     local e = svgElement
-	if parentTransform then
-		e.transform = parentTransform * e.transform
-	end
+    if parentTransform then
+        e.transform = parentTransform * e.transform
+    end
     -- Inkscape doesn't seem to export tags other then 'path' and 'rect'
-	--print("simplify", e.id)
+    --print("simplify", e.id)
     if e.name == "path" then
         local v = { close = false }
         e.vertices = v
@@ -201,7 +201,7 @@ local function simplifyElement(svgElement, parentTransform) --> nil
         for comm in all(e.d) do
             local n = comm.name
             local N = string.upper(n)
-			--print("command name", n)
+            --print("command name", n)
             local commandFn = pathCommands[N]
             if commandFn then
                 cx, cy = commandFn(n ~= N, v, cx, cy, unpack(comm))
@@ -234,9 +234,9 @@ end
 
 function msvg.loadFile(filename) 
     local svgFile = io.open(filename)
-	if svgFile then
-		return msvg.loadString(svgFile:read("*a"))
-	end
+    if svgFile then
+        return msvg.loadString(svgFile:read("*a"))
+    end
 end
 
 function msvg.loadString(s)

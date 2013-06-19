@@ -10,23 +10,23 @@ end
 
 function SCMLParser.loadFile(filename)
     local ok, ret = pcall(function() 
-		return xml.newParser():loadFile(filename)
-	end)
-	if ok then
-		local spriter_data = (ret.spriter_data or {})[1]
-		if not spriter_data then
-			print(filename .. " is not SCML file")
-			return nil
-		end
-		return SCMLParser.new(spriter_data)
-	else
-		print("Could not load " .. filename .. " - " .. ret)
-		return nil
-	end
+            return xml.newParser():loadFile(filename)
+    end)
+    if ok then
+        local spriter_data = (ret.spriter_data or {})[1]
+        if not spriter_data then
+            print(filename .. " is not SCML file")
+            return nil
+        end
+        return SCMLParser.new(spriter_data)
+    else
+        print("Could not load " .. filename .. " - " .. ret)
+        return nil
+    end
 end
 
 function SCMLParser:init(spriter_data)
-	self.scml = spriter_data
+    self.scml = spriter_data
 end
 
 function SCMLParser:createEntity(id, loaderFunction)
@@ -68,7 +68,7 @@ function SCMLParser:createEntity(id, loaderFunction)
             for k, keyTag in ipairs(timelineTag.key) do
                 
                 --print ("adding key " .. keyTag["@id"])
-				-- it's actually either 'object' or 'bone', they don't differ much
+                -- it's actually either 'object' or 'bone', they don't differ much
                 local objectTag = keyTag:children()[1]
                 
                 -- Load key params
