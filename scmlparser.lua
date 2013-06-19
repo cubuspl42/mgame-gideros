@@ -9,19 +9,24 @@ local function toLuaIndex(index)
 end
 
 function SCMLParser.loadFile(filename)
-
+    local ok, ret = pcall(function() 
+		return xml.newParser():loadFile(filename)
+	end)
+	if ok then
+		local spriter_data = (ret.spriter_data or {})[1]
+		if not spriter_data then
+			print(filename .. " is not SCML file")
+			return nil
+		end
+		return SCMLParser.new(spriter_data)
+	else
+		print("Could not load " .. filename .. " - " .. ret)
+		return nil
+	end
 end
 
-function SCMLParser:init(filename)
-    self.entities = {} -- remove?
-    self.scml = xml.newParser():loadFile(filename) or {}
-    if not self.scml.spriter_data then
-        self.scml = nil
-        print ("File ".. filename .." is not a SCML file or does not exist")
-        return
-    end
-    self.scml = self.scml.spriter_data[1]
-    print("loading " .. filename)
+function SCMLParser:init(spriter_data)
+	self.scml = spriter_data
 end
 
 function SCMLParser:createEntity(id, loaderFunction)
@@ -32,7 +37,7 @@ function SCMLParser:createEntity(id, loaderFunction)
     local entityTag = scml.entity[id + 1]
     
     -- Load entity
-    --print("loading entity " .. entityTag["@name"])
+    print("loading entity " .. entityTag["@name"])
     
     local entity = SCMLEntity.new()
     entity.name = attribValue(entityTag, "name", "<unanmed>")

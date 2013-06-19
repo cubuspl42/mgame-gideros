@@ -82,7 +82,7 @@ def get_base_layers(dir) :
 	return layers
 
 def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
-	print "\n\n--> export_base\n"
+	print "\n\n--> export_base [%s]\n" % (format)
 	dev_base = absjoin(dir, "dev_base.svg")
 	imgpath = join(dir, imgsubfolder)
 	for layer in layers :
@@ -96,17 +96,22 @@ def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 		print "-> Creating directory " + layersubfolder + "... "
 		trymakedirs(layersubfolder)
 		
-		params = ["inkscape", "--without-gui", exportarg[format] + "=" + imgfilename, "--export-dpi=" + str(scale * 90), 
-		#"--export-area-snap", 
-		"--export-id=" + id, "--export-id-only", dev_base]
+		params = ["inkscape", "--without-gui", exportarg[format] + "=" + imgfilename]
+		if format == "png" :
+			params.append("--export-dpi=" + str(scale * 90))
+		params.extend(["--export-id=" + id, "--export-id-only", dev_base])
 		print "-> Calling inkscape with:\n", params
 		print "-> Inkscape output:"
 		call(params)
-		print "-> Adding 1px offset to image:\n"
-		image = Image.open(imgfilename)
-		image = ImageOps.expand(image, 1, (0, 0, 0, 0))
-		image.save(imgfilename)
-	pass
+		
+		with open(join(layersubfolder, "offset.lua"), "w") as offset:
+			offset.write("x = %s; y = %s" % (layer['x'], layer['y']))
+		
+		if format == "png" :
+			print "-> Adding 1px offset to image:\n"
+			image = Image.open(imgfilename)
+			image = ImageOps.expand(image, 1, (0, 0, 0, 0))
+			image.save(imgfilename)
 	
 def generate_scml(dir, layers) :
 	print "\n\n--> generate_scml\n"

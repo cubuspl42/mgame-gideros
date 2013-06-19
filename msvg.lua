@@ -187,8 +187,11 @@ local function newSvgElement(tag, parentElement) --> svgElement
     return svgElement
 end
 
-local function simplifyElement(svgElement) --> nil
+local function simplifyElement(svgElement, parentTransform) --> nil
     local e = svgElement
+	if parentTransform then
+		e.transform = parentTransform * e.transform
+	end
     -- Inkscape doesn't seem to export tags other then 'path' and 'rect'
 	--print("simplify", e.id)
     if e.name == "path" then
@@ -224,40 +227,23 @@ local function simplifyElement(svgElement) --> nil
     end
     for child in all(e.children) do
         -- apply child transform
-        child.transform = e.transform * child.transform
-        simplifyElement(child)
+        --child.transform = e.transform * child.transform
+        simplifyElement(child, e.transform)
     end
 end
 
-local function meta_load(method)
-    return function (svgTree, filename)
-        local p = xml.newParser()
-        local xmlDoc = p[method](p, filename)
-        svgTree.root = newSvgElement(xmlDoc:children()[1])
-    end
+function msvg.loadFile(filename) 
+    local svgFile = io.open(filename)
+	if svgFile then
+		return msvg.loadString(svgFile:read("*a"))
+	end
 end
 
--- next two are replaced with meta function above
-local function loadFile(svgTree, filename) 
-    local xmlDoc = xml.newParser():loadFile(filename)
-    svgTree.root = newSvgElement(xmlDoc:children()[1])
-end
-
-local function loadString(svgTree, s)
+function msvg.loadString(s)
     local xmlDoc = xml.newParser():ParseXmlText(s)
-    svgTree.root = newSvgElement(xmlDoc:children()[1])
+    return newSvgElement(xmlDoc:children()[1])
 end
 
-local function simplifyTree(svgTree)
-    simplifyElement(svgTree.root)
-end
-
-function msvg.newTree()
-    return {
-        loadFile = meta_load('loadFile'),
-        loadString = meta_load('loadString'),
-        simplify = simplifyTree,
-    }
-end
+msvg.simplifyTree = simplifyElement
 
 return msvg

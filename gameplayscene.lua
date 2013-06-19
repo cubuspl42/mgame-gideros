@@ -42,11 +42,11 @@ function GameplayScene:test_screenshot()
 end
 
 function GameplayScene:test_physicsSprite()
+	do return end
 	local ps = PhysicsSprite.new(nil, {
         lock = false, fixedRotation = true,
         subshapes = { { cx = 50, cy = 50, radius = 50, fixture = {} } }
     }, self.world)
-	self:addChild(ps)
 end
 
 local function test_newShapeFromVertices(points, color, alpha)
@@ -67,10 +67,16 @@ end
 
 local msvg = require 'msvg'
 
+function GameplayScene:test_addNinja2()
+	local ninja = Entity.new("ninja", self.world)
+	ninja.scml:setAnimation("Run")
+	self:addChild(ninja)
+end
+
 function GameplayScene:test_addNinja()
 	-- SCML
     local scmlprefix = "data/entities/ninja"
-    local scml = SCMLParser.new(scmlprefix .. "/anim.scml")
+    local scml = SCMLParser.loadFile(scmlprefix .. "/anim.scml")
     local dbg = false
     local function loader(filename)
         local ok, b 
@@ -98,7 +104,9 @@ function GameplayScene:test_addNinja()
     
     
     local ninja = scml:createEntity(0, loader)
-    ninja:setPosition(2000, 3180)
+	local x, y = 2000, 3180
+	x, y = 100, 100
+    ninja:setPosition(x, y)
     ninja:setAnimation("Run") -- TEMP
 	ninja.anim.paused = true
     self:addChild(ninja)
@@ -113,9 +121,8 @@ function GameplayScene:loadLevel(levelCode)
 	--s = 4
     self:setScale(s, s)
 	
-    local svg = msvg.newTree()
-    svg:loadFile(prefix .. "/level.svg")
-    svg:simplify()
+    local svg = msvg.loadFile(prefix .. "/level.svg")
+    msvg.simplifyTree(svg)
     
     local function hex_color(s)
         if s:find'^#' then
@@ -134,10 +141,10 @@ function GameplayScene:loadLevel(levelCode)
         end
         for c in all(e.children) do walk(c) end
     end
-    walk(svg.root)
+    walk(svg)
     
 	self:test_screenshot()
-    self:test_addNinja()
+    self:test_addNinja2()
     
 
     local config = xmlFromFile(prefix .. "/level.xml")

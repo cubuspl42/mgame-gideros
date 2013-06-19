@@ -13,6 +13,7 @@ local dbg --= true
 -- TODO: is it clockwise only or not?
 
 function SimpleMesh:init(vertices, color, alpha, d)
+	local vertices = table.copy(vertices)
 	for i, _ in ipairs(vertices) do
 		-- (probably) remove repeated points
 		vertices[i] = vertices[i] + 0.00000000001 * math.random(1000000) -- HACK

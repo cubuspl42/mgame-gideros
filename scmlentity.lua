@@ -64,7 +64,7 @@ function SCMLEntity:onEnterFrame()
             anim:addChild(ref.object)
         end
     end
-    
+
     -- Update objects
     for _, ref in ipairs(mainKey.refs) do
         local object = ref.object
@@ -110,7 +110,9 @@ function SCMLEntity:onEnterFrame()
             p.y = p.y + pp.y
         end
         for k, v in pairs(params) do
-            if object.sprite then object.sprite:setParam(k, v) end
+            if object.sprite then 
+				object.sprite:setParam(k, v)
+			end
         end 
     end
 end

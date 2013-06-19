@@ -1,7 +1,7 @@
 SCMLSprite = Core.class(Sprite)
 
 function SCMLSprite:init(sprite, scaleRatio)
-    self.scaleRatio = scaleRatio or 4
+    self.scaleRatio = scaleRatio
     if not sprite then return end
     self.sprite = sprite
     self:addChild(sprite)
@@ -24,6 +24,6 @@ function SCMLSprite:setParam(k, v)
     end
     if k == "y" or k == "rotation" then v = -v end
     
-    if k == "x" or k == "y" then v = v/self.scaleRatio end
+    if k == "x" or k == "y" then v = v * self.scaleRatio end
     self:set(k, v)
 end
