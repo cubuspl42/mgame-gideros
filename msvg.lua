@@ -226,8 +226,6 @@ local function simplifyElement(svgElement, parentTransform) --> nil
         end
     end
     for child in all(e.children) do
-        -- apply child transform
-        --child.transform = e.transform * child.transform
         simplifyElement(child, e.transform)
     end
 end

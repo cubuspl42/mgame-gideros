@@ -69,7 +69,7 @@ local msvg = require 'msvg'
 
 function GameplayScene:test_addNinja2()
     local ninja = Entity.new("ninja", self.world)
-    ninja.scml:setAnimation("Run")
+    ninja.scml:setAnimation("Idle")
     self:addChild(ninja)
 end
 

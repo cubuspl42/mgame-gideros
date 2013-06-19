@@ -11,14 +11,11 @@ local lfs = require 'lfs'
 local msvg = require 'msvg'
 local Polygon = require 'polygon'
 
-application:setBackgroundColor(0xFFFFFF)
-application:setKeepAwake(true)
 local function loadData()
     -- Load data
     data = {
         entities = {}
     }
-    
     for entity in lfs.dir "data/entities" do
         local path = "data/entities/"..entity
         local mode = lfs.attributes(path, "mode")
@@ -56,7 +53,7 @@ local function loadData()
                         if not ok or not env.x or not env.y then
                             error("Error running " .. imgpath .. "/offset.lua: ", msg)
                         else
-                            e.offsetX, e.offsetY = env.x, env.y
+                            e.layers[layer].offsetX, e.layers[layer].offsetY = env.x, env.y
                         end
                     else 
                         print("No offset file for " .. folder)
@@ -81,7 +78,9 @@ local function loadData()
                             }
                             -- We create Polygon because it will make sure that the order is CW
                             local polygon = Polygon.new(unpack(object.vertices))
+							Polygon.move(polygon, -e.layers[label].offsetX, -e.layers[label].offsetY)
                             fixture.shape:set(Polygon.unpack(polygon))
+							--fixture.shape:set(0, 0, 10, 0, 0, 10)
                             table.insert(e.layers[label].fixtures, fixture)
                         end
                     end
@@ -89,7 +88,6 @@ local function loadData()
             end
         end
     end
-    
 end
 
 local function setLogicalDimensions()
@@ -108,6 +106,9 @@ local function setLogicalDimensions()
     --print("logical w, h", application:getLogicalWidth(), application:getLogicalHeight())
 end
 
+application:setBackgroundColor(0xFFFFFF)
+application:setKeepAwake(true)
+
 loadData()
 --setLogicalDimensions()
 
@@ -115,5 +116,6 @@ loadData()
 local sceneManager = SceneManager.new {
     gameplay = GameplayScene,
 }
+
 stage:addChild(sceneManager)
 sceneManager:changeScene("gameplay", nil, nil, nil, {userData = "0/1"}) -- pass level?
