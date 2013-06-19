@@ -37,7 +37,7 @@ function SCMLParser:createEntity(id, loaderFunction)
     local entityTag = scml.entity[id + 1]
     
     -- Load entity
-    print("loading entity " .. entityTag["@name"])
+    print("Loading scml entity " .. entityTag["@name"])
     
     local entity = SCMLEntity.new()
     entity.name = attribValue(entityTag, "name", "<unanmed>")

@@ -9,6 +9,7 @@ print("-------------------------------------------------------------------------
 
 local lfs = require 'lfs'
 local msvg = require 'msvg'
+local Polygon = require 'polygon'
 
 application:setBackgroundColor(0xFFFFFF)
 application:setKeepAwake(true)
@@ -18,74 +19,69 @@ data = {
 	entities = {}
 }
 for entity in lfs.dir "data/entities" do
-	if entity:sub(1, 1) ~= '.' then
-		local path = "data/entities/"..entity
-		local mode = lfs.attributes(path, "mode")
-		if mode == "directory" then
-			-- We found an entity
-			local e = { img = {}, bodyDef = {}, fixtures = {} }
-			data.entities[entity] = e
-			-- Add anim
-			e.scml = SCMLParser.loadFile(path .. "/anim.scml") -- can be nil
-			local logicFile = io.open(path .. "/logic.lua")
-			if logicFile then
-				-- logic.lua can read global vars, but can't create them
-				local env = setmetatable({}, {__index = _G})
-				local ok, msg = run(logicFile:read("*a"), env)
-				if not ok then 
-					print("Could not run file " .. path .. "/logic.lua", msg)
-				else
-					-- Add logic
-					e.logic = env
-				end
+	local path = "data/entities/"..entity
+	local mode = lfs.attributes(path, "mode")
+	if mode == "directory" and entity:sub(1, 1) ~= '.' then
+		print("Loading data for " .. entity)
+		-- We found an entity
+		local e = { layers = {} }
+		data.entities[entity] = e
+		-- Add anim
+		e.scml = SCMLParser.loadFile(path .. "/anim.scml") -- can be nil
+		local logicFile = io.open(path .. "/logic.lua")
+		if logicFile then
+			-- logic.lua can read global vars, but can't create them
+			local env = setmetatable({}, {__index = _G})
+			local ok, msg = run(logicFile:read("*a"), env)
+			if not ok then 
+				print("Could not run file " .. path .. "/logic.lua", msg)
+			else
+				-- Add logic
+				e.logic = env
 			end
-			-- Add textures
-			for folder in lfs.dir(path .. "/img") do
-				if folder:sub(1, 1) ~= "." then
-					local imgpath = path .. "/img/" .. folder
-					--print("Loading texture...")
-					-- AIR will pick the right size
-					e.img[folder] = Texture.new(imgpath .. "/img.png", true)
-					local offsetFile = io.open(imgpath .. "/offset.lua")
-					if offsetFile then
-						local env = {}
-						local ok, msg = run(offsetFile:read("*a"), env)
-						if not ok or not env.x or not env.y then
-							error("Error running " .. imgpath .. "/offset.lua: ", msg)
-						else
-							e.x, e.y = env.x, env.y
-						end
-					else 
-						print("No offset file for " .. folder)
-					end
-				end
-			end
-			-- Add bodyDef
-			e.base = msvg.loadFile(path .. "/dev_base.svg") -- TODO: dev_base -> base!
-			msvg.simplifyTree(e.base)
-			for layer in all(e.base.children) do
-				if layer.name == "g" and layer.desc then
-					local l = layer.label
-					local env = setmetatable({}, {__index = _G})
-					local ok, ret = run("return " .. layer.desc, env)
-					if not ok then 
-						error("Could not run 'desc' of layer with id " .. c.id, ret)
+		end
+		-- Add textures
+		for layer in lfs.dir(path .. "/img") do
+			if layer:sub(1, 1) ~= "." then
+				e.layers[layer] = e.layers[layer] or {}
+				local imgpath = path .. "/img/" .. layer
+				--print("Loading texture...")
+				-- AIR will pick the right size
+				e.layers[layer].texture = Texture.new(imgpath .. "/img.png", true)
+				local offsetFile = io.open(imgpath .. "/offset.lua")
+				if offsetFile then
+					local env = {}
+					local ok, msg = run(offsetFile:read("*a"), env)
+					if not ok or not env.x or not env.y then
+						error("Error running " .. imgpath .. "/offset.lua: ", msg)
 					else
-						print("Adding bodyDef for " .. l)
-						e.bodyDef[l] = ret
-						e.fixtures[l] = {}
+						e.offsetX, e.offsetY = env.x, env.y
 					end
-				
-					for c in all(layer.children) do
-						if c.desc then
-							local env = setmetatable({}, {__index = _G})
-							local ok, ret = run("return " .. c.desc, env)
-							if not ok then 
-								error("Could not run 'desc' of element with id " .. l.id, ret)
-							else
-								table.insert(e.fixtures[l], ret)
-							end
-						end
+				else 
+					print("No offset file for " .. folder)
+				end
+			end
+		end
+		-- Add fixtures
+		local base = assert(msvg.loadFile(path .. "/dev_base.svg")) -- TODO: dev_base -> base!
+		msvg.simplifyTree(base)
+		for layer in all(base.children) do
+			if layer.name == "g" then
+				local label = layer.label
+				print("Loading fixtures for " .. label)
+				e.layers[label] = e.layers[label] or {}
+				e.layers[label].fixtures = {}
+				for object in all(layer.children) do
+					if object.title then
+						print("Loading object " .. object.id)
+						local fixture = {
+							tag = object.title,
+							shape = b2.PolygonShape.new()
+						}
+						-- We create Polygon because it will make sure that the order is CW
+						local polygon = Polygon.new(unpack(object.vertices))
+						fixture.shape:set(Polygon.unpack(polygon))
+						table.insert(e.layers[label].fixtures, fixture)
 					end
 				end
 			end

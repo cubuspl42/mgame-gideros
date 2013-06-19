@@ -5,6 +5,7 @@ function Entity:init(name, world)
 	if not e then error("No entity named " .. name) end
 	
 	if e.scml then
+		print("Loading scml for " .. name)
 		local function scmlLoader(filename)
 			local bitmap = nil
 			if filename then
@@ -13,9 +14,12 @@ function Entity:init(name, world)
 				ok, bitmap = pcall(function()
 						-- is pcall needed? dev_ layers?
 						-- Physics Sprite
-						return OffsetBitmap.new(e.img[objectName])
+						return OffsetBitmap.new(e.layers[objectName].texture)
 				end)
-				if not ok then bitmap = nil end
+				if not ok then 
+					bitmap = nil
+					print("Warning: Couldn't load bitmap for " .. filename)
+				end
 			end
 			return SCMLSprite.new(bitmap, 1/4)
 		end
