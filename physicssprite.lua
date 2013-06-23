@@ -21,9 +21,9 @@ function addPhysics(sprite, bodyDef, world, physicsMode, bodyVariableName)
     sprite:addEventListener("enterFrame", function()
             if physicsIsSlave then -- force physics body to transorm
                 local x, y = sprite:localToGlobal(0, 0)
-				--print("x, y", x, y)
+                --print("x, y", x, y)
                 x, y = world.parent:globalToLocal(x, y)
-				--print("x, y", x, y)
+                --print("x, y", x, y)
                 body:setPosition(x, y)
                 body:setAngle(sprite:getWorldRotation() * math.pi / 180) -- we assume that world.parent doesn't rotate
             else  -- transorm sprite according to body
@@ -34,6 +34,6 @@ function addPhysics(sprite, bodyDef, world, physicsMode, bodyVariableName)
                 sprite:setWorldRotation(body:getAngle() * 180 / math.pi)
             end 
     end)
-	
-	return body
+    
+    return body
 end

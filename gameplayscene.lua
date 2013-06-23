@@ -1,5 +1,7 @@
 GameplayScene = Core.class(Sprite)
 
+local msvg = require 'msvg'
+
 function GameplayScene:init(levelCode) -- levelCode: e.g. "0/1"
     self:addEventListener("enterBegin", self.onTransitionInBegin, self)
     self:addEventListener("enterEnd", self.onTransitionInEnd, self)
@@ -65,7 +67,6 @@ local function test_newShapeFromVertices(points, color, alpha)
     return s
 end
 
-local msvg = require 'msvg'
 
 function GameplayScene:test_addNinja2()
     local ninja = Entity.new("ninja", self.world)
@@ -113,7 +114,7 @@ function GameplayScene:test_addNinja()
 end
 
 function GameplayScene:loadLevel(levelCode)
-    print("loading level " .. levelCode)
+    print("Loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
     
     local s = 1
@@ -143,7 +144,7 @@ function GameplayScene:loadLevel(levelCode)
     end
     walk(svg)
     
-    self:test_screenshot()
+    --self:test_screenshot()
     self:test_addNinja2()
     
     

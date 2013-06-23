@@ -19,8 +19,8 @@ function Entity:init(name, world)
                     print("Warning: Couldn't load bitmap for " .. filename)
                 end
                 local fixtures = e.layers[objectName].fixtures
-                print("Attaching fixtures to " .. objectName)
                 if #fixtures > 0 then
+                    print("Attaching fixtures to " .. objectName)
                     for fixture in all(fixtures) do
                         local bodyDef = {
                             type = b2.STATIC_BODY,

@@ -78,9 +78,9 @@ local function loadData()
                             }
                             -- We create Polygon because it will make sure that the order is CW
                             local polygon = Polygon.new(unpack(object.vertices))
-							Polygon.move(polygon, -e.layers[label].offsetX, -e.layers[label].offsetY)
+                            Polygon.move(polygon, -e.layers[label].offsetX, -e.layers[label].offsetY)
                             fixture.shape:set(Polygon.unpack(polygon))
-							--fixture.shape:set(0, 0, 10, 0, 0, 10)
+                            --fixture.shape:set(0, 0, 10, 0, 0, 10)
                             table.insert(e.layers[label].fixtures, fixture)
                         end
                     end
