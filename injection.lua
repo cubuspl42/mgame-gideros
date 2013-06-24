@@ -18,11 +18,11 @@ function table.copy(t)
     return t2
 end
 
-function table.reverse ( tab )
+function table.reversed(tab)
     local size = #tab
     local newTable = {}
     
-    for i,v in ipairs ( tab ) do
+    for i,v in ipairs (tab) do
         newTable[size-i+1] = v
     end
     

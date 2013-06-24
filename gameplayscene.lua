@@ -2,6 +2,14 @@ GameplayScene = Core.class(Sprite)
 
 local msvg = require 'msvg'
 
+local function loadLevel(levelCode)
+    print("Loading level " .. levelCode)
+    local prefix = "data/levels/" .. levelCode
+    local svgTree = msvg.loadFile(prefix .. "/level.svg")
+    msvg.simplifyTree(svgTree)
+    return svgTree
+end
+
 function GameplayScene:init(levelCode) -- levelCode: e.g. "0/1"
     self:addEventListener("enterBegin", self.onTransitionInBegin, self)
     self:addEventListener("enterEnd", self.onTransitionInEnd, self)
@@ -9,29 +17,18 @@ function GameplayScene:init(levelCode) -- levelCode: e.g. "0/1"
     self:addEventListener("exitEnd", self.onTransitionOutEnd, self)
     
     self:addEventListener("enterFrame", self.onEnterFrame, self)
-    self:addEventListener("logic", self.onLogic, self)
-    self:addEventListener("touchesMove", self.onTouch, self)
-    self:addEventListener("touchesEnd", self.onTouchEnd, self)
+    
     
     self.paused = false
-    self.contactListeners = {}
-    local debugDraw = b2.DebugDraw.new()
     
-    self.world = b2.World.new(0, 10)
-    self.world:setDebugDraw(debugDraw)
-    self.world.parent = self
-    
-    self.world:addEventListener("preSolve", self.onPreSolve, self)
-    self.world:addEventListener("beginContact", self.onBeginContact, self)
-    
-    
-    self:loadLevel(levelCode)
-    self:test_physicsSprite()
-    
-    self:addChild(debugDraw)
-    --self.mainlayer = MainLayer.new(); self:addChild(self.mainlayer)
-    --self:addChild(HUDLayer.new())
-    
+    self.svgTree = loadLevel(levelCode)
+    self:restartLevel()
+end
+
+function GameplayScene:restartLevel()
+    if self.world then self:removeChild(self.world) end
+    self.world = World.new(self.svgTree)
+    self:addChild(self.world)
 end
 
 function GameplayScene:test_screenshot()
@@ -51,28 +48,7 @@ function GameplayScene:test_physicsSprite()
     }, self.world)
 end
 
-local function test_newShapeFromVertices(points, color, alpha)
-    local s = Shape.new()
-    --s:setLineStyle(2)
-    s:setFillStyle(Shape.SOLID, color, alpha)
-    s:beginPath()
-    s:moveTo(points[1], points[2])
-    for i=3,#points,2 do
-        local px, py = points[i], points[i+1]
-        s:lineTo(px, py)
-        --print("test_newShapeFromVertices i, px, py ", i, px, py)
-    end
-    s:closePath()
-    s:endPath()
-    return s
-end
 
-
-function GameplayScene:test_addNinja2()
-    local ninja = Entity.new("ninja", self.world)
-    ninja.scml:setAnimation("Idle")
-    self:addChild(ninja)
-end
 
 function GameplayScene:test_addNinja()
     -- SCML
@@ -113,62 +89,12 @@ function GameplayScene:test_addNinja()
     self:addChild(ninja)
 end
 
-function GameplayScene:loadLevel(levelCode)
-    print("Loading level " .. levelCode)
-    local prefix = "data/levels/" .. levelCode
-    
-    local s = 1
-    --s = 1.5
-    --s = 4
-    self:setScale(s, s)
-    
-    local svg = msvg.loadFile(prefix .. "/level.svg")
-    msvg.simplifyTree(svg)
-    
-    local function hex_color(s)
-        if s:find'^#' then
-            return tonumber(s:sub(2), 16)
-        end
-    end
-    
-    -- Walk through SVG tree
-    local function walk(e)
-        if e.vertices then
-            if e.vertices.close then
-                local alpha = tonumber(e.style.fill_opacity)
-                local m = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.9)
-                self:addChild(m)
-            end
-        end
-        for c in all(e.children) do walk(c) end
-    end
-    walk(svg)
-    
-    --self:test_screenshot()
-    self:test_addNinja2()
-    
-    
-    local config = xmlFromFile(prefix .. "/level.xml")
-    
-    self:loadConfig(config)
-    self:loadMap(svg)
-end
-
 function GameplayScene:loadConfig(xmlConfig)
-    
-end
-
-function GameplayScene:loadMap(svgLevel)
-    -- self.map = MapLoader.loadMap(svgLevel.svg[1])
     
 end
 
 function GameplayScene:setPaused(flag)
     self.paused = flag
-end
-
-function GameplayScene:onLogic()
-    
 end
 
 function GameplayScene:onTouch(e)
@@ -191,9 +117,8 @@ end
 
 function GameplayScene:onEnterFrame()
     if not self.paused then
-        local logic = Event.new("logic")
-        logic.broadcast = true
-        dispatchEvent(self, logic)
+        local tickEvent = Event.new("tick")
+        self.world:dispatchEvent(tickEvent)
     end
 end
 
