@@ -21,76 +21,86 @@ local function test_newShapeFromVertices(points, color, alpha)
 end
 
 function World:init(svgTree)
-	self:addEventListener("tick", self.onTick, self)
-	self:addEventListener("touchesMove", self.onTouch, self)
+    self:addEventListener("tick", self.onTick, self)
+    self:addEventListener("touchesMove", self.onTouch, self)
     self:addEventListener("touchesEnd", self.onTouchEnd, self)
-	
-	self.collisionListeners = { preSolve = {}, postSolve = {}, beginContact = {}, endContact = {} }
-	
+    
+    self.collisionListeners = { 
+		preSolve = {}, postSolve = {},
+		beginContact = {}, endContact = {}
+	}
+    
     local debugDraw = b2.DebugDraw.new()
+    debugDraw:setFlags(
+		b2.DebugDraw.SHAPE_BIT +
+        b2.DebugDraw.JOINT_BIT +
+        b2.DebugDraw.PAIR_BIT
+    )
+    
     self.physicsWorld = b2.World.new(0, 10)
     self.physicsWorld:setDebugDraw(debugDraw)
-	
-	self.physicsWorld:addEventListener("preSolve", self.onPhysicsEvent, self)
-	self.physicsWorld:addEventListener("postSolve", self.onPhysicsEvent, self)
-	self.physicsWorld:addEventListener("beginContact", self.onPhysicsEvent, self)
-	self.physicsWorld:addEventListener("endContact", self.onPhysicsEvent, self)
-
-	
+    
+    self.physicsWorld:addEventListener("preSolve", self.onPhysicsEvent, self)
+    self.physicsWorld:addEventListener("postSolve", self.onPhysicsEvent, self)
+    self.physicsWorld:addEventListener("beginContact", self.onPhysicsEvent, self)
+    self.physicsWorld:addEventListener("endContact", self.onPhysicsEvent, self)
+    
     self:loadMap(svgTree)
-	
-	self:test_addNinja2()
-	self:addChild(test_newShapeFromVertices({0, 0, 10, 0, 0, 10}))
-	
+    
+    self:test_addNinja2()
+    --self:addChild(test_newShapeFromVertices({0, 0, 10, 0, 0, 10}))
+    
     self:addChild(debugDraw)
+    
+    --self.proxy = newproxy(true)
+    --getmetatable(self.proxy).__gc = function() print("world collected!") end
+    
+    local s = 0.23
+    --s = 1
+    self:setScale(s, s)
 	
-	--self.proxy = newproxy(true)
-	--getmetatable(self.proxy).__gc = function() print("world collected!") end
-	
-	local s = 0.3
-	--s = 1
-	self:setScale(s, s)
+	self:getChildAt(1).body:setActive(false)
 end
 
 function World:test_addNinja2()
-    local ninja = Entity.new("ninja", self, 150, 300)
-    ninja.scml:setAnimation("Idle")
+    self.ninja = Entity.new("ninja", self, 150, 300)
+    self.ninja.scml:setAnimation("Idle")
 end
 
 function World:addCollisionListener(name, sprite, listener, data)
-	self.collisionListeners[name][sprite] = self.collisionListeners[name][sprite] or {}
-	table.insert(self.collisionListeners[name][sprite], { listener, data })
+    self.collisionListeners[name][sprite] = self.collisionListeners[name][sprite] or {}
+    table.insert(self.collisionListeners[name][sprite], { listener, data })
 end
 
 function World:onPhysicsEvent(e)
-	--print("World:onPhysicsEvent", e:getType())
-	local normal = e.contact:getWorldManifold().normal
-	local sprites = { 
-		e.fixtureA:getBody().sprite,
-		e.fixtureB:getBody().sprite
-	}
-	local tags = {
-		e.fixtureA.tag,
-		e.fixtureB.tag
-	}
-	for i=1,2 do
-		local j = i%2+1
-		local event = {
-			sprite = sprites[i],
-			otherSprite = sprites[j],
-			tag = tags[i],
-			otherTag = tags[j],
-			--TODO: normal! reverse it?
-		}
-		local listeners = self.collisionListeners[e:getType()][event.sprite] or {}
-		for l in all(listeners) do
-			local listener, data = unpack(l)
-			-- data can be nil, then #args == 1
-			local args = { data, event }
-			listener(unpack(args))
-		end
-	end
-
+    --print("World:onPhysicsEvent", e:getType())
+    local normal = e.contact:getWorldManifold().normal
+    local sprites = { 
+        e.fixtureA:getBody().sprite,
+        e.fixtureB:getBody().sprite
+    }
+    local tags = {
+        e.fixtureA.tag,
+        e.fixtureB.tag
+    }
+    for i=1,2 do
+        local j = i%2+1
+        local event = {
+            sprite = sprites[i],
+            otherSprite = sprites[j],
+            tag = tags[i],
+            otherTag = tags[j],
+            --TODO: normal! reverse it?
+        }
+        local listeners = self.collisionListeners[e:getType()][event.sprite] or {}
+        for l in all(listeners) do
+            local listener, data = unpack(l)
+            -- data can be nil, then #args == 1
+            local args = { data, event }
+            listener(unpack(args))
+        end
+    end
+    
 end
 
 function World:onTouch(e)
@@ -112,7 +122,7 @@ function World:onTouchEnd(e)
 end
 
 function World:loadMap(svgTree)
-	print("Loading map")
+    print("Loading map")
     local function hex_color(s)
         if s:find'^#' then
             return tonumber(s:sub(2), 16)
@@ -126,10 +136,10 @@ function World:loadMap(svgTree)
                 local alpha = tonumber(e.style.fill_opacity)
                 local mesh = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.9)
                 local body = self:addSprite(mesh, {})
-				local chainShape = b2.ChainShape.new()
-				chainShape:createLoop(unpack(e.vertices))
-				body:createFixture { shape = chainShape }
-				print("Adding simple mesh", e.vertices[1], e.vertices[2])
+                local chainShape = b2.ChainShape.new()
+                chainShape:createLoop(unpack(e.vertices))
+                body:createFixture { shape = chainShape }
+                print("Adding simple mesh", e.vertices[1], e.vertices[2])
             end
         end
         for c in all(e.children) do walk(c) end
@@ -143,7 +153,7 @@ end
 local function updatePhysics(data)
     local world, sprite, body = unpack(data)
     if body.isSlave then
-		body:setLinearVelocity(0, 0)
+        body:setLinearVelocity(0, 0)
         local x, y = sprite:localToGlobal(0, 0)
         x, y = world:globalToLocal(x, y)
         body:setPosition(x, y)
@@ -165,11 +175,24 @@ function World:addSprite(sprite, bodyDef) --> body or nil
         body.isSlave = (bodyDef.isSlave ~= false)
         local data = { self, sprite, body }
         sprite.body, body.sprite = body, sprite
-        sprite:addEventListener("enterFrame", updatePhysics, data)
+        --stage:addEventListener("enterFrame", updatePhysics, data)
     end
     return body
 end
 
 function World:onTick()
-	self.physicsWorld:step(1.0/application:getFps(), 4, 8)
+    self.physicsWorld:step(1.0/application:getFps(), 4, 8)
+    local function walk(sprite)
+        local n = sprite:getNumChildren()
+        for i=1,n do
+            local childSprite = sprite:getChildAt(i)
+            childSprite:dispatchEvent(Event.new("tick"))
+            if childSprite.body then
+                updatePhysics{self, childSprite, childSprite.body}
+            end
+            walk(childSprite)
+            
+        end
+    end
+    walk(self)
 end

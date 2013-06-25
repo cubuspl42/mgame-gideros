@@ -11,6 +11,24 @@ local lfs = require 'lfs'
 local msvg = require 'msvg'
 local Polygon = require 'polygon'
 
+accelerometer = Accelerometer.new()
+accelerometer:start()
+accelerometer.filter = 1.0  -- the filtering constant, 1.0 means no filtering, lower values mean more filtering
+accelerometer.fx, accelerometer.fy, accelerometer.fz = 0, 0, 0
+
+local function updateAccelerometer()
+	local a = accelerometer
+	-- get accelerometer values
+	a.x, a.y, a.z = accelerometer:getAcceleration()
+
+	-- do the low-pass filtering
+	a.fx = a.x * a.filter + a.fx * (1 - a.filter)
+	a.fy = a.y * a.filter + a.fy * (1 - a.filter)
+	a.fz = a.z * a.filter + a.fz * (1 - a.filter)
+end
+
+stage:addEventListener("enterFrame", updateAccelerometer)
+
 local function loadData()
     -- Load data
     data = {
@@ -20,8 +38,8 @@ local function loadData()
         local path = "data/entities/"..entity
         local mode = lfs.attributes(path, "mode")
         if mode == "directory" and entity:sub(1, 1) ~= '.' then
+			-- We found an entity
             print("Loading data for " .. entity)
-            -- We found an entity
             local e = { layers = {} }
             data.entities[entity] = e
             -- Add anim

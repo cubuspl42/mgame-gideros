@@ -49,21 +49,3 @@ end
 function xmlFromFile(filename)
     return xml.newParser():loadFile(filename)
 end
-
--- one should use env?
-function preserve(...)
-    local global = {}
-    for _, v in pairs(arg) do
-        if type(v) == "string" then
-            global[v] = _G[v]
-            _G[v] = nil
-        end
-    end
-    return global
-end
-
-function revert(global)
-    for k, v in pairs(global) do
-        _G[k] = v
-    end
-end

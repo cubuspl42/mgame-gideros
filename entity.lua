@@ -53,30 +53,39 @@ function Entity:init(name, world, x, y)
     
     if e.logic then
         if e.logic.on_tick then
-            world:addEventListener("tick", e.logic.on_tick, self)
+            self:addEventListener("tick", e.logic.on_tick, self)
         end
-        if e.logic.on_collision then
-            
+        if e.logic.on_touch then
+            self:addEventListener("mouseDown", e.logic.on_touch, self)
         end
         if e.logic.on_init then
             e.logic.on_init(self)
         end
         self.logic = e.logic
     end
-	
-	local bodyDef = e.logic.bodyDef
-	x = x or 0
-	y = y or 0
-	self:setPosition(x, y)
-	if bodyDef then
-		bodyDef.position = bodyDef.position or {}
-		bodyDef.position.x = (bodyDef.position.x or 0) + x
-		bodyDef.position.y = (bodyDef.position.y or 0) + y
-	end
+    
+    x = x or 0
+    y = y or 0
+    self:setPosition(x, y)
+    
+    local bodyDef = e.logic.bodyDef
+    if bodyDef then
+        bodyDef.position = bodyDef.position or {}
+        bodyDef.position.x = (bodyDef.position.x or 0) + x
+        bodyDef.position.y = (bodyDef.position.y or 0) + y
+    end
+    
     local body = world:addSprite(self, bodyDef)
-	if body then
-		for fixtureDef in all(e.logic.fixtureDefs or {}) do
-			body:createFixture(fixtureDef)
-		end
-	end
+    if body then
+        for eventName in all{"preSolve", "postSolve", "beginContact", "endContact"} do
+            local on_event = e.logic["on_" .. eventName]
+            if on_event then
+                world:addCollisionListener(eventName, self, on_event, self)
+            end
+        end
+        for fixtureDef in all(e.logic.fixtureDefs or {}) do
+            local fixture = body:createFixture(fixtureDef)
+			fixture.tag = fixtureDef.tag
+        end
+    end
 end

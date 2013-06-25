@@ -70,7 +70,6 @@ function dispatchEvent(self, event)
             dispatchEvent(c, event)
         end
     end
-    
 end
 
 function Sprite:getWorldRotation()
