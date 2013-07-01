@@ -80,12 +80,13 @@ function SCMLEntity:onEnterFrame()
             if object.sprite then object:addChild(object.sprite) end
         end
         
-        -- Perform linear linerpolation
+        -- Perform linear interpolation
         local params = {}
         object.params = params
         for k, param in pairs(key.params) do
             local nextParam = nextKey.params[k]
             local spin = key.spin
+			-- following SCML specification
             if k == "rotation" and (nextParam - param) * spin < 0 then
                 nextParam = nextParam + spin * 360
             end
@@ -95,7 +96,7 @@ function SCMLEntity:onEnterFrame()
         -- Parentness
         local p = params
         if ref.parent then
-            local pp = ref.parent.params -- it should have been already created
+            local pp = ref.parent.params -- it should have already been created
             p.scaleX = p.scaleX * pp.scaleX
             p.scaleY = p.scaleY * pp.scaleY
             p.rotation = p.rotation + pp.rotation

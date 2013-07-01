@@ -26,13 +26,13 @@ function World:init(svgTree)
     self:addEventListener("touchesEnd", self.onTouchEnd, self)
     
     self.collisionListeners = { 
-		preSolve = {}, postSolve = {},
-		beginContact = {}, endContact = {}
-	}
+        preSolve = {}, postSolve = {},
+        beginContact = {}, endContact = {}
+    }
     
     local debugDraw = b2.DebugDraw.new()
     debugDraw:setFlags(
-		b2.DebugDraw.SHAPE_BIT +
+        b2.DebugDraw.SHAPE_BIT +
         b2.DebugDraw.JOINT_BIT +
         b2.DebugDraw.PAIR_BIT
     )
@@ -52,19 +52,16 @@ function World:init(svgTree)
     
     self:addChild(debugDraw)
     
-    --self.proxy = newproxy(true)
-    --getmetatable(self.proxy).__gc = function() print("world collected!") end
-    
     local s = 0.23
+	s = 0.6
+	s = 1.2
     --s = 1
     self:setScale(s, s)
-	
-	self:getChildAt(1).body:setActive(false)
 end
 
 function World:test_addNinja2()
     self.ninja = Entity.new("ninja", self, 150, 300)
-    self.ninja.scml:setAnimation("Idle")
+    self.ninja.scmlEntity:setAnimation("Yes")
 end
 
 function World:addCollisionListener(name, sprite, listener, data)
@@ -84,7 +81,7 @@ function World:onPhysicsEvent(e)
         e.fixtureB.tag
     }
     for i=1,2 do
-        local j = i%2+1
+        local j = i%2 + 1
         local event = {
             sprite = sprites[i],
             otherSprite = sprites[j],
@@ -93,8 +90,8 @@ function World:onPhysicsEvent(e)
             --TODO: normal! reverse it?
         }
         local listeners = self.collisionListeners[e:getType()][event.sprite] or {}
-        for l in all(listeners) do
-            local listener, data = unpack(l)
+        for listenerInfo in all(listeners) do
+            local listener, data = unpack(listenerInfo)
             -- data can be nil, then #args == 1
             local args = { data, event }
             listener(unpack(args))
@@ -135,63 +132,68 @@ function World:loadMap(svgTree)
             if e.vertices.close then
                 local alpha = tonumber(e.style.fill_opacity)
                 local mesh = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.9)
-                local body = self:addSprite(mesh, {})
                 local chainShape = b2.ChainShape.new()
                 chainShape:createLoop(unpack(e.vertices))
-                body:createFixture { shape = chainShape }
+				local body = self:addSprite(mesh, {{ fixtureDefs = {{ shape = chainShape }}, }})
                 print("Adding simple mesh", e.vertices[1], e.vertices[2])
             end
         end
         for c in all(e.children) do walk(c) end
     end
     walk(svgTree)
-    
-    --self:test_screenshot()
-    --self:test_addNinja2()
 end
 
-local function updatePhysics(data)
-    local world, sprite, body = unpack(data)
-    if body.isSlave then
-        body:setLinearVelocity(0, 0)
-        local x, y = sprite:localToGlobal(0, 0)
-        x, y = world:globalToLocal(x, y)
-        body:setPosition(x, y)
-        body:setAngle(sprite:getWorldRotation() * math.pi / 180) -- we assume that world doesn't rotate
-    else  -- transorm sprite according to body
-        local x, y = body:getPosition()
-        x, y = world:localToGlobal(x, y)
-        x, y = sprite:getParent():globalToLocal(x, y)
-        sprite:setPosition(x, y)
-        sprite:setWorldRotation(body:getAngle() * 180 / math.pi)
-    end 
-end
-
-function World:addSprite(sprite, bodyDef) --> body or nil
-    self:addChild(sprite)
-    local body
-    if bodyDef then
-        body = self.physicsWorld:createBody(bodyDef)
-        body.isSlave = (bodyDef.isSlave ~= false)
-        local data = { self, sprite, body }
-        sprite.body, body.sprite = body, sprite
-        --stage:addEventListener("enterFrame", updatePhysics, data)
+local function updatePhysics(world, sprite)
+    for body in all(sprite.bodies) do
+        if body.isSlave then
+            body:setLinearVelocity(0, 0)
+            local x, y = sprite:localToGlobal(0, 0)
+            x, y = world:globalToLocal(x, y)
+            body:setPosition(x, y)
+            body:setAngle(sprite:getWorldRotation() * math.pi / 180) -- we assume that world doesn't rotate
+        else  -- transorm sprite according to body
+            local x, y = body:getPosition()
+            x, y = world:localToGlobal(x, y)
+            x, y = sprite:getParent():globalToLocal(x, y)
+            sprite:setPosition(x, y)
+            sprite:setWorldRotation(body:getAngle() * 180 / math.pi)
+        end
     end
-    return body
 end
 
-function World:onTick()
+function World:addSprite(sprite, bodyDefs) --> bodies
+    self:addChild(sprite)
+    local bodies = {}
+    if bodyDefs then
+        for bodyDef in all(bodyDefs) do
+            local body = self.physicsWorld:createBody(bodyDef)
+            body.isSlave = (bodyDef.isSlave ~= false)
+            body.fixtures = {}
+            local fixtureDefs = bodyDef.fixtureDefs
+            for fixtureDef in all(fixtureDefs or {}) do
+                local fixture = body:createFixture(fixtureDef)
+                fixture.tag = fixtureDef.tag
+                table.insert(body.fixtures, fixture)
+            end
+            body.sprite = sprite
+            table.insert(bodies, body)
+        end
+    end
+    sprite.bodies = bodies
+    return bodies
+end
+
+function World:onTick(tickEvent)
     self.physicsWorld:step(1.0/application:getFps(), 4, 8)
     local function walk(sprite)
         local n = sprite:getNumChildren()
         for i=1,n do
             local childSprite = sprite:getChildAt(i)
-            childSprite:dispatchEvent(Event.new("tick"))
-            if childSprite.body then
-                updatePhysics{self, childSprite, childSprite.body}
+            childSprite:dispatchEvent(tickEvent)
+            if childSprite.bodies then
+                updatePhysics(self, childSprite)
             end
             walk(childSprite)
-            
         end
     end
     walk(self)

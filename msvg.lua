@@ -51,6 +51,7 @@ end
 
 local function parseStyle(styleString, parentStyle) --> style table
     local style = table.copy(parentStyle)
+	-- metatable __index?
     if styleString then
         --print("parseStyle", styleString)
         local s, d = styleString, {}
@@ -157,7 +158,7 @@ table.merge(pathCommands, {
 local function newSvgElement(tag, parentElement) --> svgElement
     if not supportedTags[tag:name()] then return end
     local svgElement = {
-        -- a lot of these will be nil - who cares
+        -- a lot of these will be nil, depending on actual tag - who cares
         children = {},
         name = tag:name(),
         id = tag['@id'],

@@ -18,6 +18,7 @@ function SCMLParser.loadFile(filename)
             print(filename .. " is not SCML file")
             return nil
         end
+		-- pcall?
         return SCMLParser.new(spriter_data)
     else
         print("Could not load " .. filename .. " - " .. ret)
@@ -40,7 +41,7 @@ function SCMLParser:createEntity(id, loaderFunction)
     print("Loading scml entity " .. entityTag["@name"])
     
     local entity = SCMLEntity.new()
-    entity.name = attribValue(entityTag, "name", "<unanmed>")
+    entity.name = attribValue(entityTag, "name", "<unnamed>")
     entity.animations = {}
     
     for l, animationTag in ipairs(entityTag.animation) do
@@ -61,12 +62,12 @@ function SCMLParser:createEntity(id, loaderFunction)
             
             local object = Sprite.new()
             object.name = timelineName
-            object.keys, object.sprites = {}, {}				
+            object.keys = {}
+			--object.sprites = {}				
             anim.objects[j] = object
             
             -- Load keys
             for k, keyTag in ipairs(timelineTag.key) do
-                
                 --print ("adding key " .. keyTag["@id"])
                 -- it's actually either 'object' or 'bone', they don't differ much
                 local objectTag = keyTag:children()[1]
@@ -88,19 +89,13 @@ function SCMLParser:createEntity(id, loaderFunction)
                 object.keys[k] = key
                 
                 -- Load sprite
+				local spriteFilename = nil
                 if objectTag["@folder"] then
                     local folderIndex = objectTag["@folder"] + 1
                     local fileIndex = objectTag["@file"] + 1
-                    local spriteName = scml.folder[folderIndex].file[fileIndex]["@name"]
-                    if not object.sprites[spriteName] then
-                        --print("loading sprite " .. spriteName)
-                        object.sprites[spriteName] = loaderFunction(spriteName) -- change name of loader?
-                    end
-                    key.sprite = object.sprites[spriteName] -- can be nil?
-                else
-                    key.sprite = loaderFunction()
+                    spriteFilename = scml.folder[folderIndex].file[fileIndex]["@name"]
                 end
-                
+                key.sprite = loaderFunction(spriteFilename)
             end
         end
         

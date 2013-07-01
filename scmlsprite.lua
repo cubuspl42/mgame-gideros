@@ -1,10 +1,13 @@
 SCMLSprite = Core.class(Sprite)
 
+-- SCMLSprite is a compatiblity layer between SCML coordinates and Gideros logical (local) coordinates
+
 function SCMLSprite:init(sprite, scaleRatio)
     self.scaleRatio = scaleRatio
-    if not sprite then return end
-    self.sprite = sprite
-    self:addChild(sprite)
+    if sprite then
+		self.sprite = sprite
+		self:addChild(sprite)
+	end
 end
 
 function SCMLSprite:setParam(k, v)
@@ -18,12 +21,8 @@ function SCMLSprite:setParam(k, v)
         end
         return
     end
-    if not self["set" .. string.firstToUpper(k)] then
-        print("critical: cannot set param " .. k)
-        return
-    end
+	assert(self["set" .. string.firstToUpper(k)], "cannot set param " .. k)
     if k == "y" or k == "rotation" then v = -v end
-    
     if k == "x" or k == "y" then v = v * self.scaleRatio end
     self:set(k, v)
 end

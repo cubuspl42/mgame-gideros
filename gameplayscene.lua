@@ -48,8 +48,6 @@ function GameplayScene:test_physicsSprite()
     }, self.world)
 end
 
-
-
 function GameplayScene:test_addNinja()
     -- SCML
     local scmlprefix = "data/entities/ninja"
