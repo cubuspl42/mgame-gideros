@@ -1,5 +1,5 @@
 local va = require 'vertexarray'
-local Polygon = require 'Polygon'
+local Polygon = require 'polygon'
 
 World = Core.class(Sprite)
 
@@ -47,14 +47,28 @@ function World:init(svgTree)
     
     self:test_addNinja2()
     --self:addChild(test_newShapeFromVertices({0, 0, 10, 0, 0, 10}))
-    
-    self:addChild(debugDraw)
-    
+    if debug then
+		self:addChild(debugDraw)
+    end
     local s = 0.23
     s = 0.6
-    s = 1.2
+	s = 0.3
+    --s = 1.2
     --s = 1
     self:setScale(s, s)
+	--self:test_screenshot()	
+end
+
+function World:test_screenshot()
+    local b = Bitmap.new(Texture.new("data/gfx/0.png", true))
+    s = 2.5
+	--s = 1.5
+	
+	s = 3.1
+
+    --s = 4.76
+    b:setScale(s)
+    self:addChild(b)
 end
 
 function World:test_addNinja2()
@@ -206,36 +220,16 @@ local function updatePhysics(sprite)
     end
 end
 
-function World:addSprite_(sprite, bodyDefs) --> bodies
-    self:addChild(sprite)
-    local bodies = {}
-    if bodyDefs then
-        for bodyDef in all(bodyDefs) do
-            local body = self.physicsWorld:createBody(bodyDef)
-            body.isSlave = (bodyDef.isSlave ~= false)
-            body.fixtures = {}
-            local fixtureDefs = bodyDef.fixtureDefs
-            for fixtureDef in all(fixtureDefs or {}) do
-                local fixture = body:createFixture(fixtureDef)
-                fixture.tag = fixtureDef.tag
-                table.insert(body.fixtures, fixture)
-            end
-            body.sprite = sprite
-            table.insert(bodies, body)
-        end
-    end
-    sprite.bodies = bodies
-    return bodies
-end
-
 -- Attach a physics body to a sprite. bodyConfig is a superset of bodyDef.
 -- fixtureConfig is similar to fixtureDef, but has another shape handling.
 function World:attachBody(sprite, bodyConfig)
     local enableMirroring = bodyConfig.enableMirroring or nil
     local bodies = {}
+	local isSlave = (bodyConfig.isSlave ~= false)
     for isMirrored in all{ false, enableMirroring } do
+		bodyConfig.active = false
         local body = self.physicsWorld:createBody(bodyConfig)
-        body.isSlave = (bodyConfig.isSlave ~= false)
+        body.isSlave = isSlave
         body.fixtures = {}
         local fixtureConfigs = bodyConfig.fixtureConfigs
         for fixtureConfig in all(fixtureConfigs or {}) do
@@ -257,7 +251,7 @@ function World:attachBody(sprite, bodyConfig)
 			
             local type = fixtureConfig.type
             if type == 'polygon' then
-                local polygon = Polygon.new(unpack(shape.vertices))
+                local polygon = Polygon.new(unpack(shape.vertices)) -- for CW correctness
                 fixtureDef.shape = b2.PolygonShape.new()
                 fixtureDef.shape:set(Polygon.unpack(polygon))
             elseif type == 'chain' then
@@ -283,27 +277,23 @@ function World:attachBody(sprite, bodyConfig)
     end
     sprite.body = bodies[false]
     sprite.world = self
-	self:addEventListener("updatePhysics", updatePhysics, sprite)
+	local eventName = isSlave and "updateSlaves" or "updateMasters"
+	self:addEventListener(eventName, updatePhysics, sprite)
 end
 
 function World:tick(deltaTime)
-    self.physicsWorld:step(1.0/application:getFps(), 4, 8)
+	local a = accelerometer
+	self.physicsWorld:setGravity(a.fy * -20, a.fx * -20)
+	
+	self.physicsWorld:step(1.0/application:getFps(), 4, 8)
+	self:dispatchEvent(Event.new("updateMasters"))
+
 	local tickEvent = Event.new("tick")
 	tickEvent.deltaTime = deltaTime
 	self:dispatchEvent(tickEvent)
 	
-	local updatePhysicsEvent = Event.new("updatePhysics")
-	self:dispatchEvent(updatePhysicsEvent)
-	
-    local function walk(sprite)
-        for i=1,sprite:getNumChildren() do
-            local childSprite = sprite:getChildAt(i)
-            --childSprite:dispatchEvent(tickEvent)
-            if childSprite.body then
-                updatePhysics(self, childSprite)
-            end
-            walk(childSprite)
-        end
-    end
-    --walk(self)
+	local x, y = self.ninja:getPosition()
+	--self:setPosition(-x +200, -y + 100)
+
+	self:dispatchEvent(Event.new("updateSlaves"))
 end
