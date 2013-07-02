@@ -10,7 +10,7 @@ local dbg --= true
 -- alpha = number (e.g. 0.123)
 -- d = number (e.g. 1.123) [antialiased border]
 
--- TODO: is it clockwise only or not?
+-- TODO: clockwise corectness!
 
 function SimpleMesh:init(vertices, color, alpha, d)
     local vertices = table.copy(vertices)
@@ -30,12 +30,14 @@ function SimpleMesh:init(vertices, color, alpha, d)
     d = d * (dbg and 2 or 1)
     local n = #vertices/2 -- initial vertices' size
     
-    local vertexArray = table.copy(vertices)
-    local colorArray = {}
-    local indexArray = {}
-    
     local polygon = Polygon.new(unpack(vertices))
     local t = Polygon.triangulate(polygon)
+	
+	vertices = { Polygon.unpack(polygon) }
+	
+	local vertexArray = table.copy(vertices)
+    local colorArray = {}
+    local indexArray = {}
     
     for i=1,n do
         table.insertall(colorArray, dbg and math.random(0xffffff) or color, (dbg and 0.9) or alpha)
@@ -86,9 +88,7 @@ function SimpleMesh:init(vertices, color, alpha, d)
         table.insertall(indexArray, a, b, c)
         table.insertall(indexArray, b, c, d)
     end
-    
-    --print("c, v", #colorArray, #vertexArray)
-    
+        
     m:setVertexArray(vertexArray)
     m:setColorArray(colorArray)
     m:setIndexArray(indexArray)

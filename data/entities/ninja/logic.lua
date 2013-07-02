@@ -6,16 +6,10 @@ bodyConfig = {
     fixtureConfigs = {{
             type = "circle",
             shape = {
-                --cx = 0, cy = 0,
                 r = 50
             },
-            --[[
-		type = "polygon",
-		shape = {
-			vertices = 
-		},
-		--]]
             density = 1,
+			friction = 0.06,
             restitution = 0.5,
             tag = "circle",
     }}

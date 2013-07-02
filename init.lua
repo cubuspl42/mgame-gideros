@@ -14,9 +14,9 @@ function all(t)
     end
 end
 
-function run(untrusted_code, env)
+function run(untrusted_code, env, chunkname)
     if untrusted_code:byte(1) == 27 then return nil, "binary bytecode prohibited" end
-    local untrusted_function, message = loadstring(untrusted_code)
+    local untrusted_function, message = loadstring(untrusted_code, chunkname)
     if not untrusted_function then return nil, message end
     setfenv(untrusted_function, env)
     return pcall(untrusted_function)

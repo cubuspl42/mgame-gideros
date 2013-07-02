@@ -12,7 +12,7 @@ local path = {
 local msvg = {} -- API
 local supportedTags = { svg = true, g = true, path = true, rect = true }
 local arcStepConst = 7 -- experimental values; unit: svg px
-local curveStepConst = 15
+local curveStepConst = 9
 
 ---- local functions ----
 

@@ -1,7 +1,7 @@
 SCMLEntity = Core.class(Sprite)
 
 function SCMLEntity:init()
-
+    
 end
 
 function SCMLEntity:setAnimation(animName)

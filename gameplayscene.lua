@@ -29,15 +29,6 @@ function GameplayScene:restartLevel()
     self:addChild(self.world)
 end
 
-function GameplayScene:test_screenshot()
-    local b = Bitmap.new(Texture.new("data/gfx/0.png", true))
-    local s = 3.5
-    s = 2.5
-    --s = 4.76
-    b:setScale(s)
-    self:addChild(b)
-end
-
 function GameplayScene:setPaused(flag)
     self.paused = flag
 end
