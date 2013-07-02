@@ -57,7 +57,7 @@ def get_base_layers(dir) :
 	print "\n\n--> get_base_layers\n"
 	layers = []
 	parser = etree.XMLParser(remove_blank_text=True)
-	dev_base = absjoin(dir, "dev_base.svg")
+	dev_base = absjoin(dir, "base.svg")
 	tree = etree.parse(dev_base, parser)
 	root = tree.getroot()
 	
@@ -83,7 +83,7 @@ def get_base_layers(dir) :
 
 def export_base(dir, imgsubfolder, format, layers, scale=1, postfix='') :
 	print "\n\n--> export_base [%s]\n" % (format)
-	dev_base = absjoin(dir, "dev_base.svg")
+	dev_base = absjoin(dir, "base.svg")
 	imgpath = join(dir, imgsubfolder)
 	for layer in layers :
 		id = layer['id']
@@ -159,7 +159,7 @@ def generate_scml(dir, layers) :
 ##########################################################################################
 # main
 
-desc = '''dev_gen generates png images and SCML file from dev_base.svg.
+desc = '''dev_gen generates png images and SCML file from base.svg.
 It will never overwrite scml, but it will override pngs if dev_base.md5 doesn't match.'''
 parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('--force', action='store_true',
@@ -186,7 +186,7 @@ time.sleep(2)
 	
 for dir in directories :
 	print "\n---> Entity directory: " + dir
-	dev_base = absjoin(dir, "dev_base.svg")
+	dev_base = absjoin(dir, "base.svg")
 	dev_base_md5 = absjoin(dir, "dev_base.md5")
 	oldmd5 = readfile(dev_base_md5)
 	newmd5 = filemd5(dev_base)

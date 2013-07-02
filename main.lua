@@ -4,6 +4,8 @@
 --]]
 -- TODO: cleanup
 
+debug = 1
+
 print("-----------------------------------------------------------------------------| ", os.date(), " |--------->")
 --require("mobdebug").start()
 
@@ -49,7 +51,7 @@ local function loadData()
             if logicFile then
                 -- logic.lua can read real global vars, but can't create them
                 local env = setmetatable({}, {__index = _G})
-                local ok, msg = run(logicFile:read("*a"), env)
+                local ok, msg = run(logicFile:read("*a"), env, "[" .. entity .. " logic]")
                 assert(ok, msg)
                 e.logic = env
             end
@@ -74,7 +76,7 @@ local function loadData()
                 end
             end
             -- Add fixtures
-            local base = assert(msvg.loadFile(path .. "/dev_base.svg")) -- TODO: dev_base -> base!
+            local base = assert(msvg.loadFile(path .. "/base.svg"), "couldn't open base.svg")
             msvg.simplifyTree(base)
             for layer in all(base.children) do
                 if layer.name == "g" then
@@ -85,12 +87,12 @@ local function loadData()
                     for object in all(layer.children) do
                         if object.title then
                             print("Loading object " .. object.id)
-							local vertices = {}
-							local offsetX = e.layers[label].offsetX
-							local offsetY = e.layers[label].offsetY
-							for x, y in va.iter(object.vertices) do
-								table.insertall(vertices, x - offsetX, y - offsetY)
-							end
+                            local vertices = {}
+                            local offsetX = e.layers[label].offsetX
+                            local offsetY = e.layers[label].offsetY
+                            for x, y in va.iter(object.vertices) do
+                                table.insertall(vertices, x - offsetX, y - offsetY)
+                            end
                             local fixtureConfig = {
                                 tag = object.title,
                                 isSensor = true,
@@ -108,6 +110,7 @@ local function loadData()
     end
 end
 
+-- TODO: focus on one lettetbox for smartphones and one 
 local function setLogicalDimensions()
     -- Logical dimensions
     local ppi = application:getScreenDensity() -- pixels per inch

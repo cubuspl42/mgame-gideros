@@ -1,264 +1,265 @@
 <project>
-  <properties autorotation="0" encrypt="0" fps="60" scaleMode="3" mouseToTouch="1" iosDevice="0" packageName="com.yourdomain.yourapp" logicalHeight="480" logicalWidth="320" mouseTouchOrder="0" retinaDisplay="3" touchToMouse="1" assetsOnly="0" orientation="3" architecture="0">
-    <imageScales>
-      <scale suffix="@2x" scale="2"/>
-      <scale suffix="@15x" scale="1.5"/>
-      <scale suffix="@066x" scale="0.66"/>
-    </imageScales>
-  </properties>
-  <file source="world.lua"/>
-  <file source="entity.lua"/>
-  <file source="lightvector.lua" excludeFromExecution="1"/>
-  <file source="polygon.lua" excludeFromExecution="1"/>
-  <file source="vertexarray.lua" excludeFromExecution="1"/>
-  <file source="vector.lua" excludeFromExecution="1"/>
-  <file source="xmlSimple.lua" excludeFromExecution="1"/>
-  <file source="injection.lua" excludeFromExecution="1"/>
-  <file source="gameplayscene.lua"/>
-  <file source="simplemesh.lua"/>
-  <file source="offsetbitmap.lua"/>
-  <file source="msvg.lua"/>
-  <file source="entities.lua"/>
-  <file source="ground.lua"/>
-  <file source="init.lua"/>
-  <file source="main.lua"/>
-  <file source="ninja.lua"/>
-  <file source="physicssprite.lua"/>
-  <file source="scenemanager.lua"/>
-  <file source="scmlentity.lua"/>
-  <file source="scmlparser.lua"/>
-  <file source="scmlsprite.lua"/>
-  <folder name="data">
-    <folder name="entities">
-      <file excludeFromExecution="1" source="data/entities/dev_gen.bat"/>
-      <file excludeFromExecution="1" source="data/entities/dev_gen.py"/>
-      <file excludeFromExecution="1" source="data/entities/dev_gen_args.txt"/>
-      <file excludeFromExecution="1" source="data/entities/dev_gen_scales.txt"/>
-      <folder name="ninja">
-        <file excludeFromExecution="1" source="data/entities/ninja/anim-copy.scml"/>
-        <file excludeFromExecution="1" source="data/entities/ninja/anim.scml"/>
-        <file excludeFromExecution="1" source="data/entities/ninja/dev_base.md5"/>
-        <file excludeFromExecution="1" source="data/entities/ninja/dev_base.svg"/>
-        <folder name="dev_img">
-          <folder name="dev_circle">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/dev_circle/img.png"/>
-          </folder>
-          <folder name="dev_lines">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/dev_lines/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/dev_lines/offset.lua"/>
-          </folder>
-          <folder name="head">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/head/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/head/offset.lua"/>
-          </folder>
-          <folder name="larm0">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/larm0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/larm0/offset.lua"/>
-          </folder>
-          <folder name="larm1">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/larm1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/larm1/offset.lua"/>
-          </folder>
-          <folder name="lleg0">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/lleg0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/lleg0/offset.lua"/>
-          </folder>
-          <folder name="lleg1">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/lleg1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/lleg1/offset.lua"/>
-          </folder>
-          <folder name="neck">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/neck/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/neck/offset.lua"/>
-          </folder>
-          <folder name="rarm0">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rarm0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rarm0/offset.lua"/>
-          </folder>
-          <folder name="rarm1">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rarm1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rarm1/offset.lua"/>
-          </folder>
-          <folder name="rleg0">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rleg0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rleg0/offset.lua"/>
-          </folder>
-          <folder name="rleg1">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rleg1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/rleg1/offset.lua"/>
-          </folder>
-          <folder name="torso0">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/torso0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/torso0/offset.lua"/>
-          </folder>
-          <folder name="torso1">
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/torso1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/dev_img/torso1/offset.lua"/>
-          </folder>
-        </folder>
-        <folder name="img">
-          <folder name="head">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/head/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/head/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/head/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/head/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/head/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/head/offset.lua"/>
-          </folder>
-          <folder name="larm0">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm0/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm0/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm0/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm0/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm0/offset.lua"/>
-          </folder>
-          <folder name="larm1">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm1/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm1/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm1/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm1/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/larm1/offset.lua"/>
-          </folder>
-          <folder name="lleg0">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg0/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg0/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg0/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg0/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg0/offset.lua"/>
-          </folder>
-          <folder name="lleg1">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg1/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg1/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg1/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg1/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/lleg1/offset.lua"/>
-          </folder>
-          <folder name="neck">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/neck/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/neck/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/neck/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/neck/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/neck/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/neck/offset.lua"/>
-          </folder>
-          <folder name="rarm0">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm0/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm0/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm0/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm0/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm0/offset.lua"/>
-          </folder>
-          <folder name="rarm1">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm1/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm1/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm1/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm1/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rarm1/offset.lua"/>
-          </folder>
-          <folder name="rleg0">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg0/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg0/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg0/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg0/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg0/offset.lua"/>
-          </folder>
-          <folder name="rleg1">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg1/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg1/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg1/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg1/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/rleg1/offset.lua"/>
-          </folder>
-          <folder name="torso0">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso0/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso0/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso0/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso0/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso0/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso0/offset.lua"/>
-          </folder>
-          <folder name="torso1">
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso1/img.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso1/img.svg"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso1/img@066x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso1/img@15x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso1/img@2x.png"/>
-            <file excludeFromExecution="1" source="data/entities/ninja/img/torso1/offset.lua"/>
-          </folder>
-        </folder>
-        <file excludeFromExecution="1" source="data/entities/ninja/logic.lua"/>
-      </folder>
+ <properties autorotation="0" encrypt="0" fps="60" scaleMode="3" mouseToTouch="1" iosDevice="0" packageName="com.yourdomain.yourapp" logicalHeight="480" logicalWidth="320" mouseTouchOrder="0" retinaDisplay="3" touchToMouse="1" assetsOnly="0" orientation="1" architecture="0">
+  <imageScales>
+   <scale suffix="@2x" scale="2"/>
+   <scale suffix="@15x" scale="1.5"/>
+   <scale suffix="@066x" scale="0.66"/>
+  </imageScales>
+ </properties>
+ <file source="world.lua"/>
+ <file source="entity.lua"/>
+ <file source="lightvector.lua" excludeFromExecution="1"/>
+ <file source="polygon.lua" excludeFromExecution="1"/>
+ <file source="vertexarray.lua" excludeFromExecution="1"/>
+ <file source="vector.lua" excludeFromExecution="1"/>
+ <file source="xmlSimple.lua" excludeFromExecution="1"/>
+ <file source="injection.lua" excludeFromExecution="1"/>
+ <file source="gameplayscene.lua"/>
+ <file source="simplemesh.lua"/>
+ <file source="offsetbitmap.lua"/>
+ <file source="msvg.lua"/>
+ <file source="entities.lua"/>
+ <file source="ground.lua"/>
+ <file source="init.lua"/>
+ <file source="main.lua"/>
+ <file source="ninja.lua"/>
+ <file source="physicssprite.lua"/>
+ <file source="scenemanager.lua"/>
+ <file source="scmlentity.lua"/>
+ <file source="scmlparser.lua"/>
+ <file source="scmlsprite.lua"/>
+ <folder name="data">
+  <folder name="entities">
+   <file source="data/entities/dev_gen.bat" excludeFromExecution="1"/>
+   <file source="data/entities/dev_gen.py" excludeFromExecution="1"/>
+   <file source="data/entities/dev_gen_args.txt" excludeFromExecution="1"/>
+   <file source="data/entities/dev_gen_scales.txt" excludeFromExecution="1"/>
+   <folder name="ninja">
+    <file source="data/entities/ninja/anim-copy.scml" excludeFromExecution="1"/>
+    <file source="data/entities/ninja/anim-copy2.scml" excludeFromExecution="1"/>
+    <file source="data/entities/ninja/anim.scml" excludeFromExecution="1"/>
+    <file source="data/entities/ninja/base.svg" excludeFromExecution="1"/>
+    <file source="data/entities/ninja/dev_base.md5" excludeFromExecution="1"/>
+    <folder name="dev_img">
+     <folder name="dev_circle">
+      <file source="data/entities/ninja/dev_img/dev_circle/img.png" excludeFromExecution="1"/>
+     </folder>
+     <folder name="dev_lines">
+      <file source="data/entities/ninja/dev_img/dev_lines/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/dev_lines/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="head">
+      <file source="data/entities/ninja/dev_img/head/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/head/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="larm0">
+      <file source="data/entities/ninja/dev_img/larm0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/larm0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="larm1">
+      <file source="data/entities/ninja/dev_img/larm1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/larm1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="lleg0">
+      <file source="data/entities/ninja/dev_img/lleg0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/lleg0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="lleg1">
+      <file source="data/entities/ninja/dev_img/lleg1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/lleg1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="neck">
+      <file source="data/entities/ninja/dev_img/neck/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/neck/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rarm0">
+      <file source="data/entities/ninja/dev_img/rarm0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/rarm0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rarm1">
+      <file source="data/entities/ninja/dev_img/rarm1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/rarm1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rleg0">
+      <file source="data/entities/ninja/dev_img/rleg0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/rleg0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rleg1">
+      <file source="data/entities/ninja/dev_img/rleg1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/rleg1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="torso0">
+      <file source="data/entities/ninja/dev_img/torso0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/torso0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="torso1">
+      <file source="data/entities/ninja/dev_img/torso1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/dev_img/torso1/offset.lua" excludeFromExecution="1"/>
+     </folder>
     </folder>
-    <folder name="gfx">
-      <file excludeFromExecution="1" source="data/gfx/0.png"/>
+    <folder name="img">
+     <folder name="head">
+      <file source="data/entities/ninja/img/head/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/head/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/head/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/head/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/head/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/head/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="larm0">
+      <file source="data/entities/ninja/img/larm0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm0/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm0/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm0/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm0/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="larm1">
+      <file source="data/entities/ninja/img/larm1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm1/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm1/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm1/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm1/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/larm1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="lleg0">
+      <file source="data/entities/ninja/img/lleg0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg0/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg0/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg0/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg0/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="lleg1">
+      <file source="data/entities/ninja/img/lleg1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg1/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg1/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg1/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg1/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/lleg1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="neck">
+      <file source="data/entities/ninja/img/neck/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/neck/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/neck/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/neck/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/neck/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/neck/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rarm0">
+      <file source="data/entities/ninja/img/rarm0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm0/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm0/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm0/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm0/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rarm1">
+      <file source="data/entities/ninja/img/rarm1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm1/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm1/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm1/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm1/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rarm1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rleg0">
+      <file source="data/entities/ninja/img/rleg0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg0/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg0/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg0/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg0/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="rleg1">
+      <file source="data/entities/ninja/img/rleg1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg1/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg1/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg1/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg1/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/rleg1/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="torso0">
+      <file source="data/entities/ninja/img/torso0/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso0/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso0/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso0/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso0/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso0/offset.lua" excludeFromExecution="1"/>
+     </folder>
+     <folder name="torso1">
+      <file source="data/entities/ninja/img/torso1/img.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso1/img.svg" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso1/img@066x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso1/img@15x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso1/img@2x.png" excludeFromExecution="1"/>
+      <file source="data/entities/ninja/img/torso1/offset.lua" excludeFromExecution="1"/>
+     </folder>
     </folder>
-    <folder name="levels">
-      <folder name="0">
-        <folder name="0">
-          <file excludeFromExecution="1" source="data/levels/0/0/level.svg"/>
-          <file excludeFromExecution="1" source="data/levels/0/0/level.svg.backup.svg"/>
-          <file excludeFromExecution="1" source="data/levels/0/0/level.xml"/>
-        </folder>
-        <folder name="1">
-          <file excludeFromExecution="1" source="data/levels/0/1/level.svg"/>
-          <file excludeFromExecution="1" source="data/levels/0/1/level.svg.backup.svg"/>
-        </folder>
-      </folder>
-    </folder>
+    <file source="data/entities/ninja/logic.lua" excludeFromExecution="1"/>
+   </folder>
   </folder>
-  <folder name="lib">
-    <file excludeFromExecution="1" source="lib/affine.lua"/>
-    <file excludeFromExecution="1" source="lib/glue.lua"/>
-    <file excludeFromExecution="1" source="lib/LICENSE.txt"/>
-    <folder name="lpeg">
-      <file excludeFromExecution="1" source="lib/lpeg/re.lua"/>
-    </folder>
-    <file excludeFromExecution="1" source="lib/math_eq2.lua"/>
-    <file excludeFromExecution="1" source="lib/math_eq2_test.lua"/>
-    <file excludeFromExecution="1" source="lib/math_eq3.lua"/>
-    <file excludeFromExecution="1" source="lib/math_eq3_test.lua"/>
-    <file excludeFromExecution="1" source="lib/Matrix.lua"/>
-    <file excludeFromExecution="1" source="lib/path.lua"/>
-    <file excludeFromExecution="1" source="lib/path_arc.lua"/>
-    <file excludeFromExecution="1" source="lib/path_arc_3p.lua"/>
-    <file excludeFromExecution="1" source="lib/path_arc_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier2.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier2_ai.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier2_ai_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier2_hit.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier3.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier3_ai.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier3_ai_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier3_hit.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier3_hit_test.lua"/>
-    <file excludeFromExecution="1" source="lib/path_bezier_length.lua"/>
-    <file excludeFromExecution="1" source="lib/path_cairo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_cairo_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_circle_3p.lua"/>
-    <file excludeFromExecution="1" source="lib/path_editor.lua"/>
-    <file excludeFromExecution="1" source="lib/path_editor_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_elliptic_arc.lua"/>
-    <file excludeFromExecution="1" source="lib/path_elliptic_arc_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_elliptic_arc_tangent_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_hit_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_line.lua"/>
-    <file excludeFromExecution="1" source="lib/path_point.lua"/>
-    <file excludeFromExecution="1" source="lib/path_shapes.lua"/>
-    <file excludeFromExecution="1" source="lib/path_shapes_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_svgarc.lua"/>
-    <file excludeFromExecution="1" source="lib/path_svgarc_demo.lua"/>
-    <file excludeFromExecution="1" source="lib/path_text.lua"/>
-    <file excludeFromExecution="1" source="lib/pformat.lua"/>
-    <file excludeFromExecution="1" source="lib/pp.lua"/>
-    <file excludeFromExecution="1" source="lib/svg_colors.lua"/>
-    <file excludeFromExecution="1" source="lib/svg_parser.lua"/>
+  <folder name="gfx">
+   <file source="data/gfx/0.png" excludeFromExecution="1"/>
   </folder>
+  <folder name="levels">
+   <folder name="0">
+    <folder name="0">
+     <file source="data/levels/0/0/level.svg" excludeFromExecution="1"/>
+     <file source="data/levels/0/0/level.svg.backup.svg" excludeFromExecution="1"/>
+     <file source="data/levels/0/0/level.xml" excludeFromExecution="1"/>
+    </folder>
+    <folder name="1">
+     <file source="data/levels/0/1/level.svg" excludeFromExecution="1"/>
+     <file source="data/levels/0/1/level.svg.backup.svg" excludeFromExecution="1"/>
+    </folder>
+   </folder>
+  </folder>
+ </folder>
+ <folder name="lib">
+  <file source="lib/affine.lua" excludeFromExecution="1"/>
+  <file source="lib/glue.lua" excludeFromExecution="1"/>
+  <file source="lib/LICENSE.txt" excludeFromExecution="1"/>
+  <folder name="lpeg">
+   <file source="lib/lpeg/re.lua" excludeFromExecution="1"/>
+  </folder>
+  <file source="lib/math_eq2.lua" excludeFromExecution="1"/>
+  <file source="lib/math_eq2_test.lua" excludeFromExecution="1"/>
+  <file source="lib/math_eq3.lua" excludeFromExecution="1"/>
+  <file source="lib/math_eq3_test.lua" excludeFromExecution="1"/>
+  <file source="lib/Matrix.lua" excludeFromExecution="1"/>
+  <file source="lib/path.lua" excludeFromExecution="1"/>
+  <file source="lib/path_arc.lua" excludeFromExecution="1"/>
+  <file source="lib/path_arc_3p.lua" excludeFromExecution="1"/>
+  <file source="lib/path_arc_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier2.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier2_ai.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier2_ai_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier2_hit.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier3.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier3_ai.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier3_ai_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier3_hit.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier3_hit_test.lua" excludeFromExecution="1"/>
+  <file source="lib/path_bezier_length.lua" excludeFromExecution="1"/>
+  <file source="lib/path_cairo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_cairo_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_circle_3p.lua" excludeFromExecution="1"/>
+  <file source="lib/path_editor.lua" excludeFromExecution="1"/>
+  <file source="lib/path_editor_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_elliptic_arc.lua" excludeFromExecution="1"/>
+  <file source="lib/path_elliptic_arc_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_elliptic_arc_tangent_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_hit_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_line.lua" excludeFromExecution="1"/>
+  <file source="lib/path_point.lua" excludeFromExecution="1"/>
+  <file source="lib/path_shapes.lua" excludeFromExecution="1"/>
+  <file source="lib/path_shapes_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_svgarc.lua" excludeFromExecution="1"/>
+  <file source="lib/path_svgarc_demo.lua" excludeFromExecution="1"/>
+  <file source="lib/path_text.lua" excludeFromExecution="1"/>
+  <file source="lib/pformat.lua" excludeFromExecution="1"/>
+  <file source="lib/pp.lua" excludeFromExecution="1"/>
+  <file source="lib/svg_colors.lua" excludeFromExecution="1"/>
+  <file source="lib/svg_parser.lua" excludeFromExecution="1"/>
+ </folder>
 </project>
