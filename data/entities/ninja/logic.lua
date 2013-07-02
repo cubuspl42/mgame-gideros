@@ -3,7 +3,7 @@ bodyDef = {
     isSlave = false,
     fixedRotation = true,
 	fixtureDefs = {{
-        shape = b2.CircleShape.new(50, 50, 50),
+        shape = b2.CircleShape.new(0, 0, 50),
         density = 1,
         restitution = 0.5,
         tag = "circle"
@@ -11,7 +11,7 @@ bodyDef = {
 }
 
 function on_init(self, e)
-	--self:setScale(-1, 1)
+	self:setScale(-1, 1)
 end
 
 function on_tick(self, e)
