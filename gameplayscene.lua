@@ -15,9 +15,7 @@ function GameplayScene:init(levelCode) -- levelCode: e.g. "0/1"
     self:addEventListener("enterEnd", self.onTransitionInEnd, self)
     self:addEventListener("exitBegin", self.onTransitionOutBegin, self)
     self:addEventListener("exitEnd", self.onTransitionOutEnd, self)
-    
     self:addEventListener("enterFrame", self.onEnterFrame, self)
-    
     
     self.paused = false
     
@@ -38,57 +36,6 @@ function GameplayScene:test_screenshot()
     --s = 4.76
     b:setScale(s)
     self:addChild(b)
-end
-
-function GameplayScene:test_physicsSprite()
-    do return end
-    local ps = PhysicsSprite.new(nil, {
-            lock = false, fixedRotation = true,
-            subshapes = { { cx = 50, cy = 50, radius = 50, fixture = {} } }
-    }, self.world)
-end
-
-function GameplayScene:test_addNinja()
-    -- SCML
-    local scmlprefix = "data/entities/ninja"
-    local scml = SCMLParser.loadFile(scmlprefix .. "/anim.scml")
-    local dbg = false
-    local function loader(filename)
-        local ok, b 
-        if filename then
-            filename = filename:gsub("dev_", "")
-            ok, b = pcall(function()
-                    return OffsetBitmap.new(Texture.new(scmlprefix .. filename, true))
-            end)
-            if not ok then b = nil end
-        end
-        local s = SCMLSprite.new(b, 4)
-        if dbg then 
-            for i = 1,2 do
-                a = Shape.new()
-                a:setLineStyle(3, i==1 and 0xFF0000 or 0x00FF00)
-                a:beginPath()
-                a:moveTo(0, 0)
-                a:lineTo(i==2 and 0 or 30, i==1 and 0 or 30)
-                a:endPath()
-                s:addChild(a)
-            end
-        end
-        return s
-    end
-    
-    
-    local ninja = scml:createEntity(0, loader)
-    local x, y = 2000, 3180
-    x, y = 100, 100
-    ninja:setPosition(x, y)
-    ninja:setAnimation("Run") -- TEMP
-    ninja.anim.paused = true
-    self:addChild(ninja)
-end
-
-function GameplayScene:loadConfig(xmlConfig)
-    
 end
 
 function GameplayScene:setPaused(flag)
@@ -113,27 +60,10 @@ function GameplayScene:onTouchEnd(e)
     self.prevTouchX, self.prevTouchY = nil, nil
 end
 
-function GameplayScene:onEnterFrame()
+function GameplayScene:onEnterFrame(event)
     if not self.paused then
-        local tickEvent = Event.new("tick")
-        self.world:dispatchEvent(tickEvent)
+        self.world:tick(event.deltaTime)
     end
-end
-
-function GameplayScene:onBeginContact()
-    
-end
-
-function GameplayScene:onEndContact()
-    
-end
-
-function GameplayScene:onPreSolve()
-    
-end
-
-function GameplayScene:onPostSolve()
-    
 end
 
 function GameplayScene:onTransitionInBegin()

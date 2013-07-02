@@ -18,7 +18,7 @@ function SCMLParser.loadFile(filename)
             print(filename .. " is not SCML file")
             return nil
         end
-		-- pcall?
+        -- pcall?
         return SCMLParser.new(spriter_data)
     else
         print("Could not load " .. filename .. " - " .. ret)
@@ -63,7 +63,7 @@ function SCMLParser:createEntity(id, loaderFunction)
             local object = Sprite.new()
             object.name = timelineName
             object.keys = {}
-			--object.sprites = {}				
+            --object.sprites = {}				
             anim.objects[j] = object
             
             -- Load keys
@@ -89,7 +89,7 @@ function SCMLParser:createEntity(id, loaderFunction)
                 object.keys[k] = key
                 
                 -- Load sprite
-				local spriteFilename = nil
+                local spriteFilename = nil
                 if objectTag["@folder"] then
                     local folderIndex = objectTag["@folder"] + 1
                     local fileIndex = objectTag["@file"] + 1

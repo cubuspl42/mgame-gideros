@@ -5,9 +5,9 @@ SCMLSprite = Core.class(Sprite)
 function SCMLSprite:init(sprite, scaleRatio)
     self.scaleRatio = scaleRatio
     if sprite then
-		self.sprite = sprite
-		self:addChild(sprite)
-	end
+        self.sprite = sprite
+        self:addChild(sprite)
+    end
 end
 
 function SCMLSprite:setParam(k, v)
@@ -21,7 +21,7 @@ function SCMLSprite:setParam(k, v)
         end
         return
     end
-	assert(self["set" .. string.firstToUpper(k)], "cannot set param " .. k)
+    assert(self["set" .. string.firstToUpper(k)], "cannot set param " .. k)
     if k == "y" or k == "rotation" then v = -v end
     if k == "x" or k == "y" then v = v * self.scaleRatio end
     self:set(k, v)

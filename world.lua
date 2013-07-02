@@ -1,8 +1,7 @@
+local va = require 'vertexarray'
+local Polygon = require 'Polygon'
+
 World = Core.class(Sprite)
---[[
-	events:
-	
-]]--
 
 local function test_newShapeFromVertices(points, color, alpha)
     local s = Shape.new()
@@ -21,7 +20,6 @@ local function test_newShapeFromVertices(points, color, alpha)
 end
 
 function World:init(svgTree)
-    self:addEventListener("tick", self.onTick, self)
     self:addEventListener("touchesMove", self.onTouch, self)
     self:addEventListener("touchesEnd", self.onTouchEnd, self)
     
@@ -53,8 +51,8 @@ function World:init(svgTree)
     self:addChild(debugDraw)
     
     local s = 0.23
-	s = 0.6
-	s = 1.2
+    s = 0.6
+    s = 1.2
     --s = 1
     self:setScale(s, s)
 end
@@ -132,9 +130,9 @@ function World:loadMap(svgTree)
             if e.vertices.close then
                 local alpha = tonumber(e.style.fill_opacity)
                 local mesh = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.9)
-                local chainShape = b2.ChainShape.new()
-                chainShape:createLoop(unpack(e.vertices))
-				local body = self:addSprite(mesh, {{ fixtureDefs = {{ shape = chainShape }}, }})
+                local shape = { vertices = e.vertices }
+                self:addChild(mesh)
+                self:attachBody(mesh, { fixtureConfigs = {{ type = 'chain', shape = shape }}, })
                 print("Adding simple mesh", e.vertices[1], e.vertices[2])
             end
         end
@@ -143,25 +141,72 @@ function World:loadMap(svgTree)
     walk(svgTree)
 end
 
-local function updatePhysics(world, sprite)
-    for body in all(sprite.bodies) do
-        if body.isSlave then
-            body:setLinearVelocity(0, 0)
-            local x, y = sprite:localToGlobal(0, 0)
-            x, y = world:globalToLocal(x, y)
-            body:setPosition(x, y)
-            body:setAngle(sprite:getWorldRotation() * math.pi / 180) -- we assume that world doesn't rotate
-        else  -- transorm sprite according to body
-            local x, y = body:getPosition()
-            x, y = world:localToGlobal(x, y)
-            x, y = sprite:getParent():globalToLocal(x, y)
-            sprite:setPosition(x, y)
-            sprite:setWorldRotation(body:getAngle() * 180 / math.pi)
-        end
+local function moveToHell(body)
+	body:setActive(false)
+	body:setPosition(-100, -100)
+end
+
+local function updatePhysics(sprite)
+	local world = sprite.world
+    local parent = sprite:getParent()
+    local rotation = sprite:getRotation()
+    local scaleX, scaleY = sprite:getScale()
+	
+    while true do
+        if not parent then
+			moveToHell(sprite.body)
+			return 
+		end -- skip detached sprites
+        assert(parent ~= stage, "Cannot update physics for sprite in another subtree")
+        if parent == world then break end
+        rotation = rotation + parent:getRotation()
+        scaleX = scaleX * parent:getScaleX()
+        scaleY = scaleY * parent:getScaleY()
+        parent = parent:getParent()
+    end
+	
+	sprite.body:setActive(true)
+    assert(math.abs(scaleX) > 0.99 and math.abs(scaleX) < 1.01, "sprite with attached body cannot be scaled")
+    
+    local bodies = sprite.bodies
+    local mirrored = scaleX < 0
+    
+    if not bodies and mirrored then
+        error("sprite with body configured without enableMirroring cannot be mirrored")
+    end
+	
+    if mirrored then 
+        rotation = 360 - rotation
+    end
+    
+    if bodies and sprite.body ~= bodies[mirrored] then
+		local oldBody = sprite.body
+		sprite.body = bodies[mirrored]
+		local body = sprite.body
+		body:setActive(true)
+		body:setLinearVelocity(oldBody:getLinearVelocity())
+		-- linear damping?
+		moveToHell(oldBody)
+    end
+    
+    local body = sprite.body
+    
+    if body.isSlave then
+        body:setLinearVelocity(0, 0)
+        local x, y = sprite:localToGlobal(0, 0)
+        x, y = world:globalToLocal(x, y)
+        body:setPosition(x, y)
+        body:setAngle(rotation * math.pi / 180)
+    else  -- transorm sprite according to body
+        local x, y = body:getPosition()
+        x, y = world:localToGlobal(x, y)
+        x, y = sprite:getParent():globalToLocal(x, y)
+        sprite:setPosition(x, y)
+        sprite:setRotation((body:getAngle() * 180 / math.pi) - rotation)
     end
 end
 
-function World:addSprite(sprite, bodyDefs) --> bodies
+function World:addSprite_(sprite, bodyDefs) --> bodies
     self:addChild(sprite)
     local bodies = {}
     if bodyDefs then
@@ -183,18 +228,82 @@ function World:addSprite(sprite, bodyDefs) --> bodies
     return bodies
 end
 
-function World:onTick(tickEvent)
+-- Attach a physics body to a sprite. bodyConfig is a superset of bodyDef.
+-- fixtureConfig is similar to fixtureDef, but has another shape handling.
+function World:attachBody(sprite, bodyConfig)
+    local enableMirroring = bodyConfig.enableMirroring or nil
+    local bodies = {}
+    for isMirrored in all{ false, enableMirroring } do
+        local body = self.physicsWorld:createBody(bodyConfig)
+        body.isSlave = (bodyConfig.isSlave ~= false)
+        body.fixtures = {}
+        local fixtureConfigs = bodyConfig.fixtureConfigs
+        for fixtureConfig in all(fixtureConfigs or {}) do
+            local fixtureDef = table.copy(fixtureConfig)
+            local shape = table.deepcopy(fixtureConfig.shape)
+            
+            if isMirrored then
+                if shape.vertices then
+                    local vertices = {}
+                    for x, y in va.iter(shape.vertices) do
+                        table.insertall(vertices, -x, y)
+                    end
+                    shape.vertices = vertices
+                else if shape.cx then
+                        shape.cx = -shape.cx
+                    end
+                end
+            end
+			
+            local type = fixtureConfig.type
+            if type == 'polygon' then
+                local polygon = Polygon.new(unpack(shape.vertices))
+                fixtureDef.shape = b2.PolygonShape.new()
+                fixtureDef.shape:set(Polygon.unpack(polygon))
+            elseif type == 'chain' then
+                fixtureDef.shape = b2.ChainShape.new()
+                -- shape.type == "loop"/"..." ?
+                fixtureDef.shape:createLoop(unpack(shape.vertices))
+            elseif type == 'circle' then
+                fixtureDef.shape = b2.CircleShape.new(shape.cx or 0, shape.cy or 0, assert(shape.r))
+            else
+                error("unknown shape.type " .. (type or "<nil>"))
+            end
+            
+            local fixture = body:createFixture(fixtureDef)
+            fixture.tag = fixtureConfig.tag
+            table.insert(body.fixtures, fixture)
+        end
+        body.sprite = sprite
+        bodies[isMirrored] = body
+    end
+    
+    if enableMirroring then
+        sprite.bodies = bodies
+    end
+    sprite.body = bodies[false]
+    sprite.world = self
+	self:addEventListener("updatePhysics", updatePhysics, sprite)
+end
+
+function World:tick(deltaTime)
     self.physicsWorld:step(1.0/application:getFps(), 4, 8)
+	local tickEvent = Event.new("tick")
+	tickEvent.deltaTime = deltaTime
+	self:dispatchEvent(tickEvent)
+	
+	local updatePhysicsEvent = Event.new("updatePhysics")
+	self:dispatchEvent(updatePhysicsEvent)
+	
     local function walk(sprite)
-        local n = sprite:getNumChildren()
-        for i=1,n do
+        for i=1,sprite:getNumChildren() do
             local childSprite = sprite:getChildAt(i)
-            childSprite:dispatchEvent(tickEvent)
-            if childSprite.bodies then
+            --childSprite:dispatchEvent(tickEvent)
+            if childSprite.body then
                 updatePhysics(self, childSprite)
             end
             walk(childSprite)
         end
     end
-    walk(self)
+    --walk(self)
 end

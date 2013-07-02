@@ -1,7 +1,7 @@
 SCMLEntity = Core.class(Sprite)
 
 function SCMLEntity:init()
-    self:addEventListener("enterFrame", self.onEnterFrame, self)
+
 end
 
 function SCMLEntity:setAnimation(animName)
@@ -27,9 +27,9 @@ local function linearInterpolation(v1, v2, t1, t2, t)
     return v1 + (v2 - v1) * (t - t1) / (t2 - t1)
 end
 
-function SCMLEntity:onEnterFrame()
+function SCMLEntity:step()
     local anim = self.anim
-    if not anim then return end -- TODO: or anim paused?
+    if not anim then return end
     
     -- Looping
     local time = os.timems() - self.starttime
@@ -86,7 +86,7 @@ function SCMLEntity:onEnterFrame()
         for k, param in pairs(key.params) do
             local nextParam = nextKey.params[k]
             local spin = key.spin
-			-- following SCML specification
+            -- following SCML specification
             if k == "rotation" and (nextParam - param) * spin < 0 then
                 nextParam = nextParam + spin * 360
             end

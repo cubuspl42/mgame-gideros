@@ -5,34 +5,36 @@ function Entity:init(name, world, x, y, userData)
     if not enityData then error("No entity named " .. name) end
     
     self.world = world
+    world:addChild(self)
     
     if enityData.scml then
         print("Loading scml for " .. name)
         local function scmlLoader(filename)
             local bitmap = Sprite.new()
-			bitmap.objectName = "<object_name>"
-			bitmap.entity = self
-			-- if filename is nil, it's (probably) bone
+            bitmap.objectName = "<object_name>"
+            bitmap.entity = self
+            -- if filename is nil, it's (probably) bone
             if filename then
                 local objectName = assert(filename:match("dev_img/([^/]+)/"))
                 --print("objectName", objectName)
                 local ok = pcall(function()
                         -- is pcall needed? dev_ layers?
                         bitmap = OffsetBitmap.new(enityData.layers[objectName].texture)
-						bitmap.objectName = objectName
+                        bitmap.objectName = objectName
                 end)
                 if not ok then 
                     print("Warning: Couldn't load bitmap for " .. filename)
                 end
-                local fixtureDefs = enityData.layers[objectName].fixtureDefs
-                if #fixtureDefs > 0 then
+                local fixtureConfigs = enityData.layers[objectName].fixtureConfigs
+                if #fixtureConfigs > 0 then
                     print("Attaching fixtures to " .. objectName)
-                    local bodyDef = {
+                    local bodyConfig = {
                         type = b2.DYNAMIC_BODY,
                         isSlave = true,
-						fixtureDefs = fixtureDefs,
+                        enableMirroring = true,
+                        fixtureConfigs = fixtureConfigs,
                     }
-                    local body = world:addSprite(bitmap, {bodyDef})
+                    world:attachBody(bitmap, bodyConfig)
                     for eventName in all{"preSolve", "postSolve", "beginContact", "endContact"} do
                         local on_event = enityData.logic["on_" .. eventName]
                         if on_event then
@@ -44,12 +46,15 @@ function Entity:init(name, world, x, y, userData)
             return SCMLSprite.new(bitmap, 1/4)
         end
         self.scmlEntity = enityData.scml:createEntity(0, scmlLoader)
+		world:addEventListener("tick", function(event)
+			self.scmlEntity:step() -- TODO: pass deltaTime
+		end)
         self:addChild(self.scmlEntity)
     end
     
     if enityData.logic then
         if enityData.logic.on_tick then
-            self:addEventListener("tick", enityData.logic.on_tick, self)
+            world:addEventListener("tick", enityData.logic.on_tick, self)
         end
         if enityData.logic.on_touch then
             self:addEventListener("mouseDown", enityData.logic.on_touch, self)
@@ -64,15 +69,13 @@ function Entity:init(name, world, x, y, userData)
     y = y or 0
     self:setPosition(x, y)
     
-    local bodyDef = enityData.logic.bodyDef
-    if bodyDef then
-        bodyDef.position = bodyDef.position or {}
-        bodyDef.position.x = (bodyDef.position.x or 0) + x
-        bodyDef.position.y = (bodyDef.position.y or 0) + y
-    end
-    
-    local body = world:addSprite(self, {bodyDef})
-    if body then
+    local bodyConfig = enityData.logic.bodyConfig
+    if bodyConfig then
+        bodyConfig.position = bodyConfig.position or {}
+        bodyConfig.position.x = (bodyConfig.position.x or 0) + x
+        bodyConfig.position.y = (bodyConfig.position.y or 0) + y
+        
+        world:attachBody(self, bodyConfig)
         for eventName in all{"preSolve", "postSolve", "beginContact", "endContact"} do
             local on_event = enityData.logic["on_" .. eventName]
             if on_event then

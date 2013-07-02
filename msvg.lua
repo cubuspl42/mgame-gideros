@@ -51,7 +51,7 @@ end
 
 local function parseStyle(styleString, parentStyle) --> style table
     local style = table.copy(parentStyle)
-	-- metatable __index?
+    -- metatable __index?
     if styleString then
         --print("parseStyle", styleString)
         local s, d = styleString, {}
