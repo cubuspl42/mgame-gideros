@@ -64,6 +64,7 @@ function World:test_screenshot()
     s = 2.5
 	--s = 1.5
 	
+	--s = 1.8
 	s = 3.1
 
     --s = 4.76
@@ -144,6 +145,7 @@ function World:loadMap(svgTree)
             if e.vertices.close then
                 local alpha = tonumber(e.style.fill_opacity)
                 local mesh = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.9)
+				--mesh = Sprite.new()
                 local shape = { vertices = e.vertices }
                 self:addChild(mesh)
                 self:attachBody(mesh, { fixtureConfigs = {{ type = 'chain', shape = shape }}, })
@@ -283,17 +285,20 @@ end
 
 function World:tick(deltaTime)
 	local a = accelerometer
-	self.physicsWorld:setGravity(a.fy * -20, a.fx * -20)
 	
-	self.physicsWorld:step(1.0/application:getFps(), 4, 8)
-	self:dispatchEvent(Event.new("updateMasters"))
+	self.physicsWorld:setGravity(a.fy * 40, a.fx * 40)
+	self.physicsWorld:step(1.0/application:getFps(), 4, 8) -- 1. physics step
+	
+	self:dispatchEvent(Event.new("updateMasters")) -- 2. update master bodies
 
 	local tickEvent = Event.new("tick")
 	tickEvent.deltaTime = deltaTime
-	self:dispatchEvent(tickEvent)
+	self:dispatchEvent(tickEvent) -- 3. tick event
 	
 	local x, y = self.ninja:getPosition()
 	--self:setPosition(-x +200, -y + 100)
 
-	self:dispatchEvent(Event.new("updateSlaves"))
+	self:dispatchEvent(Event.new("updateSlaves")) -- 4. update slave bodies
+	
+	--print ("memory used 1:"..collectgarbage("count")) 
 end
