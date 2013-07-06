@@ -1,3 +1,5 @@
+-- Modified by Jakub Trzebiatowski, 2013
+
 Vector = {}
 Vector.__index = Vector
 
@@ -64,11 +66,14 @@ function Vector.__tostring(a)
 end
 
 function Vector.new(x, y)
+    if not y then
+        x, y = x.x, x.y
+    end
     return setmetatable({ x = x or 0, y = y or 0 }, Vector)
 end
 
-function Vector.angle()
-    return Atan2(self.y,self.x)
+function Vector:angle()
+    return math.deg(Atan2(self.y,self.x))
 end
 
 function Vector.newFromAngleFixed(inAngle, inVelocity)

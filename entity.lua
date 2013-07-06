@@ -7,18 +7,23 @@ function Entity:init(name, world, x, y, userData)
     self.world = world
     world:addChild(self)
     
+	if nil then
+	enityData.scml = nil -- TEMP!
+	self.scmlEntity = Sprite.new() -- TEMP!
+	function self.scmlEntity.setAnimation() end
+	end
+	
     if enityData.scml then
         print("Loading scml for " .. name)
         local function scmlLoader(filename)
             local bitmap = Sprite.new()
             bitmap.objectName = "<object_name>"
-            bitmap.entity = self
             -- if filename is nil, it's (probably) bone
             if filename then
                 local objectName = assert(filename:match("dev_img/([^/]+)/"))
                 --print("objectName", objectName)
                 local ok = pcall(function()
-                        -- is pcall needed? dev_ layers?
+                        -- is pcall needed? errors on unexisting dev_ layers... (--dev-too)
                         bitmap = OffsetBitmap.new(enityData.layers[objectName].texture)
                         bitmap.objectName = objectName
                 end)
@@ -43,12 +48,13 @@ function Entity:init(name, world, x, y, userData)
                     end
                 end
             end
+            bitmap.entity = self
             return SCMLSprite.new(bitmap, 1/4)
         end
         self.scmlEntity = enityData.scml:createEntity(0, scmlLoader)
-		world:addEventListener("tick", function(event)
-			self.scmlEntity:step() -- TODO: pass deltaTime
-		end)
+        world:addEventListener("tick", function(event)
+                self.scmlEntity:step() -- TODO: pass deltaTime
+        end)
         self:addChild(self.scmlEntity)
     end
     
@@ -71,6 +77,7 @@ function Entity:init(name, world, x, y, userData)
     
     local bodyConfig = enityData.logic.bodyConfig
     if bodyConfig then
+        self.entity = self
         bodyConfig.position = bodyConfig.position or {}
         bodyConfig.position.x = (bodyConfig.position.x or 0) + x
         bodyConfig.position.y = (bodyConfig.position.y or 0) + y

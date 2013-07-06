@@ -12,7 +12,7 @@ local path = {
 local msvg = {} -- API
 local supportedTags = { svg = true, g = true, path = true, rect = true }
 local arcStepConst = 7 -- experimental values; unit: svg px
-local curveStepConst = 9
+local curveStepConst = 15
 
 ---- local functions ----
 
@@ -109,11 +109,17 @@ function pathCommands.curveto(rel, v, cx, cy, x1, y1, x2, y2, x, y, ...)
     end
     x1, y1, x2, y2, x, y = absolute(rel, cx, cy, x1, y1, x2, y2, x, y)
     -- push vertices from curve
-    local l = path.bezier3.length(1, cx, cy, x1, y1, x2, y2, x, y)
-    local steps = l/curveStepConst
-    for i=1,steps do
-        local tx, ty = path.bezier3.point(i/steps, cx, cy, x1, y1, x2, y2, x, y)
-        table.insertall(v, tx, ty)
+    local len = path.bezier3.length(1, cx, cy, x1, y1, x2, y2, x, y)
+	local px, py = 0, 0
+	local n = 1000
+    for i=1,n do
+		local t = i/n
+		--print("curlen, t", curlen, t)
+        local tx, ty = path.bezier3.point(t, cx, cy, x1, y1, x2, y2, x, y)
+		if path.point.distance(px, py, tx, ty) >= curveStepConst then
+			table.insertall(v, tx, ty)
+			px, py = tx, ty
+		end
     end
     if ... then
         return pathCommands.curveto(rel, v, x, y, ...)

@@ -3,22 +3,6 @@ local Polygon = require 'polygon'
 
 World = Core.class(Sprite)
 
-local function test_newShapeFromVertices(points, color, alpha)
-    local s = Shape.new()
-    --s:setLineStyle(2)
-    s:setFillStyle(Shape.SOLID, color, alpha)
-    s:beginPath()
-    s:moveTo(points[1], points[2])
-    for i=3,#points,2 do
-        local px, py = points[i], points[i+1]
-        s:lineTo(px, py)
-        --print("test_newShapeFromVertices i, px, py ", i, px, py)
-    end
-    s:closePath()
-    s:endPath()
-    return s
-end
-
 function World:init(svgTree)
     self:addEventListener("touchesMove", self.onTouch, self)
     self:addEventListener("touchesEnd", self.onTouchEnd, self)
@@ -47,16 +31,34 @@ function World:init(svgTree)
     
     self:test_addNinja2()
     --self:addChild(test_newShapeFromVertices({0, 0, 10, 0, 0, 10}))
-    if debug then
+    if dbg >= 1 then
 		self:addChild(debugDraw)
     end
     local s = 0.23
     s = 0.6
 	s = 0.3
-    --s = 1.2
+	--s = 3
+	--s = 0.4
+    --s = 0.9
     --s = 1
     self:setScale(s, s)
 	--self:test_screenshot()	
+end
+
+local function test_newShapeFromVertices(points, color, alpha)
+    local s = Shape.new()
+    --s:setLineStyle(2)
+    s:setFillStyle(Shape.SOLID, color, alpha)
+    s:beginPath()
+    s:moveTo(points[1], points[2])
+    for i=3,#points,2 do
+        local px, py = points[i], points[i+1]
+        s:lineTo(px, py)
+        --print("test_newShapeFromVertices i, px, py ", i, px, py)
+    end
+    s:closePath()
+    s:endPath()
+    return s
 end
 
 function World:test_screenshot()
@@ -74,7 +76,6 @@ end
 
 function World:test_addNinja2()
     self.ninja = Entity.new("ninja", self, 150, 300)
-    self.ninja.scmlEntity:setAnimation("Yes")
 end
 
 function World:addCollisionListener(name, sprite, listener, data)
@@ -89,10 +90,17 @@ function World:onPhysicsEvent(e)
         e.fixtureA:getBody().sprite,
         e.fixtureB:getBody().sprite
     }
+	if sprites[1].entity == sprites[2].entity then
+		return
+	end
     local tags = {
         e.fixtureA.tag,
         e.fixtureB.tag
     }
+	local normals = {
+		normal,
+		{ x = -normal.x, y = -normal.y }
+	}
     for i=1,2 do
         local j = i%2 + 1
         local event = {
@@ -100,7 +108,7 @@ function World:onPhysicsEvent(e)
             otherSprite = sprites[j],
             tag = tags[i],
             otherTag = tags[j],
-            --TODO: normal! reverse it?
+			normal = normals[i],
         }
         local listeners = self.collisionListeners[e:getType()][event.sprite] or {}
         for listenerInfo in all(listeners) do
@@ -148,7 +156,8 @@ function World:loadMap(svgTree)
 				--mesh = Sprite.new()
                 local shape = { vertices = e.vertices }
                 self:addChild(mesh)
-                self:attachBody(mesh, { fixtureConfigs = {{ type = 'chain', shape = shape }}, })
+				local fixtureConfig = { type = 'chain', shape = shape, tag = "wall" }
+                self:attachBody(mesh, { fixtureConfigs = { fixtureConfig }, })
                 print("Adding simple mesh", e.vertices[1], e.vertices[2])
             end
         end
@@ -193,6 +202,7 @@ local function updatePhysics(sprite)
 	
     if mirrored then 
         rotation = 360 - rotation
+		rotation = -rotation
     end
     
     if bodies and sprite.body ~= bodies[mirrored] then
@@ -253,6 +263,7 @@ function World:attachBody(sprite, bodyConfig)
 			
             local type = fixtureConfig.type
             if type == 'polygon' then
+				assert(#shape.vertices/2 <= 8, "#vertices == " .. tostring(#shape.vertices/2))
                 local polygon = Polygon.new(unpack(shape.vertices)) -- for CW correctness
                 fixtureDef.shape = b2.PolygonShape.new()
                 fixtureDef.shape:set(Polygon.unpack(polygon))

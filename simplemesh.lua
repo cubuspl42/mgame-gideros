@@ -1,8 +1,11 @@
 local va = require 'vertexarray'
 local Polygon = require 'polygon'
 
+local defaultColor = 0x4169E1
+
 SimpleMesh = Core.class(Sprite)
-local dbg --= true
+
+local dbg = (dbg or 0) >= 2
 
 -- Input:
 -- vertices = table (e.g. {<x1>, <y1>, <x2>, <y2>, <...>})
@@ -10,13 +13,11 @@ local dbg --= true
 -- alpha = number (e.g. 0.123)
 -- d = number (e.g. 1.123) [antialiased border]
 
--- TODO: clockwise corectness!
-
 function SimpleMesh:init(vertices, color, alpha, d)
     local vertices = table.copy(vertices)
     for i, _ in ipairs(vertices) do
         -- (probably) remove repeated points
-        vertices[i] = vertices[i] + 0.00000000001 * math.random(1000000) -- HACK
+        vertices[i] = vertices[i] + 0.0000000001 * math.random(10000) -- HACK
         -- God, I'm so sorry for this dirty hack
     end
     
@@ -24,7 +25,7 @@ function SimpleMesh:init(vertices, color, alpha, d)
     self:addChild(m)
     self.mesh = m
     
-    color = color or 0x4169E1
+    color = color or defaultColor
     alpha = alpha or 1
     d = d or 1.5
     d = d * (dbg and 2 or 1)
@@ -32,10 +33,10 @@ function SimpleMesh:init(vertices, color, alpha, d)
     
     local polygon = Polygon.new(unpack(vertices))
     local t = Polygon.triangulate(polygon)
-	
-	vertices = { Polygon.unpack(polygon) }
-	
-	local vertexArray = table.copy(vertices)
+    
+    vertices = { Polygon.unpack(polygon) }
+    
+    local vertexArray = table.copy(vertices)
     local colorArray = {}
     local indexArray = {}
     
@@ -88,7 +89,7 @@ function SimpleMesh:init(vertices, color, alpha, d)
         table.insertall(indexArray, a, b, c)
         table.insertall(indexArray, b, c, d)
     end
-        
+    
     m:setVertexArray(vertexArray)
     m:setColorArray(colorArray)
     m:setIndexArray(indexArray)
