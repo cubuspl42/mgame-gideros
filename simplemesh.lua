@@ -15,11 +15,14 @@ local dbg = (dbg or 0) >= 2
 
 function SimpleMesh:init(vertices, color, alpha, d)
     local vertices = table.copy(vertices)
-    for i, _ in ipairs(vertices) do
-        -- (probably) remove repeated points
-        vertices[i] = vertices[i] + 0.0000000001 * math.random(10000) -- HACK
-        -- God, I'm so sorry for this dirty hack
-    end
+	
+	if false then -- not necessary any more? lib 'path' gives no repeated points?
+		for i, _ in ipairs(vertices) do 
+			-- (probably) remove repeated points
+			vertices[i] = vertices[i] + 0.0000000001 * math.random(10000) -- HACK
+			-- God, I'm so sorry for this dirty hack
+		end
+	end
     
     local m = Mesh.new()
     self:addChild(m)
@@ -35,6 +38,8 @@ function SimpleMesh:init(vertices, color, alpha, d)
     local t = Polygon.triangulate(polygon)
     
     vertices = { Polygon.unpack(polygon) }
+	
+	self.isReversed = Polygon.isReversed(polygon)
     
     local vertexArray = table.copy(vertices)
     local colorArray = {}
@@ -55,9 +60,7 @@ function SimpleMesh:init(vertices, color, alpha, d)
                     break
                 end
             end
-            if not found then
-                print("critical: didn't find point 'p' in 'vertices'")
-            end
+            assert(found, "point 'p' not in 'vertices'")
         end
     end
     

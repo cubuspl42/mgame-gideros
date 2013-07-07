@@ -951,6 +951,45 @@ local function split_path(path, i, t)
                 cmd(path, i))))
 end
 
+--path point -------------------------------------------------------------------------------------------------------------
+
+local line_point       = require'path_line'.point
+local quad_curve_point = require'path_bezier2'.point
+local curve_point      = require'path_bezier3'.point
+
+local point = {}
+
+local function path_point(path, i, t, mt)
+	local mx, my
+	local function write(x, y)
+		mx, my = x, y
+	end
+	local function path_processor(write, mt, j, s, ...)
+		if not point[s] then return false end
+		if i == j then
+			return point[s](write, mt, t, ...)
+		end
+	end
+	decode_recursive(path_processor, write, path, mt)
+	return mx, my
+end
+
+function point.line(write, mt, t, x1, y1, x2, y2)
+	write(line_point(t, transform_points(mt, x1, y1, x2, y2)))
+end
+
+function point.curve(write, mt, t, x1, y1, x2, y2, x3, y3, x4, y4)
+	write(curve_point(t, transform_points(mt, x1, y1, x2, y2, x3, y3, x4, y4)))
+end
+
+function point.quad_curve(write, mt, t, x1, y1, x2, y2, x3, y3)
+	write(quad_curve_point(t, transform_points(mt, x1, y1, x2, y2, x3, y3)))
+end
+
+function point.move() end
+
+point.close = point.line
+
 --path to abs/rel conversion ---------------------------------------------------------------------------------------------
 
 local function add_abs_cmd(path, cpx, cpy, spx, spy, ...)
@@ -1378,6 +1417,7 @@ return {
     length = path_length,
     hit = hit_path,
     split = split_path,
+    point = path_point,
     --conversion
     to_abs = abs_path,
     to_rel = rel_path,

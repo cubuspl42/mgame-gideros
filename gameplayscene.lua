@@ -6,7 +6,7 @@ local function loadLevel(levelCode)
     print("Loading level " .. levelCode)
     local prefix = "data/levels/" .. levelCode
     local svgTree = msvg.loadFile(prefix .. "/level.svg")
-    msvg.simplifyTree(svgTree)
+    --msvg.simplifyTree(svgTree)
     return svgTree
 end
 

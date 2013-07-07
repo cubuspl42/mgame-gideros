@@ -117,6 +117,7 @@ function Polygon.new(...)
     local q = r > 1 and r - 1 or #vertices
     local s = r < #vertices and r + 1 or 1
     if not ccw(vertices[q], vertices[r], vertices[s]) then -- reverse order if polygon is not ccw
+		self.reversed = true
         local tmp = {}
         for i=#vertices,1,-1 do
             tmp[#tmp + 1] = vertices[i]
@@ -162,6 +163,10 @@ end
 -- deep copy of the polygon
 function Polygon:clone()
     return Polygon.new( Polygon.unpack(self) )
+end
+
+function Polygon:isReversed()
+	return self.reversed or false
 end
 
 -- get bounding box

@@ -6,6 +6,7 @@
    <scale suffix="@066x" scale="0.66"/>
   </imageScales>
  </properties>
+ <file source="shapepoint.lua"/>
  <file source="world.lua"/>
  <file source="entity.lua"/>
  <file source="lightvector.lua" excludeFromExecution="1"/>
@@ -200,6 +201,8 @@
   </folder>
   <folder name="gfx">
    <file source="data/gfx/0.png" excludeFromExecution="1"/>
+   <file source="data/gfx/1.png" excludeFromExecution="1"/>
+   <file source="data/gfx/2.png" excludeFromExecution="1"/>
   </folder>
   <folder name="levels">
    <folder name="0">
@@ -217,6 +220,7 @@
  </folder>
  <folder name="lib">
   <file source="lib/affine.lua" excludeFromExecution="1"/>
+  <file source="lib/affine2d.lua" excludeFromExecution="1"/>
   <file source="lib/glue.lua" excludeFromExecution="1"/>
   <file source="lib/LICENSE.txt" excludeFromExecution="1"/>
   <folder name="lpeg">

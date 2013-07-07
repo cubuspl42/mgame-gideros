@@ -148,7 +148,7 @@ function Vector:lenSq()
     return self.x * self.x + self.y * self.y
 end
 
-function Vector:Normalize()
+function Vector:normalize()
     local len = self:len()
     self.x = self.x / len
     self.y = self.y / len
@@ -159,16 +159,16 @@ function Vector:normalized()
     return self / self:len()
 end
 
-function Vector:rotate(phi)
-    local c = Cos(phi)
-    local s = Sin(phi)
+function Vector:rotate(angle)
+    local c = Cos(math.rad(angle))
+    local s = Sin(math.rad(angle))
     self.x = c * self.x - s * self.y
     self.y = s * self.x + c * self.y
     return self
 end
 
-function Vector:rotated(phi)
-    return self:clone():rotate(phi)
+function Vector:rotated(angle)
+    return self:clone():rotate(angle)
 end
 
 function Vector:reflect(vn)

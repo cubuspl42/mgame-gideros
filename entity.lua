@@ -22,8 +22,8 @@ function Entity:init(name, world, x, y, userData)
             if filename then
                 local objectName = assert(filename:match("dev_img/([^/]+)/"))
                 --print("objectName", objectName)
-                local ok = pcall(function()
-                        -- is pcall needed? errors on unexisting dev_ layers... (--dev-too)
+				-- errors on unexisting dev_ layers
+                local ok, msg = pcall(function()
                         bitmap = OffsetBitmap.new(enityData.layers[objectName].texture)
                         bitmap.objectName = objectName
                 end)

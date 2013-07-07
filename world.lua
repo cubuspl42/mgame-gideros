@@ -1,5 +1,7 @@
 local va = require 'vertexarray'
 local Polygon = require 'polygon'
+local msvg = require 'msvg'
+local path = require 'path'
 
 World = Core.class(Sprite)
 
@@ -37,8 +39,8 @@ function World:init(svgTree)
     local s = 0.23
     s = 0.6
 	s = 0.3
-	--s = 3
-	--s = 0.4
+	--s = 2
+	s = 0.4
     --s = 0.9
     --s = 1
     self:setScale(s, s)
@@ -75,7 +77,7 @@ function World:test_screenshot()
 end
 
 function World:test_addNinja2()
-    self.ninja = Entity.new("ninja", self, 150, 300)
+    self.ninja = Entity.new("ninja", self, 0, 0)
 end
 
 function World:addCollisionListener(name, sprite, listener, data)
@@ -85,7 +87,9 @@ end
 
 function World:onPhysicsEvent(e)
     --print("World:onPhysicsEvent", e:getType())
-    local normal = e.contact:getWorldManifold().normal
+	local manifold = e.contact:getWorldManifold()
+    local normal = manifold.normal
+	local points = manifold.points
     local sprites = { 
         e.fixtureA:getBody().sprite,
         e.fixtureB:getBody().sprite
@@ -109,6 +113,7 @@ function World:onPhysicsEvent(e)
             tag = tags[i],
             otherTag = tags[j],
 			normal = normals[i],
+			points = points,
         }
         local listeners = self.collisionListeners[e:getType()][event.sprite] or {}
         for listenerInfo in all(listeners) do
@@ -149,17 +154,40 @@ function World:loadMap(svgTree)
     
     -- Walk through SVG tree
     local function walk(e)
-        if e.vertices then
-            if e.vertices.close then
-                local alpha = tonumber(e.style.fill_opacity)
-                local mesh = SimpleMesh.new(e.vertices, hex_color(e.style.fill), alpha, 1.9)
-				--mesh = Sprite.new()
-                local shape = { vertices = e.vertices }
-                self:addChild(mesh)
+		local simplifiedPathData = msvg.simplifyElement(e)
+        if simplifiedPathData then -- it is a path and simplification was ok
+			print("Adding wall " .. e.id)
+			--path.inspect(simplifiedPathData)
+			for i in path.subpaths(simplifiedPathData) do
+				local vertices = {}
+				local j = i
+				while j <= path.subpath_end(simplifiedPathData, i) do
+					local s, x, y = path.cmd(simplifiedPathData, j)
+					if s == "line" then
+						table.insertall(vertices, x, y)
+					end
+					j = path.next_cmd(simplifiedPathData, j)
+					if not j then break end
+				end
+				
+				--print("vertices"); tprint(vertices)
+				
+				local alpha = tonumber(e.style.fill_opacity)
+				local mesh
+				local ok, msg = pcall(function()
+					mesh = SimpleMesh.new(vertices, hex_color(e.style.fill), alpha, 1.9)
+				end)
+				if not ok then print("Warning:", msg) end
+				mesh = mesh or Sprite.new()
+				mesh.pathData = e.d
+				mesh.pathMatrix = e.transform
+				self:addChild(mesh)
+				
+                local shape = { vertices = vertices }
 				local fixtureConfig = { type = 'chain', shape = shape, tag = "wall" }
-                self:attachBody(mesh, { fixtureConfigs = { fixtureConfig }, })
-                print("Adding simple mesh", e.vertices[1], e.vertices[2])
-            end
+                self:attachBody(mesh, { fixtureConfigs = {fixtureConfig}, })
+				print("Adding simple mesh", vertices[1], vertices[2])
+			end
         end
         for c in all(e.children) do walk(c) end
     end

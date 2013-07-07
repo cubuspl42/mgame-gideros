@@ -11,6 +11,8 @@ local lfs = require 'lfs'
 local msvg = require 'msvg'
 local Polygon = require 'polygon'
 local va = require 'vertexarray'
+local matrix = require 'affine2d'
+local path = require 'path'
 
 accelerometer = Accelerometer.new()
 accelerometer:start()
@@ -36,16 +38,16 @@ local function loadData()
         entities = {}
     }
     for entity in lfs.dir "data/entities" do
-        local path = "data/entities/"..entity
-        local mode = lfs.attributes(path, "mode")
+        local entityPath = "data/entities/"..entity
+        local mode = lfs.attributes(entityPath, "mode")
         if mode == "directory" and entity:sub(1, 1) ~= '.' then
             -- We found an entity
             print("Loading data for " .. entity)
             local e = { layers = {} }
             data.entities[entity] = e
             -- Add anim
-            e.scml = SCMLParser.loadFile(path .. "/anim.scml") -- can be nil
-            local logicFile = io.open(path .. "/logic.lua")
+            e.scml = SCMLParser.loadFile(entityPath .. "/anim.scml") -- can be nil
+            local logicFile = io.open(entityPath .. "/logic.lua")
             if logicFile then
                 -- logic.lua can read real global vars, but can't create them
                 local env = setmetatable({}, {__index = _G})
@@ -54,11 +56,11 @@ local function loadData()
                 e.logic = env
             end
             -- Add textures and offsets
-            for layer in lfs.dir(path .. "/img") do
+            for layer in lfs.dir(entityPath .. "/img") do
                 if layer:sub(1, 1) ~= "." then
                     e.layers[layer] = e.layers[layer] or {}
                     -- 'img' folder should be named 'layers'?
-                    local imgpath = path .. "/img/" .. layer
+                    local imgpath = entityPath .. "/img/" .. layer
                     --print("Loading texture...")
                     -- AIR will pick the right size
                     e.layers[layer].texture = Texture.new(imgpath .. "/img.png", true)
@@ -74,8 +76,8 @@ local function loadData()
                 end
             end
             -- Add fixtures
-            local base = assert(msvg.loadFile(path .. "/base.svg"), "couldn't open base.svg")
-            msvg.simplifyTree(base)
+            local base = assert(msvg.loadFile(entityPath .. "/base.svg"), "couldn't open base.svg")
+			print("Loading base.svg for " .. entity)
             for layer in all(base.children) do
                 if layer.name == "g" then
                     local label = layer.label
@@ -84,22 +86,35 @@ local function loadData()
                     e.layers[label].fixtureConfigs = {}
                     for object in all(layer.children) do
                         if object.title then
-                            print("Loading object " .. object.id)
-                            local vertices = {}
+                            print("Loading svg object " .. object.id)
                             local offsetX = e.layers[label].offsetX
                             local offsetY = e.layers[label].offsetY
-                            for x, y in va.iter(object.vertices) do
-                                table.insertall(vertices, x - offsetX, y - offsetY)
-                            end
-                            local fixtureConfig = {
-                                tag = object.title,
-                                isSensor = true,
-                                type = "polygon",
-                                shape = {
-                                    vertices = vertices,
-                                },
-                            }
-                            table.insert(e.layers[label].fixtureConfigs, fixtureConfig)
+							local mt = matrix()
+							mt:translate(-offsetX, -offsetY)
+							local pathData = msvg.simplifyElement(object, mt) -- TODO: scale?
+							assert(pathData)
+							for i in path.subpaths(pathData) do
+								assert(path.is_closed(pathData, i))
+								local vertices = {}
+								local j = i
+								while j <= path.subpath_end(pathData, i) do
+									local s, x, y = path.cmd(pathData, j)
+									if s == "line" then
+										table.insertall(vertices, x, y)
+									end
+									j = path.next_cmd(pathData, j)
+									if not j then break end
+								end
+								local fixtureConfig = {
+									tag = object.title,
+									isSensor = true,
+									type = "polygon",
+									shape = {
+										vertices = vertices,
+									},
+								}
+								table.insert(e.layers[label].fixtureConfigs, fixtureConfig)
+							end
                         end
                     end
                 end
