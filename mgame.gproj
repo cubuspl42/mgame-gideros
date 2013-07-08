@@ -6,7 +6,6 @@
    <scale suffix="@066x" scale="0.66"/>
   </imageScales>
  </properties>
- <file source="shapepoint.lua"/>
  <file source="world.lua"/>
  <file source="entity.lua"/>
  <file source="lightvector.lua" excludeFromExecution="1"/>
@@ -17,6 +16,7 @@
  <file source="injection.lua" excludeFromExecution="1"/>
  <file source="gameplayscene.lua"/>
  <file source="simplemesh.lua"/>
+ <file source="shapepoint.lua"/>
  <file source="offsetbitmap.lua"/>
  <file source="msvg.lua"/>
  <file source="entities.lua"/>

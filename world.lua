@@ -3,6 +3,8 @@ local Polygon = require 'polygon'
 local msvg = require 'msvg'
 local path = require 'path'
 
+local s = 2
+
 World = Core.class(Sprite)
 
 function World:init(svgTree)
@@ -36,14 +38,8 @@ function World:init(svgTree)
     if dbg >= 1 then
 		self:addChild(debugDraw)
     end
-    local s = 0.23
-    s = 0.6
-	s = 0.3
-	--s = 2
-	s = 0.4
-    --s = 0.9
-    --s = 1
-    self:setScale(s, s)
+    local scale = s
+    self:setScale(scale, scale)
 	--self:test_screenshot()	
 end
 
@@ -114,6 +110,7 @@ function World:onPhysicsEvent(e)
             otherTag = tags[j],
 			normal = normals[i],
 			points = points,
+			contact = e.contact,
         }
         local listeners = self.collisionListeners[e:getType()][event.sprite] or {}
         for listenerInfo in all(listeners) do
@@ -250,13 +247,17 @@ local function updatePhysics(sprite)
         local x, y = sprite:localToGlobal(0, 0)
         x, y = world:globalToLocal(x, y)
         body:setPosition(x, y)
-        body:setAngle(rotation * math.pi / 180)
+		if body.inheritRotation then
+			body:setAngle(rotation * math.pi / 180)
+		end
     else  -- transorm sprite according to body
         local x, y = body:getPosition()
         x, y = world:localToGlobal(x, y)
         x, y = sprite:getParent():globalToLocal(x, y)
         sprite:setPosition(x, y)
-        sprite:setRotation((body:getAngle() * 180 / math.pi) - rotation)
+		if body.inheritRotation then
+			sprite:setRotation((body:getAngle() * 180 / math.pi) - rotation)
+		end
     end
 end
 
@@ -270,9 +271,11 @@ function World:attachBody(sprite, bodyConfig)
 		bodyConfig.active = false
         local body = self.physicsWorld:createBody(bodyConfig)
         body.isSlave = isSlave
+		body.inheritRotation = bodyConfig.inheritRotation ~= false
         body.fixtures = {}
         local fixtureConfigs = bodyConfig.fixtureConfigs
         for fixtureConfig in all(fixtureConfigs or {}) do
+			if fixtureConfig.enable ~= false then
             local fixtureDef = table.copy(fixtureConfig)
             local shape = table.deepcopy(fixtureConfig.shape)
             
@@ -308,6 +311,7 @@ function World:attachBody(sprite, bodyConfig)
             local fixture = body:createFixture(fixtureDef)
             fixture.tag = fixtureConfig.tag
             table.insert(body.fixtures, fixture)
+			end
         end
         body.sprite = sprite
         bodies[isMirrored] = body
@@ -326,7 +330,9 @@ function World:tick(deltaTime)
 	local a = accelerometer
 	
 	self.physicsWorld:setGravity(a.fy * 40, a.fx * 40)
-	self.physicsWorld:step(1.0/application:getFps(), 4, 8) -- 1. physics step
+	local physicsStep = 1.0/application:getFps()
+	physicsStep = physicsStep / 1
+	self.physicsWorld:step(physicsStep, 4, 8) -- 1. physics step
 	
 	self:dispatchEvent(Event.new("updateMasters")) -- 2. update master bodies
 

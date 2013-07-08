@@ -5,7 +5,7 @@ require 'injection' -- injection to global scope
 require 'box2d' -- b2 API
 require 'vector' -- global 'Vector'
 
-dbg = 0
+dbg = 1
 
 function all(t)
     local i = 0

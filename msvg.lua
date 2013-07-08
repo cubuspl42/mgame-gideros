@@ -156,6 +156,7 @@ local quad_curve_ai = require 'path_bezier2_ai'
 
 -- return pathData simplified down to 'move', 'line', 'close' commands
 function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
+	-- TODO: support 'rect'!
 	local pathData = svgElement.d
 	if not pathData then return end
 
@@ -164,20 +165,19 @@ function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
 		transform = mt * transform
 	end
 	
-	local approximation_scale = 1
+	local approximation_scale = 0.5
 	local lightlySimplifiedPath = {}
 	local simplifiedPath = {}
 	
+	-- first, let 'path' simplify the pathData; it won't simplify curves
 	path.simplify(function(...)
 		path.append_cmd(lightlySimplifiedPath, ...)
 	end, pathData, transform)
 	
 	local function write(...)
-		--print("write", ...)
 		table.insertall(simplifiedPath, ...)
 	end
 	local function processor(write, mt, i, s, ...)
-		--print("prcessor", s, ...)
 		if s == "curve" or s == "quad_curve" then
 			local args = { write, ... }
 			table.insert(args, approximation_scale)
@@ -192,7 +192,8 @@ function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
 			path.append_cmd(simplifiedPath, s)
 		else error(s) end
 	end
-
+	
+	-- we want to simplify it even more, because we don't like curves
 	path.decode(processor, write, lightlySimplifiedPath)
 	return simplifiedPath
 end
