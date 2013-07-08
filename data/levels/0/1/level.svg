@@ -56,8 +56,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.24705882"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.17677671"
-     inkscape:cx="-351.8999"
+     inkscape:zoom="0.12500001"
+     inkscape:cx="1532.6079"
      inkscape:cy="443.89296"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -89,9 +89,9 @@
      transform="translate(0,-52.362183)">
     <path
        style="fill:#0000ff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m -113.13708,62.412744 5.65686,978.635756 1504.72312,16.9705 0,-995.606256 C 1221.4617,124.76078 627.18665,70.904536 538.89601,318.58423 330.14446,904.19009 258.28894,1351.076 -113.13708,62.412744 z"
+       d="m -1372.4507,-446.67554 5.6568,978.63577 418.45836,827.29077 2122.11814,-61.456 156.1466,-708.86427 0,-995.60627 c -29.4612,16.057 -602.12553,963.99637 -982.14773,1040.31147 -235.3359,47.2596 -213.0717,-427.1111 -213.0717,-427.1111 0,0 -314.9256,2.3519 -418.39927,-1.29823 -196.3281,-6.92566 -320.56877,-397.53668 -436.72813,-395.73065 -200.31678,3.11451 -280.60707,1032.49178 -652.03307,-256.17149 z"
        id="path5439"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccsc" />
+       sodipodi:nodetypes="ccccccscssc" />
   </g>
 </svg>

@@ -1,6 +1,6 @@
 ShapePoint = Core.class(Shape)
 
-function ShapePoint:init(color)
+function ShapePoint:init(color, scale)
 	self:setFillStyle(Shape.SOLID, color or 0xFF0000, 1)
     self:beginPath()
     self:moveTo(-1, -1)
@@ -10,6 +10,5 @@ function ShapePoint:init(color)
     self:closePath()
     self:endPath()
 	
-	local s = 3
-	self:setScale(s, s)
+	self:setScale(scale or 5, scale or 5)
 end

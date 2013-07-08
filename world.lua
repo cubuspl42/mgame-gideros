@@ -3,7 +3,7 @@ local Polygon = require 'polygon'
 local msvg = require 'msvg'
 local path = require 'path'
 
-local s = 2
+local s = 0.4
 
 World = Core.class(Sprite)
 
@@ -35,7 +35,7 @@ function World:init(svgTree)
     
     self:test_addNinja2()
     --self:addChild(test_newShapeFromVertices({0, 0, 10, 0, 0, 10}))
-    if dbg >= 1 then
+    if dbg >= 2 then
 		self:addChild(debugDraw)
     end
     local scale = s

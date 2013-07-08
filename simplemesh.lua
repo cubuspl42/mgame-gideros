@@ -5,7 +5,7 @@ local defaultColor = 0x4169E1
 
 SimpleMesh = Core.class(Sprite)
 
-local dbg = (dbg or 0) >= 2
+local dbg = dbg >= 3
 
 -- Input:
 -- vertices = table (e.g. {<x1>, <y1>, <x2>, <y2>, <...>})

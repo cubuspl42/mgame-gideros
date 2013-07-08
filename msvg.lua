@@ -165,7 +165,7 @@ function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
 		transform = mt * transform
 	end
 	
-	local approximation_scale = 0.5
+	local approximation_scale = 1
 	local lightlySimplifiedPath = {}
 	local simplifiedPath = {}
 	
