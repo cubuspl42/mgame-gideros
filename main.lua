@@ -77,7 +77,7 @@ local function loadData()
             end
             -- Add fixtures
             local base = assert(msvg.loadFile(entityPath .. "/base.svg"), "couldn't open base.svg")
-			print("Loading base.svg for " .. entity)
+            print("Loading base.svg for " .. entity)
             for layer in all(base.children) do
                 if layer.name == "g" then
                     local label = layer.label
@@ -89,33 +89,33 @@ local function loadData()
                             print("Loading svg object " .. object.id)
                             local offsetX = e.layers[label].offsetX
                             local offsetY = e.layers[label].offsetY
-							local mt = matrix()
-							mt:translate(-offsetX, -offsetY)
-							local pathData = msvg.simplifyElement(object, mt) -- TODO: scale?
-							assert(pathData)
-							for i in path.subpaths(pathData) do
-								assert(path.is_closed(pathData, i))
-								local vertices = {}
-								local j = i
-								while j <= path.subpath_end(pathData, i) do
-									local s, x, y = path.cmd(pathData, j)
-									if s == "line" then
-										table.insertall(vertices, x, y)
-									end
-									j = path.next_cmd(pathData, j)
-									if not j then break end
-								end
-								local fixtureConfig = {
-									tag = object.title,
-									isSensor = true,
-									type = "polygon",
-									shape = {
-										vertices = vertices,
-									},
-								}
-								table.insert(e.layers[label].fixtureConfigs, fixtureConfig)
-								break -- TODO: Full support of subpaths?
-							end
+                            local mt = matrix()
+                            mt:translate(-offsetX, -offsetY)
+                            local pathData = msvg.simplifyElement(object, mt) -- TODO: scale?
+                            assert(pathData)
+                            for i in path.subpaths(pathData) do
+                                assert(path.is_closed(pathData, i))
+                                local vertices = {}
+                                local j = i
+                                while j <= path.subpath_end(pathData, i) do
+                                    local s, x, y = path.cmd(pathData, j)
+                                    if s == "line" then
+                                        table.insertall(vertices, x, y)
+                                    end
+                                    j = path.next_cmd(pathData, j)
+                                    if not j then break end
+                                end
+                                local fixtureConfig = {
+                                    tag = object.title,
+                                    isSensor = true,
+                                    type = "polygon",
+                                    shape = {
+                                        vertices = vertices,
+                                    },
+                                }
+                                table.insert(e.layers[label].fixtureConfigs, fixtureConfig)
+                                break -- TODO: Full support of subpaths?
+                            end
                         end
                     end
                 end

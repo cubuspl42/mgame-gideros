@@ -15,77 +15,77 @@ local curveStepConst = 5
 local pathCommands = {}
 
 local path_cmd = {
-        m = 'rel_move',
-        M = 'move',
-        l = 'rel_line',
-        L = 'line',
-        z = 'close',
-        Z = 'close',
-        h = 'rel_hline',
-        H = 'hline',
-        v = 'rel_vline',
-        V = 'vline',
-        c = 'rel_curve',
-        C = 'curve',
-        s = 'rel_symm_curve',
-        S = 'symm_curve',
-        q = 'rel_quad_curve',
-        Q = 'quad_curve',
-        t = 'rel_symm_quad_curve',
-        T = 'symm_quad_curve',
-        a = 'rel_svgarc',
-        A = 'svgarc',
+    m = 'rel_move',
+    M = 'move',
+    l = 'rel_line',
+    L = 'line',
+    z = 'close',
+    Z = 'close',
+    h = 'rel_hline',
+    H = 'hline',
+    v = 'rel_vline',
+    V = 'vline',
+    c = 'rel_curve',
+    C = 'curve',
+    s = 'rel_symm_curve',
+    S = 'symm_curve',
+    q = 'rel_quad_curve',
+    Q = 'quad_curve',
+    t = 'rel_symm_quad_curve',
+    T = 'symm_quad_curve',
+    a = 'rel_svgarc',
+    A = 'svgarc',
 }
 
 local path_argc = {
-        rel_move = 2,
-        move = 2,
-        rel_line = 2,
-        line = 2,
-        close = 0,
-        rel_hline = 1,
-        hline = 1,
-        rel_vline = 1,
-        vline = 1,
-        rel_curve = 6,
-        curve = 6,
-        rel_symm_curve = 4,
-        symm_curve = 4,
-        rel_quad_curve = 4,
-        quad_curve = 4,
-        rel_symm_quad_curve = 2,
-        symm_quad_curve = 2,
-        rel_svgarc = 7,
-        svgarc = 7,
+    rel_move = 2,
+    move = 2,
+    rel_line = 2,
+    line = 2,
+    close = 0,
+    rel_hline = 1,
+    hline = 1,
+    rel_vline = 1,
+    vline = 1,
+    rel_curve = 6,
+    curve = 6,
+    rel_symm_curve = 4,
+    symm_curve = 4,
+    rel_quad_curve = 4,
+    quad_curve = 4,
+    rel_symm_quad_curve = 2,
+    symm_quad_curve = 2,
+    rel_svgarc = 7,
+    svgarc = 7,
 }
 
 -- parsers --
 
 local function processCommand(i, pathData, s, ...)
-	if s ~= 'close' and not ... then return end
-	local n = path_argc[s]
-	local cmd_name = s
-	if i == 1 and s == 'rel_move' then
-		cmd_name = 'move'
-	end
-	path.append_cmd(pathData, cmd_name, unpack({...}, 1, n))
-	
-	if s == 'close' then return end
-	if s == 'move' then s = 'line' end
-	if s == 'rel_move' then s = 'rel_line' end
-	processCommand(i + 1, pathData, s, select(n + 1, ...))
+    if s ~= 'close' and not ... then return end
+    local n = path_argc[s]
+    local cmd_name = s
+    if i == 1 and s == 'rel_move' then
+        cmd_name = 'move'
+    end
+    path.append_cmd(pathData, cmd_name, unpack({...}, 1, n))
+    
+    if s == 'close' then return end
+    if s == 'move' then s = 'line' end
+    if s == 'rel_move' then s = 'rel_line' end
+    processCommand(i + 1, pathData, s, select(n + 1, ...))
 end
 
 local function parsePathData(dString)
     if dString then
         local pathData = {}
         for s, argsString in dString:gmatch"([a-df-zA-DF-Z])([^a-df-zA-DF-Z]*)" do
-			s = path_cmd[s]
+            s = path_cmd[s]
             local args = {}
             for number in argsString:gmatch"([%-]?[%deE.%-]+)" do		
                 table.insert(args, tonumber(number))
             end
-			processCommand(1, pathData, s, unpack(args))
+            processCommand(1, pathData, s, unpack(args))
         end
         return pathData
     end
@@ -132,21 +132,21 @@ local function newSvgElement(tag, parentElement) --> svgElement
         
         style = parseStyle(tag['@style'], parentElement and parentElement.style or {}),
         transform = parseTransform(tag['@transform'], parentElement and parentElement.transform),
-		d = parsePathData(tag['@d']), -- path
+        d = parsePathData(tag['@d']), -- path
         
         width = tonumber(tag['@width']), -- svg, rect
         height = tonumber(tag['@height']),  -- svg, rect
         x = tonumber(tag['@x']), -- rect
         y = tonumber(tag['@y']), -- rect
     }
-	
+    
     for childTag in all(tag:children()) do
         local svgChildElement = newSvgElement(childTag, svgElement)
         if svgChildElement then
             table.insert(svgElement.children, svgChildElement)
         end
     end
-	
+    
     return svgElement
 end
 
@@ -155,42 +155,42 @@ local quad_curve_ai = require 'path_bezier2_ai'
 
 -- return pathData simplified down to 'move', 'line', 'close' commands
 function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
-	if not svgElement.d then return end -- TODO: support 'rect'!
-	local pathData = svgElement.d
-	local simplifiedPathData = {}
-
-	local transform = svgElement.transform -- can be nil
-	if transform and mt then
-		transform = mt * transform
-	end
-	
-	local approximation_scale = 1
-	local transform_points = path.transform_points
-	
-	local function write(s, ...)
-		path.append_cmd(simplifiedPathData, s, ...)
-	end
-	local function processor(write, mt, i, s, ...)
-		if s == "curve" or s == "quad_curve" then
-			local args = { write, transform_points(transform, ...) }
-			table.insert(args, approximation_scale)
-			local ai = (s == "curve") and curve_ai or quad_curve_ai
-			ai(unpack(args))
-		elseif s == "line" then
-			write(s, transform_points(transform, select(3, ...)))
-		elseif s == "move" then
-			write(s, transform_points(transform, ...))
-		elseif s == "close" then
-			local cpx, cpy, spx, spy = transform_points(transform, ...)
-			if cpx ~= spx or cpy ~= spy then
+    if not svgElement.d then return end -- TODO: support 'rect'!
+    local pathData = svgElement.d
+    local simplifiedPathData = {}
+    
+    local transform = svgElement.transform -- can be nil
+    if transform and mt then
+        transform = mt * transform
+    end
+    
+    local approximation_scale = 1
+    local transform_points = path.transform_points
+    
+    local function write(s, ...)
+        path.append_cmd(simplifiedPathData, s, ...)
+    end
+    local function processor(write, mt, i, s, ...)
+        if s == "curve" or s == "quad_curve" then
+            local args = { write, transform_points(transform, ...) }
+            table.insert(args, approximation_scale)
+            local ai = (s == "curve") and curve_ai or quad_curve_ai
+            ai(unpack(args))
+        elseif s == "line" then
+            write(s, transform_points(transform, select(3, ...)))
+        elseif s == "move" then
+            write(s, transform_points(transform, ...))
+        elseif s == "close" then
+            local cpx, cpy, spx, spy = transform_points(transform, ...)
+            if cpx ~= spx or cpy ~= spy then
                 write('line', spx, spy)
-			end
-			write('close')
-		else return false end
-	end
-	
-	path.decode_recursive(processor, write, pathData)
-	return simplifiedPathData
+            end
+            write('close')
+        else return false end
+    end
+    
+    path.decode_recursive(processor, write, pathData)
+    return simplifiedPathData
 end
 
 function msvg.loadFile(filename) 

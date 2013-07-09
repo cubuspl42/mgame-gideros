@@ -6,7 +6,7 @@ function Entity:init(name, world, x, y, userData)
     
     self.world = world
     world:addChild(self)
-	
+    
     if enityData.scml then
         print("Loading scml for " .. name)
         local function scmlLoader(filename)
@@ -16,7 +16,7 @@ function Entity:init(name, world, x, y, userData)
             if filename then
                 local objectName = assert(filename:match("dev_img/([^/]+)/"))
                 --print("objectName", objectName)
-				-- errors on unexisting dev_ layers
+                -- errors on unexisting dev_ layers
                 local ok, msg = pcall(function()
                         bitmap = OffsetBitmap.new(enityData.layers[objectName].texture)
                         bitmap.objectName = objectName
