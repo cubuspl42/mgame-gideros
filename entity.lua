@@ -6,18 +6,12 @@ function Entity:init(name, world, x, y, userData)
     
     self.world = world
     world:addChild(self)
-    
-	if nil then
-	enityData.scml = nil -- TEMP!
-	self.scmlEntity = Sprite.new() -- TEMP!
-	function self.scmlEntity.setAnimation() end
-	end
 	
     if enityData.scml then
         print("Loading scml for " .. name)
         local function scmlLoader(filename)
             local bitmap = Sprite.new()
-            bitmap.objectName = "<object_name>"
+            bitmap.objectName = "<bone>"
             -- if filename is nil, it's (probably) bone
             if filename then
                 local objectName = assert(filename:match("dev_img/([^/]+)/"))

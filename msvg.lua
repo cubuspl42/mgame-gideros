@@ -82,11 +82,10 @@ local function parsePathData(dString)
         for s, argsString in dString:gmatch"([a-df-zA-DF-Z])([^a-df-zA-DF-Z]*)" do
 			s = path_cmd[s]
             local args = {}
-            for number in argsString:gmatch"([%-]?[%deE.]+)" do		
+            for number in argsString:gmatch"([%-]?[%deE.%-]+)" do		
                 table.insert(args, tonumber(number))
             end
 			processCommand(1, pathData, s, unpack(args))
-			first = false
         end
         return pathData
     end
@@ -169,11 +168,9 @@ function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
 	local transform_points = path.transform_points
 	
 	local function write(s, ...)
-		print("write", s)
 		path.append_cmd(simplifiedPathData, s, ...)
 	end
 	local function processor(write, mt, i, s, ...)
-		print("processor",s)
 		if s == "curve" or s == "quad_curve" then
 			local args = { write, transform_points(transform, ...) }
 			table.insert(args, approximation_scale)
@@ -185,7 +182,6 @@ function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
 			write(s, transform_points(transform, ...))
 		elseif s == "close" then
 			local cpx, cpy, spx, spy = transform_points(transform, ...)
-			print("args:", ...) 
 			if cpx ~= spx or cpy ~= spy then
                 write('line', spx, spy)
 			end

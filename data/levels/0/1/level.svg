@@ -36,7 +36,6 @@
          width="260" />
     </pattern>
     <linearGradient
-       inkscape:collect="always"
        id="linearGradient5365"
        osb:paint="gradient">
       <stop
@@ -56,9 +55,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.24705882"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.50000003"
-     inkscape:cx="212.60746"
-     inkscape:cy="788.98962"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="32.561469"
+     inkscape:cy="1212.491"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -88,14 +87,10 @@
      id="layer1"
      transform="translate(0,-52.362183)">
     <path
-       sodipodi:type="arc"
-       style="fill:#ff0000;fill-opacity:1;stroke:none"
-       id="path5455"
-       sodipodi:cx="-623.99994"
-       sodipodi:cy="-447.99991"
-       sodipodi:rx="1223.9999"
-       sodipodi:ry="1223.9999"
-       d="m 599.99994,-447.99991 a 1223.9999,1223.9999 0 1 1 -2447.99974,0 1223.9999,1223.9999 0 1 1 2447.99974,0 z"
-       transform="matrix(0.22311083,0,-0.00316468,0.230392,478.80359,195.57789)" />
+       style="fill:#a02c2c;fill-opacity:1;stroke:#000000"
+       d="m 10.946481,-204.3194 -266.225701,0 0,503.46002 554.3717,0 0,-503.46002 -288.14648,0 0.354021,57.98276 c 106.613129,0 193.040129,86.427019 193.040129,193.040139 0,106.613121 -86.427,193.040141 -193.040129,193.040141 -106.613128,0 -193.040141,-86.42702 -193.040141,-193.040141 0,-106.61312 86.426992,-193.040319 193.04012,-193.040319 z"
+       id="rect3812"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccssscc" />
   </g>
 </svg>

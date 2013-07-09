@@ -44,7 +44,6 @@ function on_tick(self, e)
 		self.scmlEntity:setScaleX(scaleX) 
 	end
 	
-	redDot:setVisible(false)
 	local mesh = self.wallMesh
 	if mesh then
 		local x, y = self:getPosition()
@@ -54,9 +53,6 @@ function on_tick(self, e)
 		local d = (positionVector - hitPoint):len()
 		local r = bodyConfig.fixtureConfigs[1].shape.r
 		local dmax = r + 3
-		
-		redDot:setVisible(true)
-		redDot:setPosition(x0, y0)
 		
 		if d < dmax then
 			local vector = positionVector:clone()

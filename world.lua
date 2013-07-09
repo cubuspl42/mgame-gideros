@@ -88,7 +88,7 @@ function World:onPhysicsEvent(e)
         e.fixtureA:getBody().sprite,
         e.fixtureB:getBody().sprite
     }
-	if sprites[1].entity == sprites[2].entity then
+	if sprites[1].entity and sprites[1].entity == sprites[2].entity then
 		return
 	end
     local tags = {
@@ -141,11 +141,12 @@ end
 
 function World:loadMap(svgTree)
     print("Loading map")
+	
     local function hex_color(s)
         if s:find'^#' then
             return tonumber(s:sub(2), 16)
         end
-    end
+    end 
     
     -- Walk through SVG tree
     local function walk(e)
@@ -156,20 +157,22 @@ function World:loadMap(svgTree)
 			for i in path.subpaths(simplifiedPathData) do
 				local vertices = {}
 				local j = i
+				local prevX, prevY = 1/0, 1/0
 				while j <= path.subpath_end(simplifiedPathData, i) do
 					local s, x, y = path.cmd(simplifiedPathData, j)
 					if s == "line" then
-						table.insertall(vertices, x, y)
+						-- we don't want the same point being added twice in a row
+						if not (x == prevX and y == prevY) then
+							table.insertall(vertices, x, y)
+							prevX, prevY = x, y
+						end
 					end
 					j = path.next_cmd(simplifiedPathData, j)
 					if not j then break end
 				end
-				
-				print("vertices"); tprint(vertices)
-				
+								
 				local alpha = tonumber(e.style.fill_opacity)
 				local mesh
-				print("#v", #vertices)
 				local ok, msg = pcall(function()
 					mesh = SimpleMesh.new(vertices, hex_color(e.style.fill), alpha, 1.9)
 				end)

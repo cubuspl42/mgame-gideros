@@ -17,11 +17,10 @@ function SimpleMesh:init(vertices, color, alpha, d)
     local vertices = table.copy(vertices)
 	
 	local map = {}
-	
 	for x, y, i in va.iter(vertices) do
 		map[x] = map[x] or {}
 		local j = map[x][y]
-		assert(not j, "prev:"..tostring(j).."cur:"..tostring(i))
+		assert(not j, "Point duplicated! Previous: "..tostring(j).." Current: "..tostring(i))
 		map[x][y] = i
     end
 	
