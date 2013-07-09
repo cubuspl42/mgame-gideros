@@ -3,7 +3,7 @@ local Polygon = require 'polygon'
 local msvg = require 'msvg'
 local path = require 'path'
 
-local s = 0.4
+local s = 0.3
 
 World = Core.class(Sprite)
 
@@ -11,11 +11,10 @@ function World:init(svgTree)
     self:addEventListener("touchesMove", self.onTouch, self)
     self:addEventListener("touchesEnd", self.onTouchEnd, self)
     
-    self.collisionListeners = { 
+    self.collisionListeners = {
         preSolve = {}, postSolve = {},
         beginContact = {}, endContact = {}
     }
-    
     local debugDraw = b2.DebugDraw.new()
     debugDraw:setFlags(
         b2.DebugDraw.SHAPE_BIT +
@@ -82,7 +81,6 @@ function World:addCollisionListener(name, sprite, listener, data)
 end
 
 function World:onPhysicsEvent(e)
-    --print("World:onPhysicsEvent", e:getType())
 	local manifold = e.contact:getWorldManifold()
     local normal = manifold.normal
 	local points = manifold.points
@@ -167,10 +165,11 @@ function World:loadMap(svgTree)
 					if not j then break end
 				end
 				
-				--print("vertices"); tprint(vertices)
+				print("vertices"); tprint(vertices)
 				
 				local alpha = tonumber(e.style.fill_opacity)
 				local mesh
+				print("#v", #vertices)
 				local ok, msg = pcall(function()
 					mesh = SimpleMesh.new(vertices, hex_color(e.style.fill), alpha, 1.9)
 				end)
@@ -182,7 +181,7 @@ function World:loadMap(svgTree)
 				
                 local shape = { vertices = vertices }
 				local fixtureConfig = { type = 'chain', shape = shape, tag = "wall" }
-                self:attachBody(mesh, { fixtureConfigs = {fixtureConfig}, })
+                self:attachBody(mesh, { fixtureConfigs = { fixtureConfig }, })
 				print("Adding simple mesh", vertices[1], vertices[2])
 			end
         end
@@ -230,18 +229,18 @@ local function updatePhysics(sprite)
 		rotation = -rotation
     end
     
-    if bodies and sprite.body ~= bodies[mirrored] then
+    if bodies and sprite.body ~= bodies[mirrored] then -- swap bodies
 		local oldBody = sprite.body
 		sprite.body = bodies[mirrored]
 		local body = sprite.body
 		body:setActive(true)
 		body:setLinearVelocity(oldBody:getLinearVelocity())
-		-- linear damping?
+		-- set linear damping?
+		-- set angular something?
 		moveToHell(oldBody)
     end
     
     local body = sprite.body
-    
     if body.isSlave then
         body:setLinearVelocity(0, 0)
         local x, y = sprite:localToGlobal(0, 0)
@@ -313,6 +312,9 @@ function World:attachBody(sprite, bodyConfig)
             table.insert(body.fixtures, fixture)
 			end
         end
+		if body.isSlave then
+			moveToHell(body)
+		end
         body.sprite = sprite
         bodies[isMirrored] = body
     end
@@ -328,11 +330,11 @@ end
 
 function World:tick(deltaTime)
 	local a = accelerometer
-	
 	self.physicsWorld:setGravity(a.fy * 40, a.fx * 40)
-	local physicsStep = 1.0/application:getFps()
-	physicsStep = physicsStep / 1
-	self.physicsWorld:step(physicsStep, 4, 8) -- 1. physics step
+	
+	local physicsDt = 1.0/application:getFps()
+	physicsDt = physicsDt / 1
+	self.physicsWorld:step(physicsDt, 4, 8) -- 1. physics step
 	
 	self:dispatchEvent(Event.new("updateMasters")) -- 2. update master bodies
 

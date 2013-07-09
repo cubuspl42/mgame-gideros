@@ -114,6 +114,7 @@ local function loadData()
 									},
 								}
 								table.insert(e.layers[label].fixtureConfigs, fixtureConfig)
+								break -- TODO: Full support of subpaths?
 							end
                         end
                     end

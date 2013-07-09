@@ -22,22 +22,14 @@ bodyConfig = {
 	}
 }
 
-local dotScale = 0.5
-local aDot = ShapePoint.new(0xFF0000, dotScale)
-local bDot = ShapePoint.new(0x00FF00, dotScale)
-local pointDot = ShapePoint.new(0x0000FF, dotScale)
+local dotScale = 2
+local redDot = ShapePoint.new(0xFF0000, dotScale)
 
 function on_init(self, e)
 	if dbg > 0 then
-		self.world:addChild(aDot)
-		self.world:addChild(bDot)
-		--self.world:addChild(pointDot)
+		self.world:addChild(redDot)
 	end
 
-
-
-	
-    --self.scmlEntity:setScale(-1, 1)
     self.scmlEntity:setAnimation("Idle")
 end
 
@@ -52,20 +44,21 @@ function on_tick(self, e)
 		self.scmlEntity:setScaleX(scaleX) 
 	end
 	
+	redDot:setVisible(false)
 	local mesh = self.wallMesh
 	if mesh then
 		local x, y = self:getPosition()
 		local positionVector = Vector.new(x, y)
-		local d0, x0, y0 = path.hit(x, y, mesh.pathData, mesh.pathMatrix)
+		local _, x0, y0 = path.hit(x, y, mesh.pathData, mesh.pathMatrix)
 		local hitPoint = Vector.new(x0, y0)
 		local d = (positionVector - hitPoint):len()
 		local r = bodyConfig.fixtureConfigs[1].shape.r
-		local d1 = r + 5
+		local dmax = r + 3
 		
-		aDot:setPosition(x0, y0)
-		print(d0, d, d1)
+		redDot:setVisible(true)
+		redDot:setPosition(x0, y0)
 		
-		if d < d1 then
+		if d < dmax then
 			local vector = positionVector:clone()
 			vector = vector - hitPoint
 			vector = vector:normal()

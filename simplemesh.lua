@@ -16,6 +16,15 @@ local dbg = dbg >= 3
 function SimpleMesh:init(vertices, color, alpha, d)
     local vertices = table.copy(vertices)
 	
+	local map = {}
+	
+	for x, y, i in va.iter(vertices) do
+		map[x] = map[x] or {}
+		local j = map[x][y]
+		assert(not j, "prev:"..tostring(j).."cur:"..tostring(i))
+		map[x][y] = i
+    end
+	
 	if false then -- not necessary any more? lib 'path' gives no repeated points?
 		for i, _ in ipairs(vertices) do 
 			-- (probably) remove repeated points

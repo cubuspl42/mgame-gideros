@@ -156,46 +156,45 @@ local quad_curve_ai = require 'path_bezier2_ai'
 
 -- return pathData simplified down to 'move', 'line', 'close' commands
 function msvg.simplifyElement(svgElement, mt) --> simplifiedPath
-	-- TODO: support 'rect'!
+	if not svgElement.d then return end -- TODO: support 'rect'!
 	local pathData = svgElement.d
-	if not pathData then return end
+	local simplifiedPathData = {}
 
 	local transform = svgElement.transform -- can be nil
-	if mt then
+	if transform and mt then
 		transform = mt * transform
 	end
 	
 	local approximation_scale = 1
-	local lightlySimplifiedPath = {}
-	local simplifiedPath = {}
+	local transform_points = path.transform_points
 	
-	-- first, let 'path' simplify the pathData; it won't simplify curves
-	path.simplify(function(...)
-		path.append_cmd(lightlySimplifiedPath, ...)
-	end, pathData, transform)
-	
-	local function write(...)
-		table.insertall(simplifiedPath, ...)
+	local function write(s, ...)
+		print("write", s)
+		path.append_cmd(simplifiedPathData, s, ...)
 	end
 	local function processor(write, mt, i, s, ...)
+		print("processor",s)
 		if s == "curve" or s == "quad_curve" then
-			local args = { write, ... }
+			local args = { write, transform_points(transform, ...) }
 			table.insert(args, approximation_scale)
-			local ai = s == "curve" and curve_ai or quad_curve_ai
+			local ai = (s == "curve") and curve_ai or quad_curve_ai
 			ai(unpack(args))
 		elseif s == "line" then
-			path.append_cmd(simplifiedPath, s, select(3, ...))
+			write(s, transform_points(transform, select(3, ...)))
 		elseif s == "move" then
-			local x, y = ...
-			path.append_cmd(simplifiedPath, s, x, y)
+			write(s, transform_points(transform, ...))
 		elseif s == "close" then
-			path.append_cmd(simplifiedPath, s)
-		else error(s) end
+			local cpx, cpy, spx, spy = transform_points(transform, ...)
+			print("args:", ...) 
+			if cpx ~= spx or cpy ~= spy then
+                write('line', spx, spy)
+			end
+			write('close')
+		else return false end
 	end
 	
-	-- we want to simplify it even more, because we don't like curves
-	path.decode(processor, write, lightlySimplifiedPath)
-	return simplifiedPath
+	path.decode_recursive(processor, write, pathData)
+	return simplifiedPathData
 end
 
 function msvg.loadFile(filename) 

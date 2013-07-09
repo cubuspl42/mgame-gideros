@@ -1383,6 +1383,8 @@ end
 if not ... then require'path_cairo_demo' end
 
 return {
+	--helpers
+	transform_points = transform_points,
     --iterating
     argc = argc,
     next_cmd = next_cmd,
