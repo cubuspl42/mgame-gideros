@@ -55,6 +55,16 @@ function table.insertall(t, ...)
     end
 end
 
+function math.sgn(x)
+    if x<0 then
+        return -1
+    elseif x>0 then
+        return 1
+    else
+        return 0
+    end
+end
+
 function Application:getSpf()
     return 1/self:getFps()
 end

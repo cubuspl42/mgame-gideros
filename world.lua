@@ -333,7 +333,8 @@ end
 
 function World:tick(deltaTime)
     local a = accelerometer
-    self.physicsWorld:setGravity(a.fy * 40, a.fx * 40)
+    local vector = Vector.new(a.fy, a.fx)
+    --self.physicsWorld:setGravity(a.fy * 40, a.fx * 40)
     
     local physicsDt = 1.0/application:getFps()
     physicsDt = physicsDt / 1
@@ -342,6 +343,7 @@ function World:tick(deltaTime)
     self:dispatchEvent(Event.new("updateMasters")) -- 2. update master bodies
     
     local tickEvent = Event.new("tick")
+    tickEvent.direction = math.sgn(a.fy)
     tickEvent.deltaTime = deltaTime
     self:dispatchEvent(tickEvent) -- 3. tick event
     

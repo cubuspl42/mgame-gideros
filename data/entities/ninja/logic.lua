@@ -30,39 +30,97 @@ function on_init(self, e)
         self.world:addChild(redDot)
     end
     
+    self.state = "on_ground"
     self.scmlEntity:setAnimation("Idle")
 end
 
 local i = 0
 
-function on_tick(self, e)
-    local velocityEps = 0.01
+function on_tick(self, event)
+    local angle = nil
     local velocity = Vector.new(self.body:getLinearVelocity())
-    if abs(velocity.x) > velocityEps then
-        local scaleX = 1
-        if velocity.x < 0 then scaleX = -scaleX end
-        self.scmlEntity:setScaleX(scaleX) 
-    end
+    local body = self.body
+    local prev_state = self.state
+    local state = prev_state
+    local direction = event.direction
     
-    local mesh = self.wallMesh
-    if mesh then
+    local wallMesh = self.wallMesh
+    if wallMesh then
         local x, y = self:getPosition()
         local positionVector = Vector.new(x, y)
-        local _, x0, y0 = path.hit(x, y, mesh.pathData, mesh.pathMatrix)
+        local _, x0, y0 = path.hit(x, y, wallMesh.pathData, wallMesh.pathMatrix)
         local hitPoint = Vector.new(x0, y0)
+        
         local d = (positionVector - hitPoint):len()
         local r = bodyConfig.fixtureConfigs[1].shape.r
         local dmax = r + 3
         
+        -- we consider them still touching if d < dmax, although box2d does not
         if d < dmax then
             local vector = positionVector:clone()
             vector = vector - hitPoint
-            vector = vector:normal()
-            self.scmlEntity:setRotation(vector:angle())
+            angle = vector:normal():angle()
         else
-            self.wallMesh = nil
+            self.wallMesh = nil -- we're too far; let's forget about that wall
         end
     end
+    
+    if angle then
+        if abs(angle) < 90 then -- ninja is on his feet
+            state = "on_ground"        
+        elseif abs(angle) == 90 then -- ninja could be sliding on the wall
+			-- if he is going toward that wall
+            if math.sgn(angle) == -direction and velocity.y > 0 then
+                state = "on_wall"
+            elseif prev_state ~= "on_wall" then -- ...but he is not
+                state = "in_air"
+            end
+        end -- ninja is touching wall with his head or not touching any wall at all
+    else
+        angle = self.scmlEntity:getRotation()
+        state = "in_air"
+    end
+	    
+    local scaleX = 0
+    if state == "on_wall" then
+        scaleX = -math.sgn(angle)
+		angle = angle - math.sgn(angle) * 90
+    else
+		if abs(velocity.x) > 0.2 then
+			scaleX = math.sgn(velocity.x)
+		end
+    end
+	
+	if state == "in_air" then
+		
+	end
+	
+    if scaleX ~= 0 then
+        self.scmlEntity:setScale(scaleX, 1)
+    end
+
+    self.scmlEntity:setRotation(angle)
+    
+    if direction ~= 0 then
+        local force = Vector.new(0, 0)
+        if state == "on_ground" then
+            force.x = 50
+        else
+            force.x = 5
+        end
+        force.x = force.x * direction
+        body:applyForce(force.x, force.y, body:getWorldCenter())
+    end
+    
+    if state == "on_ground" then
+        
+    elseif state == "on_wall" then
+        
+    elseif state == "in_air" then
+        
+    else error(state) end
+    
+    self.state = state
     self.wallRotation = nil
 end
 
