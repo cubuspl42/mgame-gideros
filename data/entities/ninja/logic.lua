@@ -31,7 +31,7 @@ function on_init(self, e)
     end
     
     self.state = "on_ground"
-    self.scmlEntity:setAnimation("Idle")
+    self.scmlEntity:setAnimation("run")
 end
 
 local i = 0
@@ -111,6 +111,11 @@ function on_tick(self, event)
         force.x = force.x * direction
         body:applyForce(force.x, force.y, body:getWorldCenter())
     end
+	
+	local max_velocity = 15
+	if abs(velocity.x) > max_velocity then
+		velocity.x = math.sgn(velocity.x) * max_velocity
+	end
     
     if state == "on_ground" then
         
@@ -120,6 +125,7 @@ function on_tick(self, event)
         
     else error(state) end
     
+	body:setLinearVelocity(velocity:unpack())
     self.state = state
     self.wallRotation = nil
 end

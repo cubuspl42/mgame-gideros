@@ -1,7 +1,7 @@
 SCMLEntity = Core.class(Sprite)
 
 function SCMLEntity:init()
-    
+   
 end
 
 function SCMLEntity:setAnimation(animName)
@@ -9,6 +9,7 @@ function SCMLEntity:setAnimation(animName)
     if self.anim then self:removeChild(self.anim) end
     self.anim = self.animations[animName]
     self.anim.index = 0
+	self.time = 0
     self:addChild(self.anim)
     self.starttime = os.timems()
 end
@@ -27,12 +28,14 @@ local function linearInterpolation(v1, v2, t1, t2, t)
     return v1 + (v2 - v1) * (t - t1) / (t2 - t1)
 end
 
-function SCMLEntity:step()
+function SCMLEntity:step(deltaTime)
     local anim = self.anim
     if not anim then return end
     
-    -- Looping
-    local time = os.timems() - self.starttime
+    local time = self.time + deltaTime
+	self.time = time
+	
+	-- Looping
     if time >= anim.length then
         if not anim.looping then return end
         anim.index = 1
