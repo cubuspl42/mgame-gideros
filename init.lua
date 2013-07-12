@@ -5,6 +5,8 @@ require 'injection' -- injection to global scope
 require 'box2d' -- b2 API
 require 'vector' -- global 'Vector'
 
+b2.setScale(100)
+
 dbg = 0
 
 function all(t)

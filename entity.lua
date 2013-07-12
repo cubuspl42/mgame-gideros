@@ -46,9 +46,6 @@ function Entity:init(name, world, x, y, userData)
             return SCMLSprite.new(bitmap, 1/4)
         end
         self.scmlEntity = enityData.scml:createEntity(0, scmlLoader)
-        world:addEventListener("tick", function(event)
-                self.scmlEntity:step(event.deltaTime * 1000) -- TODO: pass deltaTime
-        end)
         self:addChild(self.scmlEntity)
     end
     

@@ -131,3 +131,19 @@ function Sprite:rotateAroundPoint(cx, cy, angle)
     y = (x - cx) * s + (y - cy) * c + cy;
     self:setPosition(x, y)
 end
+
+function TextField:reset()
+	self:setText("")
+end
+
+function TextField:append(var, ...)
+	if not var then return end
+	if type(var) == "number" then
+		var = string.format("%.4f", var)
+	end
+	if ... then
+		var = tostring(var) .. " "
+	end
+	self:setText(self:getText() .. tostring(var))
+	TextField.append(self, ...)
+end

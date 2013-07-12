@@ -18,6 +18,7 @@ accelerometer = Accelerometer.new()
 accelerometer:start()
 accelerometer.filter = 1.0  -- the filtering constant, 1.0 means no filtering, lower values mean more filtering
 accelerometer.fx, accelerometer.fy, accelerometer.fz = 0, 0, 0
+accelerometer.x, accelerometer.y, accelerometer.z = 0, 0, 0
 
 local function updateAccelerometer()
     local a = accelerometer
@@ -147,10 +148,14 @@ application:setKeepAwake(true)
 loadData()
 --setLogicalDimensions()
 
+
 -- Scene management
 local sceneManager = SceneManager.new {
     gameplay = GameplayScene,
 }
-
 stage:addChild(sceneManager)
 sceneManager:changeScene("gameplay", nil, nil, nil, {userData = "0/1"}) -- pass level?
+
+status = TextField.new()
+status:setPosition(-30, 10)
+--stage:addChild(status)

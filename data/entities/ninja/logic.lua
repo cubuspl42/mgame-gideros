@@ -31,21 +31,38 @@ function on_init(self, e)
     end
     
     self.state = "on_ground"
-    self.scmlEntity:setAnimation("run")
+    self.scmlEntity:setAnimation("jump")
 end
 
 local i = 0
 
 function on_tick(self, event)
-    local angle = nil
-    local velocity = Vector.new(self.body:getLinearVelocity())
+
     local body = self.body
-    local prev_state = self.state
+	local scmlEntity = self.scmlEntity
+
+    local scaleX = 0
+    local angle = nil
+	local scmlDeltaTime = event.deltaTime * 1000
+	local force = Vector.new(0, 0)
+
+	local animName = scmlEntity.animName
+	local prev_animName = animName
+	
+	local prev_state = self.state
     local state = prev_state
+
+    local velocity = Vector.new(self.body:getLinearVelocity())
+	local velocity_sgn = math.sgn(velocity.x)
+	local max_velocity = 5
+
     local direction = event.direction
+	
+	status:append(velocity.x, velocity.y)
     
+	-- try to get angle between ninja and wall
     local wallMesh = self.wallMesh
-    if wallMesh then
+    if wallMesh then -- if we remember some wall
         local x, y = self:getPosition()
         local positionVector = Vector.new(x, y)
         local _, x0, y0 = path.hit(x, y, wallMesh.pathData, wallMesh.pathMatrix)
@@ -61,11 +78,11 @@ function on_tick(self, event)
             vector = vector - hitPoint
             angle = vector:normal():angle()
         else
-            self.wallMesh = nil -- we're too far; let's forget about that wall
+            self.wallMesh = nil -- he's too far, let's forget about that wall
         end
     end
     
-    if angle then
+    if angle then -- we've found that angle...
         if abs(angle) < 90 then -- ninja is on his feet
             state = "on_ground"        
         elseif abs(angle) == 90 then -- ninja could be sliding on the wall
@@ -75,57 +92,72 @@ function on_tick(self, event)
             elseif prev_state ~= "on_wall" then -- ...but he is not
                 state = "in_air"
             end
-        end -- ninja is touching wall with his head or not touching any wall at all
+        else -- ninja is touching wall with his head or not touching any wall at all
+			state = "in_air"
+		end
     else
-        angle = self.scmlEntity:getRotation()
         state = "in_air"
     end
+		
+	if state == "in_air" then -- we don't honor angle between a wall and ninja
+		angle = scmlEntity:getRotation()
+		-- to zero...
+		force.x = 1
+	else
+		force.x = 5
+	end
+	
+	if direction == 0 then
+		if abs(velocity.x) > force.x then
+			force.x = -velocity_sgn * force.x
+		end
+	else
+		force.x = force.x * direction
+	end
 	    
-    local scaleX = 0
     if state == "on_wall" then
         scaleX = -math.sgn(angle)
 		angle = angle - math.sgn(angle) * 90
-    else
-		if abs(velocity.x) > 0.2 then
-			scaleX = math.sgn(velocity.x)
-		end
+    elseif abs(velocity.x) > 0.001 or velocity_sgn == direction then
+		scaleX = math.sgn(velocity.x)
     end
 	
-	if state == "in_air" then
-		
-	end
-	
-    if scaleX ~= 0 then
-        self.scmlEntity:setScale(scaleX, 1)
+	if scaleX ~= 0 then
+        scmlEntity:setScaleX(scaleX)
     end
-
-    self.scmlEntity:setRotation(angle)
-    
-    if direction ~= 0 then
-        local force = Vector.new(0, 0)
-        if state == "on_ground" then
-            force.x = 50
-        else
-            force.x = 5
-        end
-        force.x = force.x * direction
-        body:applyForce(force.x, force.y, body:getWorldCenter())
-    end
-	
-	local max_velocity = 15
-	if abs(velocity.x) > max_velocity then
-		velocity.x = math.sgn(velocity.x) * max_velocity
-	end
+    scmlEntity:setRotation(angle)
     
     if state == "on_ground" then
-        
-    elseif state == "on_wall" then
-        
-    elseif state == "in_air" then
-        
-    else error(state) end
+		if direction ~= 0 then
+			if direction == velocity_sgn and abs(velocity.x) > 0.000001 then
+				animName = "run"
+				scmlDeltaTime = scmlDeltaTime * (velocity:len() / max_velocity)
+			else
+				animName = "brake"
+			end
+		else
+			if abs(velocity.x) > 0.001 then
+				animName = "brake"
+			else
+				animName = "idle"
+			end
+		end
+	end
     
+	if prev_animName ~= animName then
+		scmlEntity:setAnimation(animName)
+	end
+	scmlEntity:step(scmlDeltaTime)
+	
+	if abs(velocity.x) > max_velocity then
+		velocity.x = velocity_sgn * max_velocity
+	end
+	
 	body:setLinearVelocity(velocity:unpack())
+	if direction ~= 0 then
+		body:applyForce(force.x, force.y, body:getWorldCenter())
+	end
+	
     self.state = state
     self.wallRotation = nil
 end
@@ -150,7 +182,7 @@ function on_postSolve(self, e)
         
         if abs(angle) < abs(self.wallRotation) then
             self.wallRotation = angle
-            self.wallMesh = e.otherSprite
+            self.wallMesh = e.otherSprite -- let's remember that wall
         end
     end
 end

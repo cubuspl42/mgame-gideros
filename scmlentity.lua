@@ -5,7 +5,8 @@ function SCMLEntity:init()
 end
 
 function SCMLEntity:setAnimation(animName)
-    print("Setting animation: ", animName)
+    --print("Setting animation: ", animName)
+	self.animName = animName
     if self.anim then self:removeChild(self.anim) end
     self.anim = self.animations[animName]
     self.anim.index = 0
