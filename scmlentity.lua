@@ -1,16 +1,16 @@
 SCMLEntity = Core.class(Sprite)
 
 function SCMLEntity:init()
-   
+    
 end
 
 function SCMLEntity:setAnimation(animName)
     --print("Setting animation: ", animName)
-	self.animName = animName
+    self.animName = animName
     if self.anim then self:removeChild(self.anim) end
     self.anim = self.animations[animName]
     self.anim.index = 0
-	self.time = 0
+    self.time = 0
     self:addChild(self.anim)
     self.starttime = os.timems()
 end
@@ -34,9 +34,9 @@ function SCMLEntity:step(deltaTime)
     if not anim then return end
     
     local time = self.time + deltaTime
-	self.time = time
-	
-	-- Looping
+    self.time = time
+    
+    -- Looping
     if time >= anim.length then
         if not anim.looping then return end
         anim.index = 1

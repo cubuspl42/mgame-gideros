@@ -81,7 +81,7 @@ function World:addCollisionListener(name, sprite, listener, data)
 end
 
 function World:onPhysicsEvent(e)
-	--print("onPhysicsEvent", e:getType())
+    --print("onPhysicsEvent", e:getType())
     local manifold = e.contact:getWorldManifold()
     local normal = manifold.normal
     local points = manifold.points
@@ -178,7 +178,7 @@ function World:loadMap(svgTree)
                         mesh = SimpleMesh.new(vertices, hex_color(e.style.fill), alpha, 1.9)
                 end)
                 if not ok then print("Warning:", msg) end
-				-- mesh = nil
+                -- mesh = nil
                 mesh = mesh or Sprite.new()
                 mesh.pathData = e.d
                 mesh.pathMatrix = e.transform
@@ -220,8 +220,8 @@ local function updatePhysics(sprite)
     end
     
     sprite.body:setActive(true)
-	local scaleIsValid = 	math.abs(scaleX) > 0.99 and math.abs(scaleX) < 1.01 and
-						scaleY > 0.99 and scaleY < 1.01
+    local scaleIsValid = 	math.abs(scaleX) > 0.99 and math.abs(scaleX) < 1.01 and
+    scaleY > 0.99 and scaleY < 1.01
     assert(scaleIsValid, "sprite with attached body cannot be scaled")
     
     local bodies = sprite.bodies
@@ -229,13 +229,6 @@ local function updatePhysics(sprite)
     
     if not bodies and mirrored then
         error("sprite with body configured without enableMirroring cannot be mirrored")
-    end
-    
-    if mirrored then
-		--rotation = -rotation
-        --rotation = 360 - rotation
-		--rotation = -rotation
-
     end
     
     if bodies and sprite.body ~= bodies[mirrored] then -- swap bodies
@@ -338,8 +331,8 @@ function World:attachBody(sprite, bodyConfig)
 end
 
 function World:tick(deltaTime)
-	status:reset()
-
+    status:reset()
+    
     local a = accelerometer
     local vector = Vector.new(a.fy, a.fx)
     --self.physicsWorld:setGravity(a.fy * 40, a.fx * 40)
@@ -351,14 +344,14 @@ function World:tick(deltaTime)
     self:dispatchEvent(Event.new("updateMasters")) -- 2. update master bodies
     
     local tickEvent = Event.new("tick")
-	tickEvent.direction = 0
-	local ay = a.y
-	if math.abs(ay) > 0.07 then
-		tickEvent.direction = math.sgn(ay)
-	end
-	
-	status:append("direction:", tickEvent.direction, "\n")
-	
+    tickEvent.direction = 0
+    local ay = a.y
+    if math.abs(ay) > 0.07 then
+        tickEvent.direction = math.sgn(ay)
+    end
+    
+    status:append("direction:", tickEvent.direction, "\n")
+    
     tickEvent.deltaTime = deltaTime
     self:dispatchEvent(tickEvent) -- 3. tick event
     

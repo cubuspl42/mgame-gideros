@@ -5,7 +5,7 @@
 -- TODO: cleanup
 
 print("-----------------------------------------------------------------------------| ", os.date(), " |--------->")
---require("mobdebug").start()
+pcall(function() require("mobdebug").start() end)
 
 local lfs = require 'lfs'
 local msvg = require 'msvg'
@@ -158,4 +158,8 @@ sceneManager:changeScene("gameplay", nil, nil, nil, {userData = "0/1"}) -- pass 
 
 status = TextField.new()
 status:setPosition(-30, 10)
---stage:addChild(status)
+stage:addChild(status)
+
+if gdebug 
+	then stage:addChild(gdebug) 
+end
