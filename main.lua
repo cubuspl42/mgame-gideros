@@ -160,6 +160,8 @@ status = TextField.new()
 status:setPosition(-30, 10)
 stage:addChild(status)
 
-if gdebug 
-	then stage:addChild(gdebug) 
-end
+local graph = PerformanceGraph.new {
+	max_frame_time = 0.009,
+}
+graph:setY(application:getContentHeight())
+stage:addChild(graph)

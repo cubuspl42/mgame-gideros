@@ -6,7 +6,9 @@
    <scale suffix="@066x" scale="0.66"/>
   </imageScales>
  </properties>
- <file source="gdebug.lua" excludeFromExecution="1"/>
+ <file source="performancegraph.lua"/>
+ <file source="list.lua"/>
+ <file source="gdebug.lua"/>
  <file source="world.lua"/>
  <file source="entity.lua"/>
  <file source="lightvector.lua" excludeFromExecution="1"/>

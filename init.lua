@@ -1,9 +1,9 @@
 package.path = package.path .. ";./lib/?.lua" -- add lib folder
 
-require 'gdebug'
 require 'injection' -- injection to global scope
 require 'box2d' -- b2 API
 require 'vector' -- global 'Vector'
+
 xml = require "xmlSimple"
 
 b2.setScale(100)
