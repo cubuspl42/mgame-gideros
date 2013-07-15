@@ -161,7 +161,7 @@ status:setPosition(-30, 10)
 stage:addChild(status)
 
 local graph = PerformanceGraph.new {
-	max_frame_time = 0.009,
+	max_frame_time = 2/application:getFps(),
 }
 graph:setY(application:getContentHeight())
 stage:addChild(graph)
