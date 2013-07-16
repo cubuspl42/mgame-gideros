@@ -8,23 +8,30 @@ local s = 0.3
 World = Core.class(Sprite)
 
 function World:init(svgTree)
-    self:addEventListener("touchesMove", self.onTouch, self)
-    self:addEventListener("touchesEnd", self.onTouchEnd, self)
+    self:addEventListener("mouseMove", self.onTouch, self)
+    self:addEventListener("mouseUp", self.onTouchEnd, self)
     
     self.collisionListeners = {
         preSolve = {}, postSolve = {},
         beginContact = {}, endContact = {}
     }
-    local debugDraw = b2.DebugDraw.new()
+	
+	self.physicsWorld = b2.World.new(0, 10)
+	
+	local debugDraw
+	if dbg >= 2 then
+
+     debugDraw = b2.DebugDraw.new()
     debugDraw:setFlags(
         b2.DebugDraw.SHAPE_BIT +
         b2.DebugDraw.JOINT_BIT +
         b2.DebugDraw.PAIR_BIT
     )
     
-    self.physicsWorld = b2.World.new(0, 10)
     self.physicsWorld:setDebugDraw(debugDraw)
     
+	end
+	
     self.physicsWorld:addEventListener("preSolve", self.onPhysicsEvent, self)
     self.physicsWorld:addEventListener("postSolve", self.onPhysicsEvent, self)
     self.physicsWorld:addEventListener("beginContact", self.onPhysicsEvent, self)
@@ -119,12 +126,16 @@ function World:onPhysicsEvent(e)
             listener(unpack(args))
         end
     end
-    
 end
 
+local j = 0
+
 function World:onTouch(e)
-    if e.touch.id ~= 1 then return end
-    local x, y = e.touch.rx, e.touch.ry
+	j = j + 1
+	print("onTouch", j)
+    --if e.touch.id ~= 1 then return end
+    --local x, y = e.touch.x, e.touch.y
+	local x, y = e.x, e.y
     --print("onTouch x, y", x, y)
     if self.prevTouchX then
         local px, py = self:getPosition()
@@ -136,7 +147,7 @@ function World:onTouch(e)
 end
 
 function World:onTouchEnd(e)
-    if e.touch.id ~= 1 then return end
+    --if e.touch.id ~= 1 then return end
     self.prevTouchX, self.prevTouchY = nil, nil
 end
 
@@ -200,7 +211,8 @@ local function moveToHell(body)
     body:setPosition(-100, -100)
 end
 
-local function updatePhysics(sprite)
+local function updatePhysics(sprite, event)
+	--print("updatePhysics", event:getType())
     local world = sprite.world
     local parent = sprite:getParent()
     local rotation = sprite:getRotation()
@@ -355,10 +367,11 @@ function World:tick(deltaTime)
     tickEvent.deltaTime = deltaTime
     self:dispatchEvent(tickEvent) -- 3. tick event
     
-    local x, y = self.ninja:getPosition()
+    --local x, y = self.ninja:getPosition()
     --self:setPosition(-x +200, -y + 100)
     
     self:dispatchEvent(Event.new("updateSlaves")) -- 4. update slave bodies
     
-    --print ("memory used 1:"..collectgarbage("count")) 
+	--collectgarbage()
+    --print ("memory used: "..collectgarbage("count")) 
 end

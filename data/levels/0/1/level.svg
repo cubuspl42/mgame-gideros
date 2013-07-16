@@ -56,8 +56,8 @@
      inkscape:pageopacity="0.24705882"
      inkscape:pageshadow="2"
      inkscape:zoom="0.056568542"
-     inkscape:cx="-966.82187"
-     inkscape:cy="752.00979"
+     inkscape:cx="1240.2849"
+     inkscape:cy="-28.320295"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -113,5 +113,11 @@
        sodipodi:ry="1078.3379"
        d="m 4189.6077,1159.099 a 1652.8621,1078.3379 0 1 1 -3305.72416,0 1652.8621,1078.3379 0 1 1 3305.72416,0 z"
        transform="translate(0,52.362183)" />
+    <path
+       style="fill:#ff0000;fill-opacity:1;stroke:none"
+       d="m 607.52405,-1634.375 c 421.48885,27.8664 622.04995,374.8373 444.40165,817.07723 L 930.43319,-494.70253 450.67622,-675.38366 z"
+       id="rect3096"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
   </g>
 </svg>

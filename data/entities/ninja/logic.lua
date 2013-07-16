@@ -31,7 +31,7 @@ function on_init(self, e)
     end
     
     self.state = "on_ground"
-    self.scmlEntity:setAnimation("jump")
+    self.scmlEntity:setAnimation("run")
 end
 
 local i = 0

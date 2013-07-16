@@ -104,5 +104,5 @@ function SimpleMesh:init(vertices, color, alpha, d)
     m:setVertexArray(vertexArray)
     m:setColorArray(colorArray)
     m:setIndexArray(indexArray)
-    
+	--a[1]=0
 end
