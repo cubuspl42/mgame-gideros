@@ -148,7 +148,6 @@ application:setKeepAwake(true)
 loadData()
 --setLogicalDimensions()
 
-
 -- Scene management
 local sceneManager = SceneManager.new {
     gameplay = GameplayScene,
@@ -164,4 +163,6 @@ local graph = PerformanceGraph.new {
 	max_frame_time = 2/application:getFps(),
 }
 graph:setY(application:getContentHeight())
-stage:addChild(graph)
+if dbg >= 1 then
+	stage:addChild(graph)
+end

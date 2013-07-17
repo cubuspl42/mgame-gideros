@@ -232,8 +232,7 @@ local function updatePhysics(sprite, event)
     end
     
     sprite.body:setActive(true)
-    local scaleIsValid = 	math.abs(scaleX) > 0.99 and math.abs(scaleX) < 1.01 and
-    scaleY > 0.99 and scaleY < 1.01
+    local scaleIsValid = math.abs(scaleX) > 0.99 and math.abs(scaleX) < 1.01 and scaleY > 0.99 and scaleY < 1.01
     assert(scaleIsValid, "sprite with attached body cannot be scaled")
     
     local bodies = sprite.bodies
@@ -361,7 +360,7 @@ function World:tick(deltaTime)
     if math.abs(ay) > 0.07 then
         tickEvent.direction = math.sgn(ay)
     end
-    
+	
     status:append("direction:", tickEvent.direction, "\n")
     
     tickEvent.deltaTime = deltaTime
